@@ -1,0 +1,26 @@
+{
+    "name": "fize/third-wechat",
+    "description": "微信接口API，与官方文档同步实现。",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "FizeChan",
+            "email": "chenfengzhan@qq.com"
+        }
+    ],
+    "require": {
+		"php": ">=5.4.0",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "ext-libxml": "*",
+        "fize/net": "*@dev",
+        "fize/crypt": "*@dev",
+        "fize/cache": "*@dev",
+        "fize/xml": "*@dev"
+    },
+	"autoload": {
+        "psr-4": {
+            "fize\\third\\wechat\\": "src"
+        }
+    }
+}
