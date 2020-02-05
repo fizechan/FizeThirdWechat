@@ -22,11 +22,11 @@ class User extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -43,7 +43,7 @@ class User extends Api
             'openid' => $openid,
             'remark' => $remark
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_USER_UPDATEREMARK . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_USER_UPDATEREMARK . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -54,7 +54,7 @@ class User extends Api
      */
     public function getUserInfo($openid)
     {
-        return $this->httpGet(self::PREFIX_API . self::URL_USER_INFO . 'access_token=' . $this->access_token . '&openid=' . $openid);
+        return $this->httpGet(self::PREFIX_API . self::URL_USER_INFO . 'access_token=' . $this->accessToken . '&openid=' . $openid);
     }
 
     /**
@@ -64,6 +64,6 @@ class User extends Api
      */
     public function getUserList($next_openid = '')
     {
-        return $this->httpGet(self::PREFIX_API . self::URL_USER_GET . 'access_token=' . $this->access_token . '&next_openid=' . $next_openid);
+        return $this->httpGet(self::PREFIX_API . self::URL_USER_GET . 'access_token=' . $this->accessToken . '&next_openid=' . $next_openid);
     }
 }

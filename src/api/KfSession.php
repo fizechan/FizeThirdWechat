@@ -22,11 +22,11 @@ class KfSession extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -48,7 +48,7 @@ class KfSession extends Api
         if ($text) {
             $data["text"] = $text;
         }
-        $result = $this->httpPost(self::PREFIX_API . self::URL_CUSTOM_SEESSION_CREATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $result = $this->httpPost(self::PREFIX_API . self::URL_CUSTOM_SEESSION_CREATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($result) {
             return true;
         } else {
@@ -77,7 +77,7 @@ class KfSession extends Api
         if ($text) {
             $data["text"] = $text;
         }
-        $result = $this->httpPost(self::PREFIX_API . self::URL_CUSTOM_SEESSION_CLOSE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $result = $this->httpPost(self::PREFIX_API . self::URL_CUSTOM_SEESSION_CLOSE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($result) {
             return true;
         } else {
@@ -98,7 +98,7 @@ class KfSession extends Api
      */
     public function getKfSession($openid)
     {
-        return $this->httpGet(self::PREFIX_API . self::URL_CUSTOM_SEESSION_GET . 'access_token=' . $this->access_token . '&openid=' . $openid);
+        return $this->httpGet(self::PREFIX_API . self::URL_CUSTOM_SEESSION_GET . 'access_token=' . $this->accessToken . '&openid=' . $openid);
     }
 
     /**
@@ -120,7 +120,7 @@ class KfSession extends Api
      */
     public function getKfSessionList($kf_account)
     {
-        return $this->httpGet(self::PREFIX_API . self::URL_CUSTOM_SEESSION_GET_LIST . 'access_token=' . $this->access_token . '&kf_account=' . $kf_account);
+        return $this->httpGet(self::PREFIX_API . self::URL_CUSTOM_SEESSION_GET_LIST . 'access_token=' . $this->accessToken . '&kf_account=' . $kf_account);
     }
 
     /**
@@ -144,6 +144,6 @@ class KfSession extends Api
      */
     public function getKfSessionWait()
     {
-        return $this->httpGet(self::PREFIX_API . self::URL_CUSTOM_SEESSION_GET_WAIT . 'access_token=' . $this->access_token);
+        return $this->httpGet(self::PREFIX_API . self::URL_CUSTOM_SEESSION_GET_WAIT . 'access_token=' . $this->accessToken);
     }
 }

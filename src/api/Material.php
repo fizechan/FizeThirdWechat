@@ -15,11 +15,11 @@ class Material extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct(array $p_options)
+    public function __construct(array $options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }

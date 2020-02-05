@@ -23,11 +23,11 @@ class Template extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct(array $p_options)
+    public function __construct(array $options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -45,7 +45,7 @@ class Template extends Api
             'industry_id1' => $industry_id1,
             'industry_id2' => $industry_id2
         ];
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_API_SET_INDUSTRY . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_API_SET_INDUSTRY . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($json) {
             return true;
         } else {
@@ -59,7 +59,7 @@ class Template extends Api
      */
     public function getIndustry()
     {
-        $json = $this->httpGet(self::PREFIX_CGI . self::URL_TEMPLATE_GET_INDUSTRY . 'access_token=' . $this->access_token);
+        $json = $this->httpGet(self::PREFIX_CGI . self::URL_TEMPLATE_GET_INDUSTRY . 'access_token=' . $this->accessToken);
         return $json;
     }
 
@@ -72,7 +72,7 @@ class Template extends Api
     public function apiAddTemplate($tpl_id)
     {
         $data = ['template_id_short' => $tpl_id];
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_API_ADD_TEMPLATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_API_ADD_TEMPLATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($json && isset($json['template_id'])) {
             return $json['template_id'];
         } else {
@@ -86,7 +86,7 @@ class Template extends Api
      */
     public function getAllPrivateTemplate()
     {
-        $json = $this->httpGet(self::PREFIX_CGI . self::URL_TEMPLATE_GET_ALL_PRIVATE_TEMPLATE . 'access_token=' . $this->access_token);
+        $json = $this->httpGet(self::PREFIX_CGI . self::URL_TEMPLATE_GET_ALL_PRIVATE_TEMPLATE . 'access_token=' . $this->accessToken);
         return $json;
     }
 
@@ -98,7 +98,7 @@ class Template extends Api
     public function delPrivateTemplate($tpl_id)
     {
         $data = ['template_id' => $tpl_id];
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_DEL_PRIVATE_TEMPLATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_DEL_PRIVATE_TEMPLATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if($json){
             return true;
         }
@@ -113,7 +113,7 @@ class Template extends Api
      */
     public function send(array $data)
     {
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_SEND . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_SEND . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($json && isset($json['msgid'])) {
             return $json['msgid'];
         } else {

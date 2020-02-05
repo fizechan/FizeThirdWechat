@@ -33,11 +33,11 @@ class KfReply extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -49,7 +49,7 @@ class KfReply extends Api
      */
     private function send_custom_message($data)
     {
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_CUSTOM_SEND . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_CUSTOM_SEND . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($json) {
             return $json;
         } else {

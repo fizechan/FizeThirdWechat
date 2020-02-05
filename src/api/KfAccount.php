@@ -28,11 +28,11 @@ class KfAccount extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -52,7 +52,7 @@ class KfAccount extends Api
             "nickname"   => $nickname,
             "password"   => md5($password)
         );
-        $result = $this->httpPost(self::PREFIX_API . self::URL_CS_KFACCOUNT_ADD . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $result = $this->httpPost(self::PREFIX_API . self::URL_CS_KFACCOUNT_ADD . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($result) {
             return true;
         } else {
@@ -75,7 +75,7 @@ class KfAccount extends Api
             "nickname"   => $nickname,
             "password"   => md5($password)
         );
-        $result = $this->httpPost(self::PREFIX_API . self::URL_CS_KFACCOUNT_UPDATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $result = $this->httpPost(self::PREFIX_API . self::URL_CS_KFACCOUNT_UPDATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($result) {
             return true;
         } else {
@@ -91,7 +91,7 @@ class KfAccount extends Api
      */
     public function deleteKfAccount($account)
     {
-        $result = $this->httpGet(self::PREFIX_API . self::URL_CS_KFACCOUNT_DEL . 'access_token=' . $this->access_token . '&kf_account=' . $account);
+        $result = $this->httpGet(self::PREFIX_API . self::URL_CS_KFACCOUNT_DEL . 'access_token=' . $this->accessToken . '&kf_account=' . $account);
         if ($result) {
             return true;
         } else {
@@ -111,7 +111,7 @@ class KfAccount extends Api
         $data = [
             'media' => new CURLFile(realpath($path))
         ];
-        $result = $this->httpPost(self::PREFIX_API . self::URL_CS_KFACCOUNT_UPLOAD_HEADIMG . 'access_token=' . $this->access_token . '&kf_account=' . $account, $data, true);
+        $result = $this->httpPost(self::PREFIX_API . self::URL_CS_KFACCOUNT_UPLOAD_HEADIMG . 'access_token=' . $this->accessToken . '&kf_account=' . $account, $data, true);
         if ($result) {
             return true;
         } else {
@@ -126,7 +126,7 @@ class KfAccount extends Api
      */
     public function getCustomServiceKfList()
     {
-        return $this->httpGet(self::PREFIX_CGI . self::URL_CS_GETKFLIST . 'access_token=' . $this->access_token);
+        return $this->httpGet(self::PREFIX_CGI . self::URL_CS_GETKFLIST . 'access_token=' . $this->accessToken);
     }
 
     /**
@@ -135,7 +135,7 @@ class KfAccount extends Api
      */
     public function getCustomServiceOnlineKfList()
     {
-        $t_json = $this->httpGet(self::PREFIX_CGI . self::URL_CS_GETONLINEKFLIST . 'access_token=' . $this->access_token);
+        $t_json = $this->httpGet(self::PREFIX_CGI . self::URL_CS_GETONLINEKFLIST . 'access_token=' . $this->accessToken);
         if ($t_json) {
             return $t_json['kf_online_list'];
         } else {
@@ -150,6 +150,6 @@ class KfAccount extends Api
      */
     public function getRecord($data)
     {
-        return $this->httpPost(self::PREFIX_CGI . self::URL_CS_GETRECORD . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_CGI . self::URL_CS_GETRECORD . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 }

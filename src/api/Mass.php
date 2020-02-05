@@ -24,11 +24,11 @@ class Mass extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -52,7 +52,7 @@ class Mass extends Api
      */
     public function sendGroupMassMessage($data)
     {
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_SEND_GROUP . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_SEND_GROUP . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($json) {
             return $json;
         } else {
@@ -79,7 +79,7 @@ class Mass extends Api
      */
     public function sendMassMessage($data)
     {
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_SEND . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_SEND . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($json) {
             return $json;
         } else {
@@ -94,7 +94,7 @@ class Mass extends Api
      */
     public function deleteMassMessage($msg_id)
     {
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_DELETE . 'access_token=' . $this->access_token, Json::encode(['msg_id' => $msg_id]));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_DELETE . 'access_token=' . $this->accessToken, Json::encode(['msg_id' => $msg_id]));
         if ($json) {
             return true;
         } else {
@@ -118,7 +118,7 @@ class Mass extends Api
      */
     public function previewMassMessage($data)
     {
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_PREVIEW . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_PREVIEW . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($json) {
             return $json;
         } else {
@@ -137,7 +137,7 @@ class Mass extends Api
      */
     public function queryMassMessage($msg_id)
     {
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_QUERY . 'access_token=' . $this->access_token, Json::encode(['msg_id' => $msg_id]));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_MASS_QUERY . 'access_token=' . $this->accessToken, Json::encode(['msg_id' => $msg_id]));
         if ($json) {
             return $json;
         } else {

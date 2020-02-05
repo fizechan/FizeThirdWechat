@@ -32,11 +32,11 @@ class Media extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct(array $p_options)
+    public function __construct(array $options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -53,7 +53,7 @@ class Media extends Api
         $data = [
             'media' => new CURLFile(realpath($path))
         ];
-        return $this->httpPost(self::PREFIX_CGI . self::URL_MEDIA_UPLOAD . 'access_token=' . $this->access_token . '&type=' . $type, $data);
+        return $this->httpPost(self::PREFIX_CGI . self::URL_MEDIA_UPLOAD . 'access_token=' . $this->accessToken . '&type=' . $type, $data);
     }
 
     /**
@@ -63,7 +63,7 @@ class Media extends Api
      */
     public function get($media_id)
     {
-        $result = $this->http->get(self::PREFIX_CGI . self::URL_MEDIA_GET . 'access_token=' . $this->access_token . '&media_id=' . $media_id);
+        $result = $this->http->get(self::PREFIX_CGI . self::URL_MEDIA_GET . 'access_token=' . $this->accessToken . '&media_id=' . $media_id);
         if ($result) {
             $headers = $this->http->getResponseHeaders();
             if(isset($headers['Content-Type']) && $headers['Content-Type'] == 'text/plain'){
@@ -93,7 +93,7 @@ class Media extends Api
      */
     public function uploadArticles($data)
     {
-        return $this->httpPost(self::PREFIX_API . self::URL_MEDIA_UPLOADNEWS . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_MEDIA_UPLOADNEWS . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -113,7 +113,7 @@ class Media extends Api
      */
     public function uploadMpVideo($data)
     {
-        return $this->httpPost(self::PREFIX_FILE . self::URL_MEDIA_VIDEOUPLOAD . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_FILE . self::URL_MEDIA_VIDEOUPLOAD . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -126,6 +126,6 @@ class Media extends Api
         $data = [
             'buffer' => new CURLFile(realpath($path))
         ];
-        return $this->httpPost(self::PREFIX_API . self::URL_MEDIA_UPLOADIMG . 'access_token=' . $this->access_token, $data, true);
+        return $this->httpPost(self::PREFIX_API . self::URL_MEDIA_UPLOADIMG . 'access_token=' . $this->accessToken, $data, true);
     }
 }

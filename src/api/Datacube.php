@@ -45,11 +45,11 @@ class DataCube extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -71,7 +71,7 @@ class DataCube extends Api
             'begin_date' => $begin_date,
             'end_date' => $end_date ? $end_date : $begin_date
         );
-        $json = $this->httpPost(self::PREFIX_API . self::$DATACUBE_URL_ARR[$type][$subtype] . 'access_token=' . $this->access_token, Json::encode($data));
+        $json = $this->httpPost(self::PREFIX_API . self::$DATACUBE_URL_ARR[$type][$subtype] . 'access_token=' . $this->accessToken, Json::encode($data));
         if ($json) {
             return isset($json['list']) ? $json['list'] : $json;
         } else {

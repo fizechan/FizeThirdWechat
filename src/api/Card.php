@@ -43,11 +43,11 @@ class Card extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -61,7 +61,7 @@ class Card extends Api
     public function addCardLocations($p_data)
     {
         $p_data = Json::encode($p_data, JSON_UNESCAPED_UNICODE);
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_LOCATION_BATCHADD . 'access_token=' . $this->access_token, $p_data);
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_LOCATION_BATCHADD . 'access_token=' . $this->accessToken, $p_data);
     }
 
     /**
@@ -77,7 +77,7 @@ class Card extends Api
             'offset' => $offset,
             'count'  => $count
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_LOCATION_BATCHGET . 'access_token=' . $this->access_token, Json::encode($data));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_LOCATION_BATCHGET . 'access_token=' . $this->accessToken, Json::encode($data));
     }
 
     /**
@@ -87,7 +87,7 @@ class Card extends Api
      */
     public function getCardColors()
     {
-        return $this->httpGet(self::PREFIX_API . self::URL_CARD_GETCOLORS . 'access_token=' . $this->access_token);
+        return $this->httpGet(self::PREFIX_API . self::URL_CARD_GETCOLORS . 'access_token=' . $this->accessToken);
     }
 
     /**
@@ -97,7 +97,7 @@ class Card extends Api
      */
     public function createCard(array $data)
     {
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CREATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CREATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -108,7 +108,7 @@ class Card extends Api
      */
     public function updateCard($data)
     {
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_UPDATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_UPDATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -123,7 +123,7 @@ class Card extends Api
         $data = array(
             'card_id' => $card_id,
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_DELETE . 'access_token=' . $this->access_token, Json::encode($data));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_DELETE . 'access_token=' . $this->accessToken, Json::encode($data));
     }
 
     /**
@@ -147,7 +147,7 @@ class Card extends Api
             'offset' => $offset,
             'count'  => $count,
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_BATCHGET . 'access_token=' . $this->access_token, Json::encode($data));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_BATCHGET . 'access_token=' . $this->accessToken, Json::encode($data));
     }
 
     /**
@@ -160,7 +160,7 @@ class Card extends Api
         $data = array(
             'card_id' => $card_id,
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_GET . 'access_token=' . $this->access_token, Json::encode($data));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_GET . 'access_token=' . $this->accessToken, Json::encode($data));
     }
 
     /**
@@ -202,7 +202,7 @@ class Card extends Api
             'action_name' => "QR_CARD",
             'action_info' => array('card' => $card)
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_QRCODE_CREATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_QRCODE_CREATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -224,7 +224,7 @@ class Card extends Api
         if ($card_id) {
             $data['card_id'] = $card_id;
         }
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_CONSUME . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_CONSUME . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -242,7 +242,7 @@ class Card extends Api
         $data = array(
             'encrypt_code' => $encrypt_code,
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_DECRYPT . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_DECRYPT . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -265,7 +265,7 @@ class Card extends Api
         $data = array(
             'code' => $code,
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_GET . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_GET . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -284,7 +284,7 @@ class Card extends Api
             'card_id'  => $card_id,
             'new_code' => $new_code,
         );
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_UPDATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_UPDATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -302,7 +302,7 @@ class Card extends Api
         if ($card_id) {
             $data['card_id'] = $card_id;
         }
-        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_UNAVAILABLE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_CODE_UNAVAILABLE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($t_rst) {
             return true;
         } else {
@@ -317,7 +317,7 @@ class Card extends Api
      */
     public function modifyCardStock($data)
     {
-        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_MODIFY_STOCK . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_MODIFY_STOCK . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($t_rst) {
             return true;
         } else {
@@ -332,7 +332,7 @@ class Card extends Api
      */
     public function activateMemberCard($data)
     {
-        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_MEMBERCARD_ACTIVATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_MEMBERCARD_ACTIVATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($t_rst) {
             return true;
         } else {
@@ -348,7 +348,7 @@ class Card extends Api
      */
     public function updateMemberCard($data)
     {
-        return $this->httpPost(self::PREFIX_API . self::URL_CARD_MEMBERCARD_UPDATEUSER . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_CARD_MEMBERCARD_UPDATEUSER . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -367,7 +367,7 @@ class Card extends Api
         if ($card_id) {
             $data['card_id'] = $card_id;
         }
-        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_LUCKYMONEY_UPDATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_LUCKYMONEY_UPDATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($t_rst) {
             return true;
         } else {
@@ -390,7 +390,7 @@ class Card extends Api
         if (count($users) > 0) {
             $data['username'] = $users;
         }
-        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_TESTWHILELIST_SET . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $t_rst = $this->httpPost(self::PREFIX_API . self::URL_CARD_TESTWHILELIST_SET . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($t_rst) {
             return true;
         } else {

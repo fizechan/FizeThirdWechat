@@ -20,11 +20,11 @@ class JsSdk extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct(array $p_options)
+    public function __construct(array $options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
     }
 
     /**
@@ -48,7 +48,7 @@ class JsSdk extends Api
             $this->jsapi_ticket = $rs;
             return $rs;
         }
-        $json = $this->httpGet(self::PREFIX_CGI . self::URL_GET_TICKET . 'access_token=' . $this->access_token . '&type=jsapi');
+        $json = $this->httpGet(self::PREFIX_CGI . self::URL_GET_TICKET . 'access_token=' . $this->accessToken . '&type=jsapi');
         if ($json) {
             $this->jsapi_ticket = $json['ticket'];
             $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;

@@ -5,7 +5,6 @@ namespace fize\third\wechat;
 /**
  * 微信核心项目自定义error code
  * @internal 仅用作类内部使用，不用于官方API接口的errCode码
- * @package fize\third\wechat
  */
 class ErrorCode
 {
@@ -39,7 +38,7 @@ class ErrorCode
     /**
      * 返回错误代码描述
      * @param int $err
-     * @return mixed
+     * @return string|false 不存在该错误码时返回false
      */
     public static function getErrText($err)
     {

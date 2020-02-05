@@ -25,11 +25,11 @@ class Other extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
     }
 
     /**
@@ -52,7 +52,7 @@ class Other extends Api
         if ($type == 1) {
             unset($data['expire_seconds']);
         }
-        return $this->httpPost(self::PREFIX_API . self::URL_QRCODE_CREATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_QRCODE_CREATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -79,7 +79,7 @@ class Other extends Api
             'action' => 'long2short',
             'long_url' => $long_url
         );
-        $json = $this->httpPost(self::PREFIX_API . self::URL_SHORTURL . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $json = $this->httpPost(self::PREFIX_API . self::URL_SHORTURL . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($json) {
             return $json['short_url'];
         } else {
@@ -117,6 +117,6 @@ class Other extends Api
         } elseif ($region) {
             $data['region'] = $region;
         }
-        return $this->httpPost(self::PREFIX_API . self::URL_SEMANTIC_SEMPROXY_SEARCH . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_API . self::URL_SEMANTIC_SEMPROXY_SEARCH . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 }

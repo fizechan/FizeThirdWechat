@@ -27,11 +27,11 @@ class Group extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
+        parent::__construct($options);
         //检测TOKEN
         $this->checkAccessToken();
     }
@@ -46,7 +46,7 @@ class Group extends Api
         $data = array(
             'group' => array('name' => $name)
         );
-        return $this->httpPost(self::PREFIX_CGI . self::URL_GROUP_CREATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        return $this->httpPost(self::PREFIX_CGI . self::URL_GROUP_CREATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     /**
@@ -55,7 +55,7 @@ class Group extends Api
      */
     public function getGroup()
     {
-        return $this->httpget(self::PREFIX_CGI . self::URL_GROUP_GET . 'access_token=' . $this->access_token);
+        return $this->httpget(self::PREFIX_CGI . self::URL_GROUP_GET . 'access_token=' . $this->accessToken);
     }
 
     /**
@@ -68,7 +68,7 @@ class Group extends Api
         $data = array(
             'openid' => $openid
         );
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_USER_GROUP . 'access_token=' . $this->access_token, Json::encode($data));
+        $json = $this->httpPost(self::PREFIX_CGI . self::URL_USER_GROUP . 'access_token=' . $this->accessToken, Json::encode($data));
         if ($json) {
             if (isset($json['groupid'])) {
                 return $json['groupid'];
@@ -88,7 +88,7 @@ class Group extends Api
         $data = array(
             'group' => array('id' => $groupid, 'name' => $name)
         );
-        $t_rst = $this->httpPost(self::PREFIX_CGI . self::URL_GROUP_UPDATE . 'access_token=' . $this->access_token, Json::encode($data, JSON_UNESCAPED_UNICODE));
+        $t_rst = $this->httpPost(self::PREFIX_CGI . self::URL_GROUP_UPDATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
         if ($t_rst) {
             return true;
         } else {
@@ -108,7 +108,7 @@ class Group extends Api
             'openid' => $openid,
             'to_groupid' => $groupid
         );
-        $t_rst = $this->httpPost(self::PREFIX_CGI . self::URL_GROUP_MEMBER_UPDATE . 'access_token=' . $this->access_token, Json::encode($data));
+        $t_rst = $this->httpPost(self::PREFIX_CGI . self::URL_GROUP_MEMBER_UPDATE . 'access_token=' . $this->accessToken, Json::encode($data));
         if ($t_rst) {
             return true;
         } else {
@@ -128,6 +128,6 @@ class Group extends Api
             'openid_list' => $openid_list,
             'to_groupid' => $groupid
         );
-        return $this->httpPost(self::PREFIX_CGI . self::URL_GROUP_MEMBER_BATCHUPDATE . 'access_token=' . $this->access_token, Json::encode($data));
+        return $this->httpPost(self::PREFIX_CGI . self::URL_GROUP_MEMBER_BATCHUPDATE . 'access_token=' . $this->accessToken, Json::encode($data));
     }
 }

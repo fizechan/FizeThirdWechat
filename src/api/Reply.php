@@ -36,12 +36,12 @@ class Reply extends Api
 
     /**
      * 构造函数
-     * @param array $p_options 参数数组
+     * @param array $options 参数数组
      */
-    public function __construct($p_options)
+    public function __construct($options)
     {
-        parent::__construct($p_options);
-        $this->_from = $p_options['fromusername'];
+        parent::__construct($options);
+        $this->_from = $options['fromusername'];
     }
 
     /**
