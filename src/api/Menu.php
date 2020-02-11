@@ -12,15 +12,6 @@ use fize\third\wechat\Api;
  */
 class Menu extends Api
 {
-
-    const URI_MENU_CREATE = '/menu/create';
-    const URI_MENU_GET_CURRENT_SELFMENU_INFO = '/get_current_selfmenu_info';
-    const URI_MENU_DELETE = '/menu/delete';
-    const URI_MENU_ADDCONDITIONAL = '/menu/addconditional';
-    const URI_MENU_DELCONDITIONAL = '/menu/delconditional';
-    const URI_MENU_TRYMATCH = '/menu/trymatch';
-    const URI_MENU_GET = '/menu/get';
-
     const BUTTON_TYPE_CLICK = 'click';
     const BUTTON_TYPE_VIEW = 'view';
     const BUTTON_TYPE_SCANCODE_PUSH = 'scancode_push';
@@ -40,7 +31,7 @@ class Menu extends Api
     public function __construct(array $options)
     {
         parent::__construct($options);
-        $this->checkAccessToken();  //检测TOKEN以便于URI中的token字段马上有效
+        $this->checkAccessToken();  // 检测TOKEN以便于URI中的token字段马上有效
     }
 
     /**
@@ -53,7 +44,7 @@ class Menu extends Api
         $body = [
             'button' => $buttons
         ];
-        $result = $this->httpPost(self::URI_MENU_CREATE . '?access_token=' . $this->accessToken, $body);
+        $result = $this->httpPost("/menu/create?access_token={$this->accessToken}", $body);
         if (!$result) {
             return false;
         }
@@ -66,7 +57,7 @@ class Menu extends Api
      */
     public function getCurrentSelfmenuInfo()
     {
-        return $this->httpGet(self::URI_MENU_GET_CURRENT_SELFMENU_INFO . '?access_token=' . $this->accessToken);
+        return $this->httpGet("/get_current_selfmenu_info?access_token={$this->accessToken}");
     }
 
     /**
@@ -75,7 +66,7 @@ class Menu extends Api
      */
     public function delete()
     {
-        $result = $this->httpGet(self::URI_MENU_DELETE . '?access_token=' . $this->accessToken);
+        $result = $this->httpGet("/menu/delete?access_token={$this->accessToken}");
         if ($result) {
             return true;
         } else {
@@ -89,7 +80,7 @@ class Menu extends Api
      */
     public function get()
     {
-        return $this->httpGet(self::URI_MENU_GET . '?access_token=' . $this->accessToken);
+        return $this->httpGet("/menu/get?access_token={$this->accessToken}");
     }
 
 
@@ -106,7 +97,7 @@ class Menu extends Api
             'button' => $buttons,
             'matchrule' => $matchrule
         ];
-        $json = $this->httpPost(self::URI_MENU_ADDCONDITIONAL . '?access_token=' . $this->accessToken, $body);
+        $json = $this->httpPost("/menu/addconditional?access_token={$this->accessToken}", $body);
         if (!$json) {
             return false;
         }
@@ -123,7 +114,7 @@ class Menu extends Api
         $body = [
             'menuid' => $menuid
         ];
-        $json = $this->httpPost(self::URI_MENU_DELCONDITIONAL . '?access_token=' . $this->accessToken, $body);
+        $json = $this->httpPost("/menu/delconditional?access_token={$this->accessToken}", $body);
         if (!$json) {
             return false;
         }
@@ -140,6 +131,6 @@ class Menu extends Api
         $body = [
             'user_id' => $user_id
         ];
-        return $this->httpPost(self::URI_MENU_TRYMATCH . '?access_token=' . $this->accessToken, $body);
+        return $this->httpPost("/menu/trymatch?access_token={$this->accessToken}", $body);
     }
 }

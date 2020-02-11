@@ -51,12 +51,6 @@ class Api
      */
     const PREFIX_CGI = '/cgi-bin';
 
-    const URI_TOKEN = '/token';
-
-    const URI_GETCALLBACKIP = '/getcallbackip';
-
-    const URI_CALLBACK_CHECK = '/callback/check';
-
     const ACTION_DNS = 'dns';
 
     const ACTION_PING = 'ping';
@@ -102,11 +96,13 @@ class Api
     protected $host;
 
     /**
+     * @todo 待删除
      * @var string
      */
     protected $token;
 
     protected $encrypt_type;
+
     protected $encodingAesKey;
 
     /**
@@ -250,18 +246,18 @@ class Api
         $appid = $this->appid;
         $appsecret = $this->appsecret;
 
-        $cache = $this->cache->get($this->cacheKey);  //获取当前缓存的access_token
+        $cache = $this->cache->get($this->cacheKey . $appid);  //获取当前缓存的access_token
         if ($cache) {
             $this->accessToken = $cache;
             return true;
         }
-        $json = $this->httpGet(self::URI_TOKEN . "?grant_type=client_credential&appid={$appid}&secret={$appsecret}", true, false);
+        $json = $this->httpGet("/token?grant_type=client_credential&appid={$appid}&secret={$appsecret}", true, false);
         if (!$json) {
             return false;
         }
         $this->accessToken = $json['access_token'];
         $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;
-        $this->cache->set($this->cacheKey, $json['access_token'], $expire);  //将access_token缓存
+        $this->cache->set($this->cacheKey . $appid, $json['access_token'], $expire);  //将access_token缓存
         return true;
     }
 
@@ -271,18 +267,7 @@ class Api
     public function resetAccessToken()
     {
         $this->accessToken = '';
-        $this->cache->delete($this->cacheKey);
-    }
-
-    /**
-     * 返回当前AccessToken
-     *
-     * 供测试使用
-     * @return string
-     */
-    public function getAccessToken()
-    {
-        return $this->accessToken;
+        $this->cache->delete($this->cacheKey . $this->appid);
     }
 
     /**
@@ -300,12 +285,12 @@ class Api
 
     /**
      * 获取微信服务器IP地址列表
-     * @return mixed 成功时返回数组，失败时返回false
+     * @return array|false 成功时返回数组，失败时返回false
      */
     public function getCallBackIp()
     {
         $this->checkAccessToken();
-        $json = $this->httpGet(self::URI_GETCALLBACKIP . '?access_token=' . $this->accessToken);
+        $json = $this->httpGet("/getcallbackip?access_token={$this->accessToken}");
         if (!$json) {
             return false;
         }
@@ -330,7 +315,7 @@ class Api
             'action'         => $action,
             'check_operator' => $check_operator
         ];
-        return $this->httpPost(self::URI_CALLBACK_CHECK . '?access_token=' . $this->accessToken, $params);
+        return $this->httpPost("/callback/check?access_token={$this->accessToken}", $params);
     }
 
     /**

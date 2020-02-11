@@ -3,28 +3,17 @@
 
 namespace fize\third\wechat\api;
 
-
-use fize\third\wechat\Api;
-use fize\crypt\Json;
 use CURLFile;
+use fize\crypt\Json;
+use fize\net\Http;
+use fize\third\wechat\Api;
 
 
 /**
- * 微信多媒体管理类
+ * 临时素材
  */
 class Media extends Api
 {
-    //上传多媒体的路径
-    const URL_MEDIA_UPLOAD = '/media/upload?';
-    const URL_MEDIA_GET = '/media/get?';
-
-    const URL_MEDIA_UPLOADNEWS = '/media/uploadnews?';
-
-    const URL_MEDIA_VIDEOUPLOAD = '/media/uploadvideo?';
-
-    //上传图片的路径
-    const URL_MEDIA_UPLOADIMG = '/media/uploadimg?';
-
     const MEDIA_TYPE_IMAGE = 'image';
     const MEDIA_TYPE_VOICE = 'voice';
     const MEDIA_TYPE_VIDEO = 'video';
@@ -37,36 +26,35 @@ class Media extends Api
     public function __construct(array $options)
     {
         parent::__construct($options);
-        //检测TOKEN
-        $this->checkAccessToken();
+        $this->checkAccessToken();  // 检测TOKEN以便于URI中的token字段马上有效
     }
 
     /**
      * 新增临时素材
      * 注意：上传大文件时可能需要先调用 set_time_limit(0) 避免超时
-     * @param string $path 要上传的文件路径
+     * @param string $file 要上传的文件
      * @param string $type 类型：图片:image 语音:voice 视频:video 缩略图:thumb
-     * @return mixed
+     * @return array|false 失败返回false
      */
-    public function upload($path, $type)
+    public function upload($file, $type)
     {
-        $data = [
-            'media' => new CURLFile(realpath($path))
+        $params = [
+            'media' => new CURLFile(realpath($file))
         ];
-        return $this->httpPost(self::PREFIX_CGI . self::URL_MEDIA_UPLOAD . 'access_token=' . $this->accessToken . '&type=' . $type, $data);
+        return $this->httpPost("/media/upload?access_token={$this->accessToken}&type={$type}", $params, false);
     }
 
     /**
-     * 根据媒体文件ID获取媒体文件(认证后的订阅号可用)
-     * @param string $media_id 媒体文件id
-     * @return mixed data
+     * 获取临时素材
+     * @param string $media_id 媒体文件ID
+     * @return array|false 失败返回false
      */
     public function get($media_id)
     {
-        $result = $this->http->get(self::PREFIX_CGI . self::URL_MEDIA_GET . 'access_token=' . $this->accessToken . '&media_id=' . $media_id);
+        $result = $this->httpGet("/media/get?access_token={$this->accessToken}&media_id={$media_id}");
         if ($result) {
-            $headers = $this->http->getResponseHeaders();
-            if(isset($headers['Content-Type']) && $headers['Content-Type'] == 'text/plain'){
+            $ContentType = Http::getLastResponse()->getHeaderLine('Content-Type');
+            if ($ContentType == 'text/plain') {
                 $json = Json::decode($result);
                 if (isset($json['errcode'])) {
                     $this->errCode = $json['errcode'];
@@ -74,12 +62,12 @@ class Media extends Api
                     return false;
                 }
                 return [  //返回JSON
-                    'type' => 'json',
+                    'type'  => 'json',
                     'value' => $json
                 ];
             }
             return [  //返回二进制流
-                'type' => 'binary',
+                'type'  => 'binary',
                 'value' => $result
             ];
         }
@@ -87,45 +75,19 @@ class Media extends Api
     }
 
     /**
-     * 上传图文消息素材(认证后的订阅号可用)
-     * @param array $data 消息结构{"articles":[{...}]}
-     * @return mixed
+     * 上传图文消息内的图片获取URL
+     * @param string $file 要上传的文件
+     * @return string|false 成功返回URI失败返回false
      */
-    public function uploadArticles($data)
+    public function uploadImg($file)
     {
-        return $this->httpPost(self::PREFIX_API . self::URL_MEDIA_UPLOADNEWS . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
-    }
-
-    /**
-     * 上传视频素材(认证后的订阅号可用)
-     * @param array $data 消息结构
-     * {
-     *     "media_id"=>"",     //通过上传媒体接口得到的MediaId
-     *     "title"=>"TITLE",    //视频标题
-     *     "description"=>"Description"        //视频描述
-     * }
-     * @return boolean|array
-     * {
-     *     "type":"video",
-     *     "media_id":"mediaid",
-     *     "created_at":1398848981
-     *  }
-     */
-    public function uploadMpVideo($data)
-    {
-        return $this->httpPost(self::PREFIX_FILE . self::URL_MEDIA_VIDEOUPLOAD . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
-    }
-
-    /**
-     * 上传LOGO等可用图片
-     * @param string $path 要上传的文件路径
-     * @return boolean|array
-     */
-    public function uploadImg($path)
-    {
-        $data = [
-            'buffer' => new CURLFile(realpath($path))
+        $params = [
+            'media' => new CURLFile(realpath($file))
         ];
-        return $this->httpPost(self::PREFIX_API . self::URL_MEDIA_UPLOADIMG . 'access_token=' . $this->accessToken, $data, true);
+        $json = $this->httpPost("/media/uploadimg?access_token={$this->accessToken}", $params, false);
+        if (!$json) {
+            return false;
+        }
+        return $json['url'];
     }
 }

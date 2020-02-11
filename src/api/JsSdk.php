@@ -5,55 +5,34 @@ namespace fize\third\wechat\api;
 
 
 use fize\third\wechat\Api;
-use fize\third\wechat\Prpcrypt;
 
 
 /**
- * 微信JSSDK类
+ * JS-SDK
  */
 class JsSdk extends Api
 {
 
-    const URL_GET_TICKET = '/ticket/getticket?';
-
-    private $jsapi_ticket = '';
-
     /**
-     * 构造函数
-     * @param array $options 参数数组
+     * @var string jsapiTicket缓存名
      */
-    public function __construct(array $options)
-    {
-        parent::__construct($options);
-    }
+    private $jsapiTicketCacheKey = "_WEIXIN_JSAPI_TICKET_";
 
     /**
      * 获取JSAPI授权TICKET
-     * @param string $appid 用于多个appid时使用,可空
-     * @param string $jsapi_ticket 手动指定jsapi_ticket，非必要情况不建议用
-     * @return mixed
+     * @return string|false 失败时返回false
      */
-    public function getJsApiTicket($appid = '', $jsapi_ticket = '')
+    public function getJsApiTicket()
     {
-        $this->checkAccessToken();
-        if (!$appid) $appid = $this->appid;
-        if ($jsapi_ticket) {
-            //手动指定token，优先使用
-            $this->jsapi_ticket = $jsapi_ticket;
-            return $this->jsapi_ticket;
-        }
-        $authname = 'wechat_jsapi_ticket' . $appid;
-        $rs = $this->cache->get($authname);
+        $rs = $this->cache->get($this->jsapiTicketCacheKey . $this->appid);
         if ($rs) {
-            $this->jsapi_ticket = $rs;
             return $rs;
         }
-        $json = $this->httpGet(self::PREFIX_CGI . self::URL_GET_TICKET . 'access_token=' . $this->accessToken . '&type=jsapi');
+        $json = $this->httpGet("/ticket/getticket?access_token={$this->accessToken}&type=jsapi");
         if ($json) {
-            $this->jsapi_ticket = $json['ticket'];
             $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;
-            $this->cache->set($authname, $this->jsapi_ticket, $expire);
-            return $this->jsapi_ticket;
+            $this->cache->set($this->jsapiTicketCacheKey . $this->appid, $json['ticket'], $expire);
+            return $json['ticket'];
         } else {
             return false;
         }
@@ -61,31 +40,20 @@ class JsSdk extends Api
 
     /**
      * 删除JSAPI授权TICKET
-     * @param string $appid 用于多个appid时使用
      * @return bool
      */
-    public function resetJsApiTicket($appid = '')
+    public function resetJsApiTicket()
     {
-        if (!$appid) {
-            $appid = $this->appid;
-        }
-        $this->jsapi_ticket = '';
-        $authname = 'wechat_jsapi_ticket' . $appid;
-        $this->cache->remove($authname);
-        return true;
+        return $this->cache->delete($this->jsapiTicketCacheKey . $this->appid);
     }
 
     /**
      * 获取签名
      * @param array $arrdata 签名数组
-     * @param string $method 签名方法
-     * @return boolean|string 签名值
+     * @return string 签名值
      */
-    private function getSignature($arrdata, $method = "sha1")
+    private function getSignature($arrdata)
     {
-        if (!function_exists($method)) {
-            return false;
-        }
         ksort($arrdata);
         $paramstring = "";
         foreach ($arrdata as $key => $value) {
@@ -95,8 +63,7 @@ class JsSdk extends Api
                 $paramstring .= "&" . $key . "=" . $value;
             }
         }
-        $Sign = $method($paramstring);
-        return $Sign;
+        return sha1($paramstring);
     }
 
     /**
@@ -104,19 +71,19 @@ class JsSdk extends Api
      * @param string $url 网页的URL，自动处理#及其后面部分 为空则签名当前页
      * @param int $timestamp 当前时间戳 (为空则自动生成)
      * @param string $noncestr 随机串 (为空则自动生成)
-     * @param string $appid 用于多个appid时使用,可空
      * @return array|bool 返回签名字串
      */
-    public function getJsSign($url = '', $timestamp = 0, $noncestr = '', $appid = '')
+    public function getJsSign($url = '', $timestamp = 0, $noncestr = '')
     {
-        if (!$this->jsapi_ticket && !$this->getJsApiTicket($appid)) {
+        $jsapi_ticket = $this->getJsApiTicket();
+        if (!$jsapi_ticket) {
             return false;
         }
         if (!$timestamp) {
             $timestamp = time();
         }
         if (!$noncestr) {
-            $noncestr = Prpcrypt::getRandomStr();
+            $noncestr = uniqid();
         }
         $ret = strpos($url, '#');
         if ($ret) {
@@ -127,18 +94,22 @@ class JsSdk extends Api
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
             $url = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         }
-        $arrdata = array("timestamp" => $timestamp, "noncestr" => $noncestr, "url" => $url, "jsapi_ticket" => $this->jsapi_ticket);
+        $arrdata = [
+            "timestamp"    => $timestamp,
+            "noncestr"     => $noncestr,
+            "url"          => $url,
+            "jsapi_ticket" => $jsapi_ticket
+        ];
         $sign = $this->getSignature($arrdata);
         if (!$sign) {
             return false;
         }
-        $signPackage = array(
+        return [
             "appId"     => $this->appid,
             "nonceStr"  => $noncestr,
             "timestamp" => $timestamp,
             "url"       => $url,
             "signature" => $sign
-        );
-        return $signPackage;
+        ];
     }
 }
