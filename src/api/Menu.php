@@ -25,26 +25,16 @@ class Menu extends Api
     const BUTTON_TYPE_MINIPROGRAM = 'miniprogram';
 
     /**
-     * 构造函数
-     * @param array $options 参数数组
-     */
-    public function __construct(array $options)
-    {
-        parent::__construct($options);
-        $this->checkAccessToken();  // 检测TOKEN以便于URI中的token字段马上有效
-    }
-
-    /**
      * 创建接口
      * @param array $buttons 菜单数组数据
      * @return bool
      */
     public function create(array $buttons)
     {
-        $body = [
+        $params = [
             'button' => $buttons
         ];
-        $result = $this->httpPost("/menu/create?access_token={$this->accessToken}", $body);
+        $result = $this->httpPost("/menu/create?access_token={$this->accessToken}", $params);
         if (!$result) {
             return false;
         }
@@ -83,8 +73,6 @@ class Menu extends Api
         return $this->httpGet("/menu/get?access_token={$this->accessToken}");
     }
 
-
-
     /**
      * 创建个性化菜单
      * @param array $buttons 菜单
@@ -93,11 +81,11 @@ class Menu extends Api
      */
     public function addconditional(array $buttons, array $matchrule)
     {
-        $body = [
-            'button' => $buttons,
+        $params = [
+            'button'    => $buttons,
             'matchrule' => $matchrule
         ];
-        $json = $this->httpPost("/menu/addconditional?access_token={$this->accessToken}", $body);
+        $json = $this->httpPost("/menu/addconditional?access_token={$this->accessToken}", $params);
         if (!$json) {
             return false;
         }
@@ -111,10 +99,10 @@ class Menu extends Api
      */
     public function delconditional($menuid)
     {
-        $body = [
+        $params = [
             'menuid' => $menuid
         ];
-        $json = $this->httpPost("/menu/delconditional?access_token={$this->accessToken}", $body);
+        $json = $this->httpPost("/menu/delconditional?access_token={$this->accessToken}", $params);
         if (!$json) {
             return false;
         }
@@ -128,9 +116,9 @@ class Menu extends Api
      */
     public function trymatch($user_id)
     {
-        $body = [
+        $params = [
             'user_id' => $user_id
         ];
-        return $this->httpPost("/menu/trymatch?access_token={$this->accessToken}", $body);
+        return $this->httpPost("/menu/trymatch?access_token={$this->accessToken}", $params);
     }
 }

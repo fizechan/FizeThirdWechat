@@ -10,7 +10,6 @@ use fize\third\wechat\Api;
 
 /**
  * 永久素材
- * Class Material
  */
 class Material extends Api
 {
@@ -18,16 +17,6 @@ class Material extends Api
     const MEDIA_TYPE_VOICE = 'voice';
     const MEDIA_TYPE_VIDEO = 'video';
     const MEDIA_TYPE_THUMB = 'thumb';
-
-    /**
-     * 构造函数
-     * @param array $options 参数数组
-     */
-    public function __construct(array $options)
-    {
-        parent::__construct($options);
-        $this->checkAccessToken();  // 检测TOKEN以便于URI中的token字段马上有效
-    }
 
     /**
      * 新增永久图文素材

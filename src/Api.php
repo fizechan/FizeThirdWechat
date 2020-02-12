@@ -140,6 +140,8 @@ class Api
         $cache_handler = isset($options['cache']['handler']) ? $options['cache']['handler'] : 'file';
         $cache_config = isset($options['cache']['config']) ? $options['cache']['config'] : [];
         $this->cache = Cache::getInstance($cache_handler, $cache_config);
+
+        $this->checkAccessToken();  // 检测TOKEN以便于URI中的token字段马上有效
     }
 
     /**
@@ -289,7 +291,6 @@ class Api
      */
     public function getCallBackIp()
     {
-        $this->checkAccessToken();
         $json = $this->httpGet("/getcallbackip?access_token={$this->accessToken}");
         if (!$json) {
             return false;
@@ -310,7 +311,6 @@ class Api
      */
     public function callbackCheck($action, $check_operator)
     {
-        $this->checkAccessToken();
         $params = [
             'action'         => $action,
             'check_operator' => $check_operator

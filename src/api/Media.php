@@ -20,16 +20,6 @@ class Media extends Api
     const MEDIA_TYPE_THUMB = 'thumb';
 
     /**
-     * 构造函数
-     * @param array $options 参数数组
-     */
-    public function __construct(array $options)
-    {
-        parent::__construct($options);
-        $this->checkAccessToken();  // 检测TOKEN以便于URI中的token字段马上有效
-    }
-
-    /**
      * 新增临时素材
      * 注意：上传大文件时可能需要先调用 set_time_limit(0) 避免超时
      * @param string $file 要上传的文件
