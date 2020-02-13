@@ -319,6 +319,32 @@ class Api
     }
 
     /**
+     * 通过ticket换取二维码
+     * @param string $ticket 二维码ticket
+     * @return string 返回二维码URL
+     */
+    public static function showqrcode($ticket)
+    {
+        $ticket = urlencode($ticket);
+        return "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={$ticket}";
+    }
+
+    /**
+     * 长连接转短链接
+     * @param string $long_url 需要转换的长链接
+     * @param string $action 动作
+     * @return bool|mixed
+     */
+    public function shorturl($long_url, $action = 'long2short')
+    {
+        $params = [
+            'action'         => $action,
+            'long_url' => $long_url
+        ];
+        return $this->httpPost("/shorturl?access_token={$this->accessToken}", $params);
+    }
+
+    /**
      * 补齐完整URI
      * @param string $path 路径
      * @param string $prefix 路径前缀
