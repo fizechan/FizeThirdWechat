@@ -1,16 +1,17 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat\offiaccount;
 
 
-use fize\third\wechat\Api;
+use fize\third\wechat\Offiaccount;
 
 
 /**
  * JS-SDK
+ * @todo 可能移除放置在外部
  */
-class JsSdk extends Api
+class JsSdk extends Offiaccount
 {
 
     /**

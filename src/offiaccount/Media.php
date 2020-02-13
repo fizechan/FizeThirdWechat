@@ -1,18 +1,18 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat\offiaccount;
 
 use CURLFile;
 use fize\crypt\Json;
 use fize\net\Http;
-use fize\third\wechat\Api;
+use fize\third\wechat\Offiaccount;
 
 
 /**
  * 临时素材
  */
-class Media extends Api
+class Media extends Offiaccount
 {
     const MEDIA_TYPE_IMAGE = 'image';
     const MEDIA_TYPE_VOICE = 'voice';

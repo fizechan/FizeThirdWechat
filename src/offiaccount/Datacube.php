@@ -1,16 +1,16 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat\offiaccount;
 
 
-use fize\third\wechat\Api;
+use fize\third\wechat\Offiaccount;
 
 
 /**
  * 数据统计
  */
-class DataCube extends Api
+class DataCube extends Offiaccount
 {
 
     /**

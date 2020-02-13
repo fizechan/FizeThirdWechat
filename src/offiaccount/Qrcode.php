@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat\offiaccount;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\Offiaccount;
 
 /**
  * 二维码
  */
-class Qrcode extends Api
+class Qrcode extends Offiaccount
 {
 
     /**

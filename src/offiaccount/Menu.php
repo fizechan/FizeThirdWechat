@@ -1,16 +1,16 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat\offiaccount;
 
 
-use fize\third\wechat\Api;
+use fize\third\wechat\Offiaccount;
 
 
 /**
  * 自定义菜单
  */
-class Menu extends Api
+class Menu extends Offiaccount
 {
     const BUTTON_TYPE_CLICK = 'click';
     const BUTTON_TYPE_VIEW = 'view';
@@ -39,15 +39,6 @@ class Menu extends Api
             return false;
         }
         return true;
-    }
-
-    /**
-     * 查询接口
-     * @return array
-     */
-    public function getCurrentSelfmenuInfo()
-    {
-        return $this->httpGet("/get_current_selfmenu_info?access_token={$this->accessToken}");
     }
 
     /**
