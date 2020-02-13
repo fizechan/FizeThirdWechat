@@ -5,77 +5,218 @@ namespace fize\third\wechat\api;
 
 
 use fize\third\wechat\Api;
-use fize\crypt\Json;
 
 
 /**
- * 微信数据统计类
+ * 数据统计
  */
 class DataCube extends Api
 {
 
-    ///数据分析接口
-    static $DATACUBE_URL_ARR = array(        //用户分析
-        'user' => array(
-            'summary' => '/datacube/getusersummary?',        //获取用户增减数据（getusersummary）
-            'cumulate' => '/datacube/getusercumulate?',        //获取累计用户数据（getusercumulate）
-        ),
-        'article' => array(            //图文分析
-            'summary' => '/datacube/getarticlesummary?',        //获取图文群发每日数据（getarticlesummary）
-            'total' => '/datacube/getarticletotal?',        //获取图文群发总数据（getarticletotal）
-            'read' => '/datacube/getuserread?',            //获取图文统计数据（getuserread）
-            'readhour' => '/datacube/getuserreadhour?',        //获取图文统计分时数据（getuserreadhour）
-            'share' => '/datacube/getusershare?',            //获取图文分享转发数据（getusershare）
-            'sharehour' => '/datacube/getusersharehour?',        //获取图文分享转发分时数据（getusersharehour）
-        ),
-        'upstreammsg' => array(        //消息分析
-            'summary' => '/datacube/getupstreammsg?',        //获取消息发送概况数据（getupstreammsg）
-            'hour' => '/datacube/getupstreammsghour?',    //获取消息分送分时数据（getupstreammsghour）
-            'week' => '/datacube/getupstreammsgweek?',    //获取消息发送周数据（getupstreammsgweek）
-            'month' => '/datacube/getupstreammsgmonth?',    //获取消息发送月数据（getupstreammsgmonth）
-            'dist' => '/datacube/getupstreammsgdist?',    //获取消息发送分布数据（getupstreammsgdist）
-            'distweek' => '/datacube/getupstreammsgdistweek?',    //获取消息发送分布周数据（getupstreammsgdistweek）
-            'distmonth' => '/datacube/getupstreammsgdistmonth?',    //获取消息发送分布月数据（getupstreammsgdistmonth）
-        ),
-        'interface' => array(        //接口分析
-            'summary' => '/datacube/getinterfacesummary?',    //获取接口分析数据（getinterfacesummary）
-            'summaryhour' => '/datacube/getinterfacesummaryhour?',    //获取接口分析分时数据（getinterfacesummaryhour）
-        )
-    );
-
     /**
-     * 构造函数
-     * @param array $options 参数数组
+     * 获取用户增减数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
      */
-    public function __construct($options)
+    public function getusersummary($begin_date, $end_date)
     {
-        parent::__construct($options);
-        //检测TOKEN
-        $this->checkAccessToken();
+        return $this->action('getusersummary', $begin_date, $end_date);
     }
 
     /**
-     * 获取统计数据
-     * @param string $type 数据分类(user|article|upstreammsg|interface)分别为(用户分析|图文分析|消息分析|接口分析)
-     * @param string $subtype 数据子分类，参考 DATACUBE_URL_ARR 常量定义部分
-     * @param string $begin_date 开始时间
-     * @param string $end_date 结束时间
-     * @return boolean|array 成功返回查询结果数组，其定义请看官方文档
+     * 获取累计用户数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
      */
-    public function getDatacube($type, $subtype, $begin_date, $end_date = '')
+    public function getusercumulate($begin_date, $end_date)
     {
-        if (!isset(self::$DATACUBE_URL_ARR[$type]) || !isset(self::$DATACUBE_URL_ARR[$type][$subtype])) {
-            return false;
-        }
-        $data = array(
+        return $this->action('getusercumulate', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取图文群发每日数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getarticlesummary($begin_date, $end_date)
+    {
+        return $this->action('getarticlesummary', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取图文群发总数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getarticletotal($begin_date, $end_date)
+    {
+        return $this->action('getarticletotal', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取图文统计数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getuserread($begin_date, $end_date)
+    {
+        return $this->action('getuserread', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取图文统计分时数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getuserreadhour($begin_date, $end_date)
+    {
+        return $this->action('getuserreadhour', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取图文分享转发数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getusershare($begin_date, $end_date)
+    {
+        return $this->action('getusershare', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取图文分享转发分时数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getusersharehour($begin_date, $end_date)
+    {
+        return $this->action('getusersharehour', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取消息发送概况数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getupstreammsg($begin_date, $end_date)
+    {
+        return $this->action('getupstreammsg', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取消息分送分时数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getupstreammsghour($begin_date, $end_date)
+    {
+        return $this->action('getupstreammsghour', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取消息发送周数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getupstreammsgweek($begin_date, $end_date)
+    {
+        return $this->action('getupstreammsgweek', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取消息发送月数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getupstreammsgmonth($begin_date, $end_date)
+    {
+        return $this->action('getupstreammsgmonth', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取消息发送分布数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getupstreammsgdist($begin_date, $end_date)
+    {
+        return $this->action('getupstreammsgdist', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取消息发送分布周数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getupstreammsgdistweek($begin_date, $end_date)
+    {
+        return $this->action('getupstreammsgdistweek', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取消息发送分布月数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getupstreammsgdistmonth($begin_date, $end_date)
+    {
+        return $this->action('getupstreammsgdistmonth', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取接口分析数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getinterfacesummary($begin_date, $end_date)
+    {
+        return $this->action('getinterfacesummary', $begin_date, $end_date);
+    }
+
+    /**
+     * 获取接口分析分时数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    public function getinterfacesummaryhour($begin_date, $end_date)
+    {
+        return $this->action('getinterfacesummaryhour', $begin_date, $end_date);
+    }
+
+    /**
+     * 数据统计底层方法
+     * @param string $action 动作
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @return array|false
+     */
+    private function action($action, $begin_date, $end_date)
+    {
+        $params = [
             'begin_date' => $begin_date,
-            'end_date' => $end_date ? $end_date : $begin_date
-        );
-        $json = $this->httpPost(self::PREFIX_API . self::$DATACUBE_URL_ARR[$type][$subtype] . 'access_token=' . $this->accessToken, Json::encode($data));
-        if ($json) {
-            return isset($json['list']) ? $json['list'] : $json;
-        } else {
+            'end_date' => $end_date
+        ];
+        $json = $this->httpPost("/datacube/{$action}?access_token={$this->accessToken}", $params);
+        if (!$json) {
             return false;
         }
+        return $json['list'];
     }
 }
