@@ -168,7 +168,7 @@ class Api
      * @param bool $response_json_decode 是否对结果进行JSON解码
      * @param bool $check_token 是否检查当前的TOKEN
      * @param string $path_prefix 路径前缀
-     * @return mixed 成功时返回对应结果，失败时返回false
+     * @return mixed|false 成功时返回对应结果，失败时返回false
      */
     protected function httpGet($path, $response_json_decode = true, $check_token = true, $path_prefix = self::PREFIX_CGI)
     {
@@ -201,12 +201,12 @@ class Api
     /**
      * 核心POST函数
      * @param string $path 请求路径
-     * @param mixed $params 提交的参数，可以是数组或者字符串，如果需要上传文件必须使用数组
+     * @param array|string $params 提交的参数，可以是数组或者字符串，如果需要上传文件必须使用数组
      * @param bool $params_json_encode 是否对参数进行JSON编码
      * @param bool $response_json_decode 是否对结果进行JSON解码
      * @param bool $check_token 是否检查当前的TOKEN
      * @param string $path_prefix 路径前缀
-     * @return mixed 成功时返回对应结果，失败时返回false
+     * @return mixed|false 成功时返回对应结果，失败时返回false
      */
     protected function httpPost($path, $params, $params_json_encode = true, $response_json_decode = true, $check_token = true, $path_prefix = self::PREFIX_CGI)
     {
@@ -338,7 +338,7 @@ class Api
     public function shorturl($long_url, $action = 'long2short')
     {
         $params = [
-            'action'         => $action,
+            'action'   => $action,
             'long_url' => $long_url
         ];
         return $this->httpPost("/shorturl?access_token={$this->accessToken}", $params);

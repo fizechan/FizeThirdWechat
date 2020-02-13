@@ -201,6 +201,94 @@ class DataCube extends Api
     }
 
     /**
+     * 拉取卡券概况数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @param int $cond_source 卡券来源
+     * @return array|false
+     */
+    public function getcardbizuininfo($begin_date, $end_date, $cond_source)
+    {
+        $params = [
+            'begin_date' => $begin_date,
+            'end_date'   => $end_date,
+            'cond_source' => $cond_source
+        ];
+        $json = $this->httpPost("/datacube/getcardbizuininfo?access_token={$this->accessToken}", $params);
+        if (!$json) {
+            return false;
+        }
+        return $json['list'];
+    }
+
+    /**
+     * 获取免费券数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @param int $cond_source 卡券来源
+     * @param string $card_id 卡券ID
+     * @return array|false
+     */
+    public function getcardcardinfo($begin_date, $end_date, $cond_source, $card_id = null)
+    {
+        $params = [
+            'begin_date' => $begin_date,
+            'end_date'   => $end_date,
+            'cond_source' => $cond_source
+        ];
+        if(!is_null($card_id)) {
+            $params['card_id'] = $card_id;
+        }
+        $json = $this->httpPost("/datacube/getcardcardinfo?access_token={$this->accessToken}", $params);
+        if (!$json) {
+            return false;
+        }
+        return $json['list'];
+    }
+
+    /**
+     * 拉取会员卡概况数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @param int $cond_source 卡券来源
+     * @return array|false
+     */
+    public function getcardmembercardinfo($begin_date, $end_date, $cond_source)
+    {
+        $params = [
+            'begin_date' => $begin_date,
+            'end_date'   => $end_date,
+            'cond_source' => $cond_source
+        ];
+        $json = $this->httpPost("/datacube/getcardmembercardinfo?access_token={$this->accessToken}", $params);
+        if (!$json) {
+            return false;
+        }
+        return $json['list'];
+    }
+
+    /**
+     * 拉取会员卡概况数据
+     * @param string $begin_date 开始日期
+     * @param string $end_date 结束日期
+     * @param string $card_id 卡券ID
+     * @return array|false
+     */
+    public function getcardmembercarddetail($begin_date, $end_date, $card_id)
+    {
+        $params = [
+            'begin_date' => $begin_date,
+            'end_date'   => $end_date,
+            'card_id' => $card_id
+        ];
+        $json = $this->httpPost("/datacube/getcardmembercarddetail?access_token={$this->accessToken}", $params);
+        if (!$json) {
+            return false;
+        }
+        return $json['list'];
+    }
+
+    /**
      * 数据统计底层方法
      * @param string $action 动作
      * @param string $begin_date 开始日期
@@ -211,7 +299,7 @@ class DataCube extends Api
     {
         $params = [
             'begin_date' => $begin_date,
-            'end_date' => $end_date
+            'end_date'   => $end_date
         ];
         $json = $this->httpPost("/datacube/{$action}?access_token={$this->accessToken}", $params);
         if (!$json) {

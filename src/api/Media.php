@@ -69,7 +69,7 @@ class Media extends Api
      * @param string $file 要上传的文件
      * @return string|false 成功返回URI失败返回false
      */
-    public function uploadImg($file)
+    public function uploadimg($file)
     {
         $params = [
             'media' => new CURLFile(realpath($file))
