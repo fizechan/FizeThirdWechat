@@ -278,6 +278,15 @@ class Offiaccount extends Common
     }
 
     /**
+     * 获取公众号的自动回复规则
+     * @return array
+     */
+    public function getCurrentAutoreplyInfo()
+    {
+        return $this->httpGet("/get_current_autoreply_info?access_token={$this->accessToken}");
+    }
+
+    /**
      * 补齐完整URI
      * @param string $path 路径
      * @param string $prefix 路径前缀

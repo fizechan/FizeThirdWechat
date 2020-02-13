@@ -250,7 +250,7 @@ EOF;
      * @param bool $return 是否返回信息而不抛出到浏览器 默认:否
      * @return mixed
      */
-    public function reply($msg = array(), $return = false)
+    public function send($msg = array(), $return = false)
     {
         if (empty($this->_to)) {
             return false;

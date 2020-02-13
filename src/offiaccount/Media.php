@@ -80,4 +80,17 @@ class Media extends Offiaccount
         }
         return $json['url'];
     }
+
+    /**
+     * 上传图文消息素材
+     * @param array $articles 图文消息
+     * @return array|false
+     */
+    public function uploadnews(array $articles)
+    {
+        $params = [
+            'articles' => $articles
+        ];
+        return $this->httpPost("/media/uploadnews?access_token={$this->accessToken}", $params);
+    }
 }
