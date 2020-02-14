@@ -1,10 +1,10 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat\message;
 
 
-use fize\third\wechat\Api;
+use fize\third\wechat\Message;
 use fize\third\wechat\Prpcrypt;
 use fize\xml\SimpleXml;
 
@@ -13,7 +13,7 @@ use fize\xml\SimpleXml;
  * 微信信息接收类
  * @todo 需要服务器配合测试
  */
-class Receive extends Api
+class Receive extends Message
 {
     private $postxml;
     private $_receive;

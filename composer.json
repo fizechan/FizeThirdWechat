@@ -13,9 +13,9 @@
         "ext-json": "*",
         "ext-curl": "*",
         "ext-libxml": "*",
-        "fize/net": "~4.0",
         "fize/crypt": "~3.2",
         "fize/cache": "~3.0",
+        "fize/net": "~4.0",
         "fize/xml": "~2.1"
     },
 	"require-dev": {

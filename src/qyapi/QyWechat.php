@@ -1,22 +1,4 @@
 <?php
-/**
- *	微信公众平台企业号PHP-SDK, 官方API类库
- *  @author  binsee <binsee@163.com>
- *  @link https://github.com/binsee/wechat-php-sdk
- *  @version 1.0
- *  usage:
- *   $options = array(
- *			'token'=>'tokenaccesskey', //填写应用接口的Token
- *			'encodingaeskey'=>'encodingaeskey', //填写加密用的EncodingAESKey
- *			'appid'=>'wxdk1234567890', //填写高级调用功能的app id
- *			'appsecret'=>'xxxxxxxxxxxxxxxxxxx', //填写高级调用功能的密钥
- *			'agentid'=>'1', //应用的id
- *			'debug'=>false, //调试开关
- *			'_logcallback'=>'logg', //调试输出方法，需要有一个string类型的参数
- *		);
- *
- */
-include_once 'WxEncrypt.class.php';
 class QyWechat{
     const MSGTYPE_TEXT = 'text';
     const MSGTYPE_IMAGE = 'image';
@@ -45,7 +27,7 @@ class QyWechat{
     const TAG_GET_URL = '/tag/get?';
     const TAG_ADDUSER_URL = '/tag/addtagusers?';
     const TAG_DELUSER_URL = '/tag/deltagusers?';
-    const TAG_LIST_URL = '/tag/list?';    
+    const TAG_LIST_URL = '/tag/list?';
     const MEDIA_UPLOAD_URL = '/media/upload?';
     const MEDIA_GET_URL = '/media/get?';
     const AUTHSUCC_URL = '/user/authsucc?';
@@ -56,7 +38,7 @@ class QyWechat{
     const TOKEN_GET_URL = '/gettoken?';
 	const OAUTH_PREFIX = 'https://open.weixin.qq.com/connect/oauth2';
 	const OAUTH_AUTHORIZE_URL = '/authorize?';
-	
+
 	private $token;
 	private $encodingAesKey;
 	private $appid;         //也就是企业号的CorpID
@@ -64,7 +46,7 @@ class QyWechat{
 	private $access_token;
     private $agentid;       //应用id   AgentID
 	private $postxml;
-    private $agentidxml;    //接收的应用id   AgentID	
+    private $agentidxml;    //接收的应用id   AgentID
 	private $_msg;
 	private $_receive;
 	private $_sendmsg;      //主动发送消息的内容
@@ -75,7 +57,7 @@ class QyWechat{
 	private $_logcallback;
 	private $_cachecallback;
 	private $cacheKey = "_WEIXIN_ACCESS_TOKEN_";
-	
+
 	public function __construct($options){
 		$this->token = isset($options['token'])?$options['token']:'';
 		$this->encodingAesKey = isset($options['encodingaeskey'])?$options['encodingaeskey']:'';
@@ -86,7 +68,7 @@ class QyWechat{
 		$this->_logcallback = isset($options['logcallback'])?$options['logcallback']:false;
 		$this->_cachecallback = isset($options['cachecallback'])?$options['cachecallback']:false;
 	}
-	
+
 	/**
 	 * 回调日志
 	 * @param string $log 日志主体
@@ -107,7 +89,7 @@ class QyWechat{
 	public static function xml_safe_str($str){
 	    return '<![CDATA['.preg_replace("/[\\x00-\\x08\\x0b-\\x0c\\x0e-\\x1f]/",'',$str).']]>';
 	}
-	
+
 	/**
 	 * 数据XML编码
 	 * @param mixed $data 数据
@@ -124,7 +106,7 @@ class QyWechat{
 	    }
 	    return $xml;
 	}
-	
+
 	/**
 	 * XML编码
 	 * @param mixed $data 数据
@@ -149,7 +131,7 @@ class QyWechat{
 	    $xml   .= "</{$root}>";
 	    return $xml;
 	}
-	
+
 
 	/**
 	 * 微信api不支持中文转义的json结构
@@ -198,7 +180,7 @@ class QyWechat{
 	        return '[' . $json . ']'; //Return numerical JSON
 	    return '{' . $json . '}'; //Return associative JSON
 	}
-	
+
 	/**
 	 * 过滤文字回复\r\n换行符
 	 * @param string $text
@@ -237,7 +219,7 @@ class QyWechat{
 	        return false;
 	    }
 	}
-	
+
 	/**
 	 * POST 请求
 	 * @param string $url
@@ -300,7 +282,7 @@ class QyWechat{
 	        return false;
 	    }
 	}
-	
+
 	/**
 	 * 微信验证，包括post来的xml解密
 	 * @param bool $return 是否返回
@@ -352,7 +334,7 @@ class QyWechat{
         }
         return false;
     }
-    
+
     /**
      * 获取微信服务器发来的信息
      */
@@ -368,21 +350,21 @@ class QyWechat{
 		}
 		return $this;
 	}
-	
+
 	/**
 	 * 获取微信服务器发来的信息
 	 */
 	public function getRevData(){
 		return $this->_receive;
 	}
-	
+
 	/**
 	 * 获取微信服务器发来的原始加密信息
 	 */
 	public function getRevPostXml(){
 	    return $this->postxml;
 	}
-	
+
 	/**
 	 * 获取消息发送者
 	 */
@@ -393,7 +375,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取消息接受者
 	 */
@@ -404,7 +386,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取接收消息的应用id
 	 */
@@ -426,7 +408,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取消息ID
 	 */
@@ -437,7 +419,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取消息发送时间
 	 */
@@ -448,7 +430,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取接收消息内容正文
 	 */
@@ -459,7 +441,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取接收消息图片
 	 */
@@ -473,7 +455,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取接收地理位置
 	 */
@@ -489,7 +471,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取上报地理位置事件
 	 */
@@ -504,7 +486,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取接收事件推送
 	 */
@@ -550,7 +532,7 @@ class QyWechat{
 	        return false;
 	    }
 	}
-	
+
 	/**
 	 * 获取自定义菜单的图片发送事件信息
 	 *
@@ -594,7 +576,7 @@ class QyWechat{
 	        return false;
 	    }
 	}
-	
+
 	/**
 	 * 获取自定义菜单的地理位置选择器事件推送
 	 *
@@ -632,7 +614,7 @@ class QyWechat{
 	        return false;
 	    }
 	}
-	
+
 	/**
 	 * 获取接收语音推送
 	 */
@@ -646,7 +628,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 获取接收视频推送
 	 */
@@ -660,7 +642,7 @@ class QyWechat{
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 设置回复消息
 	 * Example: $obj->text('hello')->reply();
@@ -677,7 +659,7 @@ class QyWechat{
 		$this->Message($msg);
 		return $this;
 	}
-	
+
 	/**
 	 * 设置回复图片
 	 * Example: $obj->image('media_id')->reply();
@@ -694,7 +676,7 @@ class QyWechat{
 		$this->Message($msg);
 		return $this;
 	}
-	
+
 	/**
 	 * 设置回复消息
 	 * Example: $obj->voice('media_id')->reply();
@@ -711,7 +693,7 @@ class QyWechat{
 		$this->Message($msg);
 		return $this;
 	}
-	
+
 	/**
 	 * 设置回复消息
 	 * Example: $obj->video('media_id','title','description')->reply();
@@ -732,10 +714,10 @@ class QyWechat{
 		$this->Message($msg);
 		return $this;
 	}
-	
+
 	/**
 	 * 设置回复图文
-	 * @param array $newsData 
+	 * @param array $newsData
 	 * 数组结构:
 	 *  array(
 	 *  	"0"=>array(
@@ -761,7 +743,7 @@ class QyWechat{
 		$this->Message($msg);
 		return $this;
 	}
-	
+
 	/**
 	 * 设置发送消息
 	 * @param array $msg 消息数组
@@ -794,9 +776,9 @@ class QyWechat{
 	    $format = "<xml><Encrypt><![CDATA[%s]]></Encrypt><MsgSignature><![CDATA[%s]]></MsgSignature><TimeStamp>%s</TimeStamp><Nonce><![CDATA[%s]]></Nonce></xml>";
 	    return sprintf($format, $encrypt, $signature, $timestamp, $nonce);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * 回复微信服务器, 此函数支持链式操作
 	 * Example: $this->text('msg tips')->reply();
 	 * @param string $msg 要发送的信息, 默认取$this->_msg
@@ -834,7 +816,7 @@ class QyWechat{
 		}
 	}
 
-	
+
 	/**
 	 * 获取或设置缓存
 	 * @param string $p_key 缓存键名
@@ -874,7 +856,7 @@ class QyWechat{
 		if($t_cache){
 			$this->access_token = $t_cache;
 			return true;
-		}	
+		}
 		$result = $this->http_get(self::API_URL_PREFIX.self::TOKEN_GET_URL.'corpid='.$appid.'&corpsecret='.$appsecret);
 		if ($result) {
 			$json = json_decode($result,true);
@@ -979,7 +961,7 @@ class QyWechat{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 获取菜单
 	 * @return array('menu'=>array(....s))
@@ -1001,7 +983,7 @@ class QyWechat{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 删除菜单
 	 * @return boolean
@@ -1050,7 +1032,7 @@ class QyWechat{
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 根据媒体文件ID获取媒体文件
 	 * @param string $media_id 媒体文件id
@@ -1084,7 +1066,7 @@ class QyWechat{
 	 * {
  	 *   "errcode": 0,        //返回码
 	 *   "errmsg": "created",  //对返回码的文本描述内容
- 	 *   "id": 2               //创建的部门id。 
+ 	 *   "id": 2               //创建的部门id。
 	 * }
 	 */
 	public function createDepartment($data){
@@ -1101,7 +1083,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 
 	/**
 	 * 更新部门
@@ -1185,7 +1167,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 获取部门列表
 	 * @return boolean|array	 成功返回结果
@@ -1256,8 +1238,8 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
-	
+
+
 	/**
 	 * 更新成员
 	 * @param array $data 	结构体为:
@@ -1292,7 +1274,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 删除成员
 	 * @param $userid  员工UserID。对应管理端的帐号
@@ -1316,7 +1298,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 获取成员信息
 	 * @param $userid  员工UserID。对应管理端的帐号
@@ -1351,7 +1333,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 获取部门成员
 	 * @param $department_id   部门id
@@ -1441,7 +1423,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 更新标签
 	 * @param array $data 	结构体为:
@@ -1469,7 +1451,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 删除标签
 	 * @param $tagid  标签TagID
@@ -1493,7 +1475,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 获取标签成员
 	 * @param $tagid  标签TagID
@@ -1523,7 +1505,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 增加标签成员
 	 * @param array $data 	结构体为:
@@ -1556,7 +1538,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 删除标签成员
 	 * @param array $data 	结构体为:
@@ -1589,7 +1571,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * 获取标签列表
 	 * @return boolean|array	 成功返回数组结果，这里附上json样例
@@ -1627,29 +1609,29 @@ class QyWechat{
 	 *         "safe":"0"			//是否为保密消息，对于news无效
 	 *         "agentid" => "001",	//应用id
 	 *         "msgtype" => "text",  //根据信息类型，选择下面对应的信息结构体
-	 * 
+	 *
 	 *         "text" => array(
 	 *                 "content" => "Holiday Request For Pony(http://xxxxx)"
 	 *         ),
-	 * 
+	 *
 	 *         "image" => array(
 	 *                 "media_id" => "MEDIA_ID"
 	 *         ),
-	 * 
+	 *
 	 *         "voice" => array(
 	 *                 "media_id" => "MEDIA_ID"
 	 *         ),
-	 * 
+	 *
 	 *         " video" => array(
 	 *                 "media_id" => "MEDIA_ID",
 	 *                 "title" => "Title",
 	 *                 "description" => "Description"
 	 *         ),
-	 * 
+	 *
 	 *         "file" => array(
 	 *                 "media_id" => "MEDIA_ID"
 	 *         ),
-	 * 
+	 *
 	 *         "news" => array(			//不支持保密
 	 *                 "articles" => array(    //articles  图文消息，一个图文消息支持1到10个图文
 	 *                     array(
@@ -1661,7 +1643,7 @@ class QyWechat{
 	 *                     ),
 	 *                 )
 	 *         ),
-	 * 
+	 *
 	 *         "mpnews" => array(
 	 *                 "articles" => array(    //articles  图文消息，一个图文消息支持1到10个图文
 	 *                     array(
@@ -1677,7 +1659,7 @@ class QyWechat{
 	 *         )
 	 * )
 	 * 请查看官方开发文档中的 发送消息 -> 消息类型及数据格式
-	 * 
+	 *
 	 * @return boolean|array
 	 * 如果对应用或收件人、部门、标签任何一个无权限，则本次发送失败；
 	 * 如果收件人、部门或标签不存在，发送仍然执行，但返回无效的部分。
@@ -1710,7 +1692,7 @@ class QyWechat{
 	 * 当员工绑定通讯录中的帐号后，会收到一条图文消息，
 	 * 引导员工到企业的验证页面验证身份，企业在员工验证成功后，
 	 * 调用如下接口即可让员工关注成功。
-	 * 
+	 *
 	 * @param $userid
 	 * @return boolean|array 成功返回结果
 	 * {
@@ -1732,7 +1714,7 @@ class QyWechat{
 	    }
 	    return false;
 	}
-	
+
 	/**
 	 * oauth 授权跳转接口
 	 * @param string $callback 回调URI

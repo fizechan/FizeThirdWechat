@@ -1,10 +1,10 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat\message;
 
 
-use fize\third\wechat\Api;
+use fize\third\wechat\Message;
 use fize\third\wechat\Prpcrypt;
 use fize\crypt\Xml;
 
@@ -12,7 +12,7 @@ use fize\crypt\Xml;
 /**
  * 微信信息发送类
  */
-class Reply extends Api
+class Reply extends Message
 {
 
     const MSGTYPE_TEXT = 'text';

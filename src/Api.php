@@ -75,16 +75,6 @@ class Api extends Common
     protected $host;
 
     /**
-     * @todo 待删除
-     * @var string
-     */
-    protected $token;
-
-    protected $encrypt_type;
-
-    protected $encodingAesKey;
-
-    /**
      * @var string 全局唯一接口调用凭据
      */
     protected $accessToken;
@@ -107,8 +97,6 @@ class Api extends Common
     {
         $this->host = isset($options['host']) ? $options['host'] : self::HOST1;
 
-        $this->token = isset($options['token']) ? $options['token'] : '';
-        $this->encodingAesKey = isset($options['encodingaeskey']) ? $options['encodingaeskey'] : '';
         $this->appid = isset($options['appid']) ? $options['appid'] : '';
         $this->appsecret = isset($options['appsecret']) ? $options['appsecret'] : '';
 
