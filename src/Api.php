@@ -10,9 +10,9 @@ use fize\crypt\Json;
 use fize\net\Http;
 
 /**
- * 公众号
+ * 微信API
  */
-class Offiaccount extends Common
+class Api extends Common
 {
 
     /**
@@ -275,6 +275,19 @@ class Offiaccount extends Common
     public function getCurrentSelfmenuInfo()
     {
         return $this->httpGet("/get_current_selfmenu_info?access_token={$this->accessToken}");
+    }
+
+    /**
+     * APi调用次数进行清零
+     * @return bool
+     */
+    public function clearQuota()
+    {
+        $params = [
+            'appid'   => $this->appid
+        ];
+        $result = $this->httpPost("/clear_quota?access_token={$this->accessToken}", $params);
+        return $result ? true : false;
     }
 
     /**
