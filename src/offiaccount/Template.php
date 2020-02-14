@@ -1,123 +1,121 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat\offiaccount;
 
 
-use fize\third\wechat\Api;
-use fize\crypt\Json;
+use fize\third\wechat\Offiaccount;
 
 
 /**
- * 微信模版消息类
+ * 模版消息
  */
-class Template extends Api
+class Template extends Offiaccount
 {
 
-    const URL_TEMPLATE_API_SET_INDUSTRY = '/template/api_set_industry?';
-    const URL_TEMPLATE_GET_INDUSTRY = '/template/get_industry?';
-    const URL_TEMPLATE_API_ADD_TEMPLATE = '/template/api_add_template?';
-    const URL_TEMPLATE_GET_ALL_PRIVATE_TEMPLATE = '/template/get_all_private_template?';
-    const URL_TEMPLATE_DEL_PRIVATE_TEMPLATE = '/template/del_private_template?';
-    const URL_TEMPLATE_SEND = '/template/send?';
-
     /**
-     * 构造函数
-     * @param array $options 参数数组
-     */
-    public function __construct(array $options)
-    {
-        parent::__construct($options);
-        //检测TOKEN
-        $this->checkAccessToken();
-    }
-
-    /**
-     * 模板消息 设置所属行业
-     * @see https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433751277
-     * @param string $industry_id1 公众号模板消息所属行业编号，参看官方开发文档 行业代码
-     * @param string $industry_id2 公众号模板消息所属行业编号，参看官方开发文档 行业代码
+     * 设置所属行业
+     * @param string $industry_id1 公众号模板消息所属行业编号
+     * @param string $industry_id2 公众号模板消息所属行业编号
      * @return bool
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html#0
      */
     public function apiSetIndustry($industry_id1, $industry_id2)
     {
-        $data = [
+        $params = [
             'industry_id1' => $industry_id1,
             'industry_id2' => $industry_id2
         ];
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_API_SET_INDUSTRY . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
-        if ($json) {
-            return true;
-        } else {
-            return false;
-        }
+        $result = $this->httpPost("/template/api_set_industry?access_token={$this->accessToken}", $params);
+        return $result ? true : false;
     }
 
     /**
      * 获取设置的行业信息
-     * @return mixed
+     * @return array
      */
     public function getIndustry()
     {
-        $json = $this->httpGet(self::PREFIX_CGI . self::URL_TEMPLATE_GET_INDUSTRY . 'access_token=' . $this->accessToken);
-        return $json;
+        return $this->httpGet("/template/get_industry?access_token={$this->accessToken}");
     }
 
     /**
-     * 模板消息 获得模板ID
+     * 获得模板ID
      * 成功返回消息模板的调用id
-     * @param string $tpl_id 模板库中模板的编号，有“TM**”和“OPENTMTM**”等形式
-     * @return mixed
+     * @param string $template_id_short 模板库中模板的编号
+     * @return string
      */
-    public function apiAddTemplate($tpl_id)
+    public function apiAddTemplate($template_id_short)
     {
-        $data = ['template_id_short' => $tpl_id];
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_API_ADD_TEMPLATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
-        if ($json && isset($json['template_id'])) {
-            return $json['template_id'];
-        } else {
+        $params = ['template_id_short' => $template_id_short];
+        $result = $this->httpPost("/template/api_add_template?access_token={$this->accessToken}", $params);
+        if ($result === false) {
             return false;
         }
+        return $result['template_id'];
     }
 
     /**
      * 获取模板列表
-     * @return mixed
+     * @return array|false
      */
     public function getAllPrivateTemplate()
     {
-        $json = $this->httpGet(self::PREFIX_CGI . self::URL_TEMPLATE_GET_ALL_PRIVATE_TEMPLATE . 'access_token=' . $this->accessToken);
-        return $json;
+        $result = $this->httpGet("/template/get_all_private_template?access_token={$this->accessToken}");
+        if ($result === false) {
+            return false;
+        }
+        return $result['template_list'];
     }
 
     /**
      * 删除模板
-     * @param string $tpl_id 公众帐号下模板消息ID
+     * @param string $template_id 公众帐号下模板消息ID
      * @return bool
      */
-    public function delPrivateTemplate($tpl_id)
+    public function delPrivateTemplate($template_id)
     {
-        $data = ['template_id' => $tpl_id];
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_DEL_PRIVATE_TEMPLATE . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
-        if($json){
-            return true;
-        }
-        return false;
+        $params = ['template_id' => $template_id];
+        $result = $this->httpPost("/template/del_private_template?access_token={$this->accessToken}", $params);
+        return $result ? true : false;
     }
 
     /**
      * 发送模板消息
-     * @see https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433751277
-     * @param array $data 消息结构
-     * @return mixed 成功时返回消息id，失败时返回false
+     * @param string $touser 接收者openid
+     * @param string $template_id 模板ID
+     * @param array $data 模板数据
+     * @param string $url 模板跳转链接
+     * @param string|array $miniprogram 小程序
+     * @param string $color 字体颜色
+     * @return string|false 成功时返回消息id，失败时返回false
      */
-    public function send(array $data)
+    public function send($touser, $template_id, array $data, $url = null, $miniprogram = null, $color = null)
     {
-        $json = $this->httpPost(self::PREFIX_CGI . self::URL_TEMPLATE_SEND . 'access_token=' . $this->accessToken, Json::encode($data, JSON_UNESCAPED_UNICODE));
-        if ($json && isset($json['msgid'])) {
-            return $json['msgid'];
-        } else {
+        $params = [
+            'touser'      => $touser,
+            'template_id' => $template_id,
+            'data'        => $data
+        ];
+        if (!is_null($url)) {
+            $params['url'] = $url;
+        }
+        if (is_null($miniprogram)) {
+            if (is_string($miniprogram)) {
+                $miniprogram = [
+                    'appid' => $miniprogram
+                ];
+                $params['miniprogram'] = $miniprogram;
+            }
+        }
+        if (!is_null($color)) {
+            $params['color'] = $color;
+        }
+
+        $result = $this->httpPost("/message/template/send?access_token={$this->accessToken}", $params);
+        if ($result === false) {
             return false;
         }
+        return $result['msgid'];
     }
 }
