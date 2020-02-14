@@ -309,6 +309,6 @@ EOF;
         if (!empty($customer_account)) {
             $msg['TransInfo'] = array('KfAccount' => $customer_account);
         }
-        $this->reply($msg);
+        $this->send($msg);
     }
 }
