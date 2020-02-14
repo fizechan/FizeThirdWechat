@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\message;
+namespace fize\third\wechat\api\message;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 订阅模板消息
  */
-class Template extends Offiaccount
+class Template extends Api
 {
 
     /**
@@ -20,7 +20,6 @@ class Template extends Offiaccount
      * @param array $data 消息正文
      * @param string $url 点击消息跳转的链接
      * @param string|array $miniprogram 小程序
-     * @return bool
      */
     public function subscribe($touser, $scene, $template_id, $title, array $data, $url = null, $miniprogram = null)
     {
@@ -42,7 +41,6 @@ class Template extends Offiaccount
                 $params['miniprogram'] = $miniprogram;
             }
         }
-        $result = $this->httpPost("/message/template/subscribe?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/message/template/subscribe?access_token={$this->accessToken}", $params);
     }
 }

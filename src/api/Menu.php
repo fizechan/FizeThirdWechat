@@ -1,16 +1,16 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 
 /**
  * 自定义菜单
  */
-class Menu extends Offiaccount
+class Menu extends Api
 {
     const BUTTON_TYPE_CLICK = 'click';
     const BUTTON_TYPE_VIEW = 'view';
@@ -25,34 +25,23 @@ class Menu extends Offiaccount
     const BUTTON_TYPE_MINIPROGRAM = 'miniprogram';
 
     /**
-     * 创建接口
-     * @param array $buttons 菜单数组数据
-     * @return bool
+     * 创建
+     * @param array $button 菜单数组
      */
-    public function create(array $buttons)
+    public function create(array $button)
     {
         $params = [
-            'button' => $buttons
+            'button' => $button
         ];
-        $result = $this->httpPost("/menu/create?access_token={$this->accessToken}", $params);
-        if (!$result) {
-            return false;
-        }
-        return true;
+        $this->httpPost("/menu/create?access_token={$this->accessToken}", $params);
     }
 
     /**
-     * 删除接口
-     * @return bool
+     * 删除
      */
     public function delete()
     {
-        $result = $this->httpGet("/menu/delete?access_token={$this->accessToken}");
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
+        $this->httpGet("/menu/delete?access_token={$this->accessToken}");
     }
 
     /**
@@ -68,7 +57,7 @@ class Menu extends Offiaccount
      * 创建个性化菜单
      * @param array $buttons 菜单
      * @param array $matchrule 匹配规则
-     * @return mixed 成功返回menuid，失败返回false
+     * @return string 返回menuid
      */
     public function addconditional(array $buttons, array $matchrule)
     {
@@ -76,34 +65,26 @@ class Menu extends Offiaccount
             'button'    => $buttons,
             'matchrule' => $matchrule
         ];
-        $json = $this->httpPost("/menu/addconditional?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['menuid'];
+        $result = $this->httpPost("/menu/addconditional?access_token={$this->accessToken}", $params);
+        return $result['menuid'];
     }
 
     /**
      * 删除个性化菜单
      * @param string $menuid 菜单ID
-     * @return bool
      */
     public function delconditional($menuid)
     {
         $params = [
             'menuid' => $menuid
         ];
-        $json = $this->httpPost("/menu/delconditional?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return true;
+        $this->httpPost("/menu/delconditional?access_token={$this->accessToken}", $params);
     }
 
     /**
      * 测试个性化菜单匹配结果
      * @param string $user_id 可以是粉丝的OpenID，也可以是粉丝的微信号。
-     * @return mixed 成功返回结果数组，失败返回false
+     * @return array
      */
     public function trymatch($user_id)
     {

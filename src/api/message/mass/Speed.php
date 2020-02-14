@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\message\mass;
+namespace fize\third\wechat\api\message\mass;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 群发速度
  */
-class Speed extends Offiaccount
+class Speed extends Api
 {
 
     /**
@@ -29,6 +29,6 @@ class Speed extends Offiaccount
         $params = [
             'speed' => $speed
         ];
-        $result = $this->httpPost("/message/mass/speed/set?access_token={$this->accessToken}", $params);
+        $this->httpPost("/message/mass/speed/set?access_token={$this->accessToken}", $params);
     }
 }

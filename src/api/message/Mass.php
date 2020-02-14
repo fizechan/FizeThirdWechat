@@ -1,16 +1,16 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\message;
+namespace fize\third\wechat\api\message;
 
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 
 /**
  * 高级群发
  */
-class Mass extends Offiaccount
+class Mass extends Api
 {
 
     const MSGTYPE_TEXT = 'text';
@@ -44,11 +44,11 @@ class Mass extends Offiaccount
         } elseif (is_string($filter)) {
             $filter = [
                 'is_to_all' => false,
-                'tag_id' => $filter
+                'tag_id'    => $filter
             ];
         }
         $params = [
-            'filter' => $filter,
+            'filter'  => $filter,
             'msgtype' => $msgtype
         ];
         if (!is_null($clientmsgid)) {
@@ -185,7 +185,7 @@ class Mass extends Offiaccount
     public function sendallMpnews($filter, $media_id, $send_ignore_reprint = 0, $clientmsgid = null)
     {
         $extend = [
-            'mpnews' => [
+            'mpnews'              => [
                 'media_id' => $media_id,
             ],
             'send_ignore_reprint' => $send_ignore_reprint
@@ -268,7 +268,7 @@ class Mass extends Offiaccount
             $touser = [$touser];
         }
         $params = [
-            'touser' => $touser,
+            'touser'  => $touser,
             'msgtype' => $msgtype
         ];
         if (!is_null($clientmsgid)) {
@@ -476,7 +476,6 @@ class Mass extends Offiaccount
      * 删除群发
      * @param string $msg_id 发送出去的消息ID
      * @param int $article_idx 要删除的文章在图文消息中的位置，第一篇编号为1，该字段不填或填0会删除全部文章
-     * @return bool
      */
     public function delete($msg_id, $article_idx = null)
     {
@@ -486,8 +485,7 @@ class Mass extends Offiaccount
         if (!is_null($article_idx)) {
             $params['article_idx'] = $article_idx;
         }
-        $result = $this->httpPost("/message/mass/delete?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/message/mass/delete?access_token={$this->accessToken}", $params);
     }
 
     /**
@@ -502,7 +500,7 @@ class Mass extends Offiaccount
     {
         $params = [
             "to{$to_type}" => $to,
-            'msgtype' => $msgtype
+            'msgtype'      => $msgtype
         ];
         $params = array_merge($params, $extend);
         return $this->httpPost("/message/mass/preview?access_token={$this->accessToken}", $params);

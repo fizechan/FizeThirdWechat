@@ -1,23 +1,22 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 
 /**
  * 模版消息
  */
-class Template extends Offiaccount
+class Template extends Api
 {
 
     /**
      * 设置所属行业
      * @param string $industry_id1 公众号模板消息所属行业编号
      * @param string $industry_id2 公众号模板消息所属行业编号
-     * @return bool
      * @see https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html#0
      */
     public function apiSetIndustry($industry_id1, $industry_id2)
@@ -26,8 +25,7 @@ class Template extends Offiaccount
             'industry_id1' => $industry_id1,
             'industry_id2' => $industry_id2
         ];
-        $result = $this->httpPost("/template/api_set_industry?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/template/api_set_industry?access_token={$this->accessToken}", $params);
     }
 
     /**
@@ -49,35 +47,27 @@ class Template extends Offiaccount
     {
         $params = ['template_id_short' => $template_id_short];
         $result = $this->httpPost("/template/api_add_template?access_token={$this->accessToken}", $params);
-        if ($result === false) {
-            return false;
-        }
         return $result['template_id'];
     }
 
     /**
      * 获取模板列表
-     * @return array|false
+     * @return array
      */
     public function getAllPrivateTemplate()
     {
         $result = $this->httpGet("/template/get_all_private_template?access_token={$this->accessToken}");
-        if ($result === false) {
-            return false;
-        }
         return $result['template_list'];
     }
 
     /**
      * 删除模板
      * @param string $template_id 公众帐号下模板消息ID
-     * @return bool
      */
     public function delPrivateTemplate($template_id)
     {
         $params = ['template_id' => $template_id];
-        $result = $this->httpPost("/template/del_private_template?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/template/del_private_template?access_token={$this->accessToken}", $params);
     }
 
     /**
@@ -88,7 +78,7 @@ class Template extends Offiaccount
      * @param string $url 模板跳转链接
      * @param string|array $miniprogram 小程序
      * @param string $color 字体颜色
-     * @return string|false 成功时返回消息id，失败时返回false
+     * @return string 返回消息id
      */
     public function send($touser, $template_id, array $data, $url = null, $miniprogram = null, $color = null)
     {
@@ -113,9 +103,6 @@ class Template extends Offiaccount
         }
 
         $result = $this->httpPost("/message/template/send?access_token={$this->accessToken}", $params);
-        if ($result === false) {
-            return false;
-        }
         return $result['msgid'];
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\message;
+namespace fize\third\wechat\api\message;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 客服发消息
  */
-class Custom extends Offiaccount
+class Custom extends Api
 {
 
     const MSGTYPE_TEXT = 'text';
@@ -31,7 +31,6 @@ class Custom extends Offiaccount
      * @param string $msgtype 消息类型
      * @param array $extend 扩展字段
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function send($touser, $msgtype, array $extend, $kf_account = null)
     {
@@ -45,7 +44,7 @@ class Custom extends Offiaccount
                 'kf_account' => $kf_account
             ];
         }
-        return $this->httpPost("/message/custom/send?access_token={$this->accessToken}", $params);
+        $this->httpPost("/message/custom/send?access_token={$this->accessToken}", $params);
     }
 
     /**
@@ -53,7 +52,6 @@ class Custom extends Offiaccount
      * @param string $touser 接收用户OPENID
      * @param string $content 文本内容
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendText($touser, $content, $kf_account = null)
     {
@@ -62,7 +60,7 @@ class Custom extends Offiaccount
                 'content' => $content
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_TEXT, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_TEXT, $extend, $kf_account);
     }
 
     /**
@@ -70,7 +68,6 @@ class Custom extends Offiaccount
      * @param string $touser 接收用户OPENID
      * @param string $media_id 图片素材ID
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendImage($touser, $media_id, $kf_account = null)
     {
@@ -79,7 +76,7 @@ class Custom extends Offiaccount
                 'media_id' => $media_id
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_IMAGE, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_IMAGE, $extend, $kf_account);
     }
 
     /**
@@ -87,7 +84,6 @@ class Custom extends Offiaccount
      * @param string $touser 接收用户OPENID
      * @param string $media_id 语音素材ID
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendVoice($touser, $media_id, $kf_account = null)
     {
@@ -96,7 +92,7 @@ class Custom extends Offiaccount
                 'media_id' => $media_id
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_VOICE, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_VOICE, $extend, $kf_account);
     }
 
     /**
@@ -107,7 +103,6 @@ class Custom extends Offiaccount
      * @param string $title 标题
      * @param string $description 简介
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendVideo($touser, $media_id, $thumb_media_id, $title, $description, $kf_account = null)
     {
@@ -119,7 +114,7 @@ class Custom extends Offiaccount
                 'description'    => $description,
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_VIDEO, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_VIDEO, $extend, $kf_account);
     }
 
     /**
@@ -131,7 +126,6 @@ class Custom extends Offiaccount
      * @param string $hqmusicurl 高品质音乐URL
      * @param string $thumb_media_id 缩略图素材ID
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendMusic($touser, $title, $description, $musicurl, $hqmusicurl, $thumb_media_id, $kf_account = null)
     {
@@ -144,7 +138,7 @@ class Custom extends Offiaccount
                 'thumb_media_id' => $thumb_media_id,
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_MUSIC, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_MUSIC, $extend, $kf_account);
     }
 
     /**
@@ -152,7 +146,6 @@ class Custom extends Offiaccount
      * @param string $touser 接收用户OPENID
      * @param array $articles 图文消息
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendNews($touser, array $articles, $kf_account = null)
     {
@@ -161,7 +154,7 @@ class Custom extends Offiaccount
                 'articles' => $articles,
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_NEWS, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_NEWS, $extend, $kf_account);
     }
 
     /**
@@ -169,7 +162,6 @@ class Custom extends Offiaccount
      * @param string $touser 接收用户OPENID
      * @param string $media_id 图文素材ID
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendMpnews($touser, $media_id, $kf_account = null)
     {
@@ -178,7 +170,7 @@ class Custom extends Offiaccount
                 'media_id' => $media_id,
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_MPNEWS, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_MPNEWS, $extend, $kf_account);
     }
 
     /**
@@ -188,7 +180,6 @@ class Custom extends Offiaccount
      * @param array $list 选项
      * @param string $tail_content 底部内容
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendMsgmenu($touser, $head_content, array $list, $tail_content, $kf_account = null)
     {
@@ -199,7 +190,7 @@ class Custom extends Offiaccount
                 'tail_content' => $tail_content
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_MSGMENU, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_MSGMENU, $extend, $kf_account);
     }
 
     /**
@@ -207,7 +198,6 @@ class Custom extends Offiaccount
      * @param string $touser 接收用户OPENID
      * @param string $card_id 卡券ID
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendWxcard($touser, $card_id, $kf_account = null)
     {
@@ -216,7 +206,7 @@ class Custom extends Offiaccount
                 'card_id' => $card_id,
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_WXCARD, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_WXCARD, $extend, $kf_account);
     }
 
     /**
@@ -227,7 +217,6 @@ class Custom extends Offiaccount
      * @param string $pagepath 指定页面路径
      * @param string $thumb_media_id 缩略图素材ID
      * @param string $kf_account 指定客服帐号
-     * @return array|false
      */
     public function sendMiniprogrampage($touser, $title, $appid, $pagepath, $thumb_media_id, $kf_account = null)
     {
@@ -239,14 +228,13 @@ class Custom extends Offiaccount
                 'thumb_media_id' => $thumb_media_id
             ]
         ];
-        return $this->send($touser, self::MSGTYPE_MINIPROGRAMPAGE, $extend, $kf_account);
+        $this->send($touser, self::MSGTYPE_MINIPROGRAMPAGE, $extend, $kf_account);
     }
 
     /**
      * 客服输入状态
      * @param string $touser 接收用户OPENID
      * @param string $command 输入状态
-     * @return bool
      */
     public function typing($touser, $command)
     {
@@ -254,7 +242,6 @@ class Custom extends Offiaccount
             'touser'  => $touser,
             'command' => $command
         ];
-        $result = $this->httpPost("/message/custom/typing?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/message/custom/typing?access_token={$this->accessToken}", $params);
     }
 }

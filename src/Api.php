@@ -60,11 +60,6 @@ class Api extends Common
     const CHECK_OPERATOR_DEFAULT = 'DEFAULT';
 
     /**
-     * @var bool 是否DEBUG
-     */
-    protected $debug = false;
-
-    /**
      * @var string 唯一凭证
      */
     protected $appid;
@@ -116,7 +111,6 @@ class Api extends Common
         $this->encodingAesKey = isset($options['encodingaeskey']) ? $options['encodingaeskey'] : '';
         $this->appid = isset($options['appid']) ? $options['appid'] : '';
         $this->appsecret = isset($options['appsecret']) ? $options['appsecret'] : '';
-        $this->debug = isset($options['debug']) ? $options['debug'] : false;
 
         if (isset($options['cache']['key'])) {
             $this->cacheKey = $options['cache']['key'];
@@ -135,29 +129,25 @@ class Api extends Common
      * @param bool $check_token 是否检查当前的TOKEN
      * @param string $path_prefix 路径前缀
      * @param string $scheme 协议
-     * @return mixed|false 成功时返回对应结果，失败时返回false
+     * @return array|string
      */
     protected function httpGet($path, $response_json_decode = true, $check_token = true, $path_prefix = self::PREFIX_CGI, $scheme = 'https')
     {
         if ($check_token) {
-            if (!$this->accessToken && !$this->checkAccessToken()) {
-                return false;
+            if (!$this->accessToken) {
+                $this->checkAccessToken();
             }
         }
         $uri = $this->getUri($path, $path_prefix, $scheme);
         $result = Http::get($uri);
         if (!$result) {
-            $this->errCode = Http::getLastErrCode();
-            $this->errMsg = Http::getLastErrMsg();
-            return false;
+            throw new ApiException(Http::getLastErrMsg(), Http::getLastErrCode());
         }
 
         if ($response_json_decode) {
             $json = Json::decode($result);
             if (isset($json['errcode']) && $json['errcode'] != 0) {
-                $this->errCode = $json['errcode'];
-                $this->errMsg = $json['errmsg'];
-                return false;
+                throw new ApiException($json['errmsg'], $json['errcode']);
             }
             return $json;
         } else {
@@ -179,8 +169,8 @@ class Api extends Common
     protected function httpPost($path, $params, $params_json_encode = true, $response_json_decode = true, $check_token = true, $path_prefix = self::PREFIX_CGI, $scheme = 'https')
     {
         if ($check_token) {
-            if (!$this->accessToken && !$this->checkAccessToken()) {
-                return false;
+            if (!$this->accessToken) {
+                $this->checkAccessToken();
             }
         }
         $uri = $this->getUri($path, $path_prefix, $scheme);
@@ -189,17 +179,13 @@ class Api extends Common
         }
         $result = Http::post($uri, $params);
         if (!$result) {
-            $this->errCode = Http::getLastErrCode();
-            $this->errMsg = Http::getLastErrMsg();
-            return false;
+            throw new ApiException(Http::getLastErrMsg(), Http::getLastErrCode());
         }
 
         if ($response_json_decode) {
             $json = Json::decode($result);
             if (isset($json['errcode']) && $json['errcode'] != 0) {
-                $this->errCode = $json['errcode'];
-                $this->errMsg = $json['errmsg'];
-                return false;
+                throw new ApiException($json['errmsg'], $json['errcode']);
             }
             return $json;
         } else {
@@ -208,8 +194,7 @@ class Api extends Common
     }
 
     /**
-     * 通用AccessToken验证方法
-     * @return bool AccessToken正确返回true，否则返回false
+     * 验证AccessToken
      */
     public function checkAccessToken()
     {
@@ -219,20 +204,16 @@ class Api extends Common
         $cache = $this->cache->get($this->cacheKey . $appid);  //获取当前缓存的access_token
         if ($cache) {
             $this->accessToken = $cache;
-            return true;
+            return;
         }
         $json = $this->httpGet("/token?grant_type=client_credential&appid={$appid}&secret={$appsecret}", true, false);
-        if (!$json) {
-            return false;
-        }
         $this->accessToken = $json['access_token'];
         $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;
         $this->cache->set($this->cacheKey . $appid, $json['access_token'], $expire);  //将access_token缓存
-        return true;
     }
 
     /**
-     * 删除重置验证数据
+     * 重置AccessToken
      */
     public function resetAccessToken()
     {
@@ -242,30 +223,27 @@ class Api extends Common
 
     /**
      * 获取微信服务器IP地址列表
-     * @return array|false 成功时返回数组，失败时返回false
+     * @return array
      */
     public function getcallbackip()
     {
-        $json = $this->httpGet("/getcallbackip?access_token={$this->accessToken}");
-        if (!$json) {
-            return false;
-        }
-        return $json['ip_list'];
+        $result = $this->httpGet("/getcallbackip?access_token={$this->accessToken}");
+        return $result['ip_list'];
     }
 
     /**
      * 长连接转短链接
      * @param string $long_url 需要转换的长链接
-     * @param string $action 动作
-     * @return bool|mixed
+     * @return string
      */
-    public function shorturl($long_url, $action = 'long2short')
+    public function shorturl($long_url)
     {
         $params = [
-            'action'   => $action,
+            'action'   => 'long2short',
             'long_url' => $long_url
         ];
-        return $this->httpPost("/shorturl?access_token={$this->accessToken}", $params);
+        $result = $this->httpPost("/shorturl?access_token={$this->accessToken}", $params);
+        return $result['short_url'];
     }
 
     /**
@@ -279,15 +257,13 @@ class Api extends Common
 
     /**
      * APi调用次数进行清零
-     * @return bool
      */
     public function clearQuota()
     {
         $params = [
-            'appid'   => $this->appid
+            'appid' => $this->appid
         ];
-        $result = $this->httpPost("/clear_quota?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/clear_quota?access_token={$this->accessToken}", $params);
     }
 
     /**
