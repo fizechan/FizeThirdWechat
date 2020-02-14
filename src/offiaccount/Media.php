@@ -93,4 +93,17 @@ class Media extends Offiaccount
         ];
         return $this->httpPost("/media/uploadnews?access_token={$this->accessToken}", $params);
     }
+
+    /**
+     * 上传视频素材
+     * @param $file
+     * @return array
+     */
+    public function uploadvideo($file)
+    {
+        $params = [
+            'media' => new CURLFile(realpath($file))
+        ];
+        return $this->httpPost("/media/uploadvideo?access_token={$this->accessToken}", $params, false);
+    }
 }
