@@ -1,17 +1,18 @@
 <?php
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
 use CURLFile;
 use fize\crypt\Json;
 use fize\net\Http;
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
+use fize\third\wechat\ApiException;
 
 
 /**
  * 永久素材
  */
-class Material extends Offiaccount
+class Material extends Api
 {
     const MEDIA_TYPE_IMAGE = 'image';
     const MEDIA_TYPE_VOICE = 'voice';
@@ -29,7 +30,7 @@ class Material extends Offiaccount
      * @param string $digest 图文消息的摘要
      * @param int $need_open_comment 是否打开评论，0不打开，1打开
      * @param int $only_fans_can_comment 是否粉丝才可评论，0所有人可评论，1粉丝才可评论
-     * @return string|false 成功返回素材ID，失败返回false
+     * @return string 返回素材ID
      */
     public function addNews($title, $thumb_media_id, $show_cover_pic, $content, $content_source_url, $author = null, $digest = null, $need_open_comment = null, $only_fans_can_comment = null)
     {
@@ -52,11 +53,8 @@ class Material extends Offiaccount
         if (!is_null($only_fans_can_comment)) {
             $params['only_fans_can_comment'] = $only_fans_can_comment;
         }
-        $json = $this->httpPost("/material/add_news?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['media_id'];
+        $result = $this->httpPost("/material/add_news?access_token={$this->accessToken}", $params);
+        return $result['media_id'];
     }
 
     /**
@@ -65,7 +63,7 @@ class Material extends Offiaccount
      * @param string $file 要上传的文件
      * @param string $title 视频素材的标题
      * @param string $introduction 视频素材的描述
-     * @return array|false 失败时返回false
+     * @return array
      */
     public function addMaterial($type, $file, $title = null, $introduction = null)
     {
@@ -85,7 +83,7 @@ class Material extends Offiaccount
     /**
      * 获取永久素材
      * @param string $media_id 素材的media_id
-     * @return array|false 失败时返回false
+     * @return array
      */
     public function getMaterial($media_id)
     {
@@ -93,40 +91,33 @@ class Material extends Offiaccount
             'media_id' => $media_id
         ];
         $result = $this->httpPost("/material/get_material?access_token={$this->accessToken}", $params);
-        if ($result) {
-            $ContentType = Http::getLastResponse()->getHeaderLine('Content-Type');
-            if ($ContentType == 'text/plain') {
-                $json = Json::decode($result);
-                if (isset($json['errcode'])) {
-                    $this->errCode = $json['errcode'];
-                    $this->errMsg = $json['errmsg'];
-                    return false;
-                }
-                return [  //返回JSON
-                    'type'  => 'json',
-                    'value' => $json
-                ];
+        $ContentType = Http::getLastResponse()->getHeaderLine('Content-Type');
+        if ($ContentType == 'text/plain') {
+            $json = Json::decode($result);
+            if (isset($json['errcode']) && $json['errcode']) {
+                throw new ApiException($json['errmsg'], $json['errcode']);
             }
-            return [  //返回二进制流
-                'type'  => 'binary',
-                'value' => $result
+            return [  //返回JSON
+                'type'  => 'json',
+                'value' => $json
             ];
         }
-        return false;
+        return [  //返回二进制流
+            'type'  => 'binary',
+            'value' => $result
+        ];
     }
 
     /**
      * 删除永久素材
      * @param string $media_id 素材的media_id
-     * @return bool
      */
     public function delMaterial($media_id)
     {
         $params = [
             'media_id' => $media_id
         ];
-        $result = $this->httpPost("/material/del_material?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/material/del_material?access_token={$this->accessToken}", $params);
     }
 
     /**
@@ -140,7 +131,6 @@ class Material extends Offiaccount
      * @param int $show_cover_pic 是否显示封面，0为false，即不显示，1为true，即显示
      * @param string $content 图文消息的具体内容
      * @param string $content_source_url 图文消息的原文地址
-     * @return bool
      */
     public function updateNews($media_id, $index, $title, $thumb_media_id, $author, $digest, $show_cover_pic, $content, $content_source_url)
     {
@@ -155,13 +145,12 @@ class Material extends Offiaccount
             'content'            => $content,
             'content_source_url' => $content_source_url
         ];
-        $result = $this->httpPost("/material/update_news?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/material/update_news?access_token={$this->accessToken}", $params);
     }
 
     /**
      * 获取素材总数
-     * @return array|false 失败返回false
+     * @return array
      */
     public function getMaterialCount()
     {
@@ -173,7 +162,7 @@ class Material extends Offiaccount
      * @param string $type 类型
      * @param int $offset 偏移位置
      * @param int $count 返回素材的数量
-     * @return array|false 失败时返回false
+     * @return array
      */
     public function batchGetMaterial($type, $offset, $count)
     {

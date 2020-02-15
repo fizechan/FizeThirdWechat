@@ -155,7 +155,7 @@ class Api extends Common
      * @param bool $check_token 是否检查当前的TOKEN
      * @param string $path_prefix 路径前缀
      * @param string $scheme 协议
-     * @return mixed|false 成功时返回对应结果，失败时返回false
+     * @return array|string
      */
     protected function httpPost($path, $params, $params_json_encode = true, $response_json_decode = true, $check_token = true, $path_prefix = self::PREFIX_CGI, $scheme = 'https')
     {
