@@ -14,8 +14,14 @@ use fize\third\wechat\api\Sns as ApiSns;
 class Oauth2 extends Open
 {
 
+    /**
+     * 授权作用域：基础信息
+     */
     const SCOPE_SNSAPI_BASE = 'snsapi_base';
 
+    /**
+     * 授权作用域：完整信息
+     */
     const SCOPE_SNSAPI_USERINFO = 'snsapi_userinfo';
 
     /**
@@ -42,7 +48,7 @@ class Oauth2 extends Open
      * @param string $state 自定义参数
      * @return array
      */
-    public function userbase($redirect_uri = null, $state = null)
+    public function apiBase($redirect_uri = null, $state = null)
     {
         if (empty($redirect_uri)) {
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
@@ -70,7 +76,7 @@ class Oauth2 extends Open
      * @param string $lang 国家地区语言版本
      * @return array
      */
-    public function userinfo($redirect_uri = null, $state = null, $lang = 'zh_CN')
+    public function apiUserinfo($redirect_uri = null, $state = null, $lang = 'zh_CN')
     {
         if (empty($redirect_uri)) {
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
@@ -92,5 +98,10 @@ class Oauth2 extends Open
 
         $sns = new ApiSns($config);
         return $sns->userinfo($result['access_token'], $result['openid'], $lang);
+    }
+
+    public function qyapiUserinfo()
+    {
+
     }
 }

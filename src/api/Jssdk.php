@@ -1,17 +1,13 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
-
-
-use fize\third\wechat\Offiaccount;
+namespace fize\third\wechat\api;
 
 
 /**
  * JS-SDK
- * @todo 可能移除放置在外部
  */
-class JsSdk extends Offiaccount
+class Jssdk extends Ticket
 {
 
     /**
@@ -21,31 +17,18 @@ class JsSdk extends Offiaccount
 
     /**
      * 获取JSAPI授权TICKET
-     * @return string|false 失败时返回false
+     * @return string
      */
-    public function getJsApiTicket()
+    private function getJsApiTicket()
     {
-        $rs = $this->cache->get($this->jsapiTicketCacheKey . $this->appid);
-        if ($rs) {
-            return $rs;
+        $cache = $this->cache->get($this->jsapiTicketCacheKey . $this->appid);
+        if ($cache) {
+            return $cache;
         }
-        $json = $this->httpGet("/ticket/getticket?access_token={$this->accessToken}&type=jsapi");
-        if ($json) {
-            $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;
-            $this->cache->set($this->jsapiTicketCacheKey . $this->appid, $json['ticket'], $expire);
-            return $json['ticket'];
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 删除JSAPI授权TICKET
-     * @return bool
-     */
-    public function resetJsApiTicket()
-    {
-        return $this->cache->delete($this->jsapiTicketCacheKey . $this->appid);
+        $result = $this->getticket('jsapi');
+        $expire = $result['expires_in'] ? intval($result['expires_in']) - 100 : 3600;
+        $this->cache->set($this->jsapiTicketCacheKey . $this->appid, $result['ticket'], $expire);
+        return $result['ticket'];
     }
 
     /**
@@ -68,18 +51,15 @@ class JsSdk extends Offiaccount
     }
 
     /**
-     * 获取JsApi使用签名
+     * 获取JsApi权限验证配置
      * @param string $url 网页的URL，自动处理#及其后面部分 为空则签名当前页
      * @param int $timestamp 当前时间戳 (为空则自动生成)
      * @param string $noncestr 随机串 (为空则自动生成)
      * @return array|bool 返回签名字串
      */
-    public function getJsSign($url = '', $timestamp = 0, $noncestr = '')
+    public function getConfig($url = '', $timestamp = 0, $noncestr = '')
     {
         $jsapi_ticket = $this->getJsApiTicket();
-        if (!$jsapi_ticket) {
-            return false;
-        }
         if (!$timestamp) {
             $timestamp = time();
         }
@@ -102,9 +82,6 @@ class JsSdk extends Offiaccount
             "jsapi_ticket" => $jsapi_ticket
         ];
         $sign = $this->getSignature($arrdata);
-        if (!$sign) {
-            return false;
-        }
         return [
             "appId"     => $this->appid,
             "nonceStr"  => $noncestr,
