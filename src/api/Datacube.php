@@ -1,23 +1,23 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 
 /**
  * 数据统计
  */
-class DataCube extends Offiaccount
+class DataCube extends Api
 {
 
     /**
      * 获取用户增减数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getusersummary($begin_date, $end_date)
     {
@@ -28,7 +28,7 @@ class DataCube extends Offiaccount
      * 获取累计用户数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getusercumulate($begin_date, $end_date)
     {
@@ -39,7 +39,7 @@ class DataCube extends Offiaccount
      * 获取图文群发每日数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getarticlesummary($begin_date, $end_date)
     {
@@ -50,7 +50,7 @@ class DataCube extends Offiaccount
      * 获取图文群发总数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getarticletotal($begin_date, $end_date)
     {
@@ -61,7 +61,7 @@ class DataCube extends Offiaccount
      * 获取图文统计数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getuserread($begin_date, $end_date)
     {
@@ -72,7 +72,7 @@ class DataCube extends Offiaccount
      * 获取图文统计分时数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getuserreadhour($begin_date, $end_date)
     {
@@ -83,7 +83,7 @@ class DataCube extends Offiaccount
      * 获取图文分享转发数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getusershare($begin_date, $end_date)
     {
@@ -94,7 +94,7 @@ class DataCube extends Offiaccount
      * 获取图文分享转发分时数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getusersharehour($begin_date, $end_date)
     {
@@ -105,7 +105,7 @@ class DataCube extends Offiaccount
      * 获取消息发送概况数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getupstreammsg($begin_date, $end_date)
     {
@@ -116,7 +116,7 @@ class DataCube extends Offiaccount
      * 获取消息分送分时数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getupstreammsghour($begin_date, $end_date)
     {
@@ -127,7 +127,7 @@ class DataCube extends Offiaccount
      * 获取消息发送周数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getupstreammsgweek($begin_date, $end_date)
     {
@@ -138,7 +138,7 @@ class DataCube extends Offiaccount
      * 获取消息发送月数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getupstreammsgmonth($begin_date, $end_date)
     {
@@ -149,7 +149,7 @@ class DataCube extends Offiaccount
      * 获取消息发送分布数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getupstreammsgdist($begin_date, $end_date)
     {
@@ -160,7 +160,7 @@ class DataCube extends Offiaccount
      * 获取消息发送分布周数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getupstreammsgdistweek($begin_date, $end_date)
     {
@@ -171,7 +171,7 @@ class DataCube extends Offiaccount
      * 获取消息发送分布月数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getupstreammsgdistmonth($begin_date, $end_date)
     {
@@ -182,7 +182,7 @@ class DataCube extends Offiaccount
      * 获取接口分析数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getinterfacesummary($begin_date, $end_date)
     {
@@ -193,7 +193,7 @@ class DataCube extends Offiaccount
      * 获取接口分析分时数据
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     public function getinterfacesummaryhour($begin_date, $end_date)
     {
@@ -205,20 +205,17 @@ class DataCube extends Offiaccount
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
      * @param int $cond_source 卡券来源
-     * @return array|false
+     * @return array
      */
     public function getcardbizuininfo($begin_date, $end_date, $cond_source)
     {
         $params = [
-            'begin_date' => $begin_date,
-            'end_date'   => $end_date,
+            'begin_date'  => $begin_date,
+            'end_date'    => $end_date,
             'cond_source' => $cond_source
         ];
-        $json = $this->httpPost("/datacube/getcardbizuininfo?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['list'];
+        $result = $this->httpPost("/datacube/getcardbizuininfo?access_token={$this->accessToken}", $params);
+        return $result['list'];
     }
 
     /**
@@ -227,23 +224,20 @@ class DataCube extends Offiaccount
      * @param string $end_date 结束日期
      * @param int $cond_source 卡券来源
      * @param string $card_id 卡券ID
-     * @return array|false
+     * @return array
      */
     public function getcardcardinfo($begin_date, $end_date, $cond_source, $card_id = null)
     {
         $params = [
-            'begin_date' => $begin_date,
-            'end_date'   => $end_date,
+            'begin_date'  => $begin_date,
+            'end_date'    => $end_date,
             'cond_source' => $cond_source
         ];
-        if(!is_null($card_id)) {
+        if (!is_null($card_id)) {
             $params['card_id'] = $card_id;
         }
-        $json = $this->httpPost("/datacube/getcardcardinfo?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['list'];
+        $result = $this->httpPost("/datacube/getcardcardinfo?access_token={$this->accessToken}", $params);
+        return $result['list'];
     }
 
     /**
@@ -251,20 +245,17 @@ class DataCube extends Offiaccount
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
      * @param int $cond_source 卡券来源
-     * @return array|false
+     * @return array
      */
     public function getcardmembercardinfo($begin_date, $end_date, $cond_source)
     {
         $params = [
-            'begin_date' => $begin_date,
-            'end_date'   => $end_date,
+            'begin_date'  => $begin_date,
+            'end_date'    => $end_date,
             'cond_source' => $cond_source
         ];
-        $json = $this->httpPost("/datacube/getcardmembercardinfo?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['list'];
+        $result = $this->httpPost("/datacube/getcardmembercardinfo?access_token={$this->accessToken}", $params);
+        return $result['list'];
     }
 
     /**
@@ -272,20 +263,17 @@ class DataCube extends Offiaccount
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
      * @param string $card_id 卡券ID
-     * @return array|false
+     * @return array
      */
     public function getcardmembercarddetail($begin_date, $end_date, $card_id)
     {
         $params = [
             'begin_date' => $begin_date,
             'end_date'   => $end_date,
-            'card_id' => $card_id
+            'card_id'    => $card_id
         ];
-        $json = $this->httpPost("/datacube/getcardmembercarddetail?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['list'];
+        $result = $this->httpPost("/datacube/getcardmembercarddetail?access_token={$this->accessToken}", $params);
+        return $result['list'];
     }
 
     /**
@@ -293,7 +281,7 @@ class DataCube extends Offiaccount
      * @param string $action 动作
      * @param string $begin_date 开始日期
      * @param string $end_date 结束日期
-     * @return array|false
+     * @return array
      */
     private function action($action, $begin_date, $end_date)
     {
@@ -301,10 +289,7 @@ class DataCube extends Offiaccount
             'begin_date' => $begin_date,
             'end_date'   => $end_date
         ];
-        $json = $this->httpPost("/datacube/{$action}?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['list'];
+        $result = $this->httpPost("/datacube/{$action}?access_token={$this->accessToken}", $params);
+        return $result['list'];
     }
 }
