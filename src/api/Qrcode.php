@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 二维码
  */
-class Qrcode extends Offiaccount
+class Qrcode extends Api
 {
 
     /**
@@ -36,7 +36,7 @@ class Qrcode extends Offiaccount
      * @param string $action_name 二维码类型
      * @param array|int|string $scene 场景值
      * @param int $expire_seconds 该二维码有效时间，以秒为单位
-     * @return array|false
+     * @return array
      */
     public function create($action_name, $scene, $expire_seconds = null)
     {
@@ -50,12 +50,12 @@ class Qrcode extends Offiaccount
             ];
         }
         $params = [
-            'action_name'   => $action_name,
+            'action_name' => $action_name,
             'action_info' => [
                 'scene' => $scene
             ]
         ];
-        if(!is_null($expire_seconds)) {
+        if (!is_null($expire_seconds)) {
             $params['expire_seconds'] = $expire_seconds;
         }
         return $this->httpPost("/qrcode/create?access_token={$this->accessToken}", $params);
