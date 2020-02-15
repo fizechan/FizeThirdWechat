@@ -1,20 +1,19 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\user;
+namespace fize\third\wechat\api\user;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 用户信息
  */
-class Info extends Offiaccount
+class Info extends Api
 {
     /**
      * 设置用户备注名
      * @param string $openid
      * @param string $remark 备注名
-     * @return bool
      */
     public function updateremark($openid, $remark)
     {
@@ -22,14 +21,13 @@ class Info extends Offiaccount
             'openid' => $openid,
             'remark' => $remark
         ];
-        $result = $this->httpPost("/user/info/updateremark?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/user/info/updateremark?access_token={$this->accessToken}", $params);
     }
 
     /**
      * 批量获取用户基本信息
      * @param array $users 用户列表
-     * @return array|false
+     * @return array
      */
     public function batchget(array $users)
     {

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 用户标签管理
  */
-class Tags extends Offiaccount
+class Tags extends Api
 {
 
     /**
@@ -23,16 +23,13 @@ class Tags extends Offiaccount
                 'name' => $name
             ]
         ];
-        $json = $this->httpPost("/tags/create?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['tag'];
+        $result = $this->httpPost("/tags/create?access_token={$this->accessToken}", $params);
+        return $result['tag'];
     }
 
     /**
      * 获取公众号已创建的标签
-     * @return array|false
+     * @return array
      */
     public function get()
     {
@@ -43,7 +40,6 @@ class Tags extends Offiaccount
      * 编辑标签
      * @param int $id 标签ID
      * @param string $name 标签名
-     * @return bool
      */
     public function update($id, $name)
     {
@@ -53,14 +49,12 @@ class Tags extends Offiaccount
                 'name' => $name
             ]
         ];
-        $result = $this->httpPost("/tags/update?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/tags/update?access_token={$this->accessToken}", $params);
     }
 
     /**
      * 删除标签
      * @param int $id 标签ID
-     * @return bool
      */
     public function delete($id)
     {
@@ -69,24 +63,20 @@ class Tags extends Offiaccount
                 'id' => $id
             ]
         ];
-        $result = $this->httpPost("/tags/delete?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/tags/delete?access_token={$this->accessToken}", $params);
     }
 
     /**
      * 获取用户身上的标签列表
      * @param string $openid 用户openid
-     * @return array|false
+     * @return array
      */
     public function getidlist($openid)
     {
         $params = [
             'openid' => $openid
         ];
-        $json = $this->httpPost("/tags/getidlist?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['tagid_list'];
+        $result = $this->httpPost("/tags/getidlist?access_token={$this->accessToken}", $params);
+        return $result['tagid_list'];
     }
 }
