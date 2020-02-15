@@ -10,7 +10,7 @@ use fize\crypt\Json;
 use fize\net\Http;
 
 /**
- * 微信API
+ * 微信接口
  */
 class Api extends Common
 {
@@ -92,13 +92,14 @@ class Api extends Common
     /**
      * 构造
      * @param array $options 配置参数
+     * @param bool $check_access_token 是否马上检测AccessToken
      */
-    public function __construct(array $options)
+    public function __construct(array $options, $check_access_token = true)
     {
         $this->host = isset($options['host']) ? $options['host'] : self::HOST1;
 
-        $this->appid = isset($options['appid']) ? $options['appid'] : '';
-        $this->appsecret = isset($options['appsecret']) ? $options['appsecret'] : '';
+        $this->appid = $options['appid'];
+        $this->appsecret = $options['appsecret'];
 
         if (isset($options['cache']['key'])) {
             $this->cacheKey = $options['cache']['key'];
@@ -107,7 +108,9 @@ class Api extends Common
         $cache_config = isset($options['cache']['config']) ? $options['cache']['config'] : [];
         $this->cache = Cache::getInstance($cache_handler, $cache_config);
 
-        $this->checkAccessToken();  // 检测TOKEN以便于URI中的token字段马上有效
+        if ($check_access_token) {
+            $this->checkAccessToken();  // 检测TOKEN以便于URI中的token字段马上有效
+        }
     }
 
     /**
