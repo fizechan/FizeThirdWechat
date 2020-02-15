@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\card;
+namespace fize\third\wechat\api\card;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 飞机票
  */
-class Boardingpass extends Offiaccount
+class Boardingpass extends Api
 {
 
     /**
@@ -20,14 +20,13 @@ class Boardingpass extends Offiaccount
      * @param string $qrcode_data 二维码数据
      * @param string $seat 座位号
      * @param bool $is_cancel 是否取消值机
-     * @return bool
      */
     public function checkin($code, $etkt_bnr, $class, $card_id = null, $qrcode_data = null, $seat = null, $is_cancel = null)
     {
         $params = [
-            'code' => $code,
+            'code'     => $code,
             'etkt_bnr' => $etkt_bnr,
-            'class' => $class,
+            'class'    => $class,
         ];
         if (!is_null($card_id)) {
             $params['card_id'] = $card_id;
@@ -41,7 +40,6 @@ class Boardingpass extends Offiaccount
         if (!is_null($is_cancel)) {
             $params['is_cancel'] = $is_cancel;
         }
-        $result = $this->httpPost("/card/boardingpass/checkin?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/card/boardingpass/checkin?access_token={$this->accessToken}", $params);
     }
 }

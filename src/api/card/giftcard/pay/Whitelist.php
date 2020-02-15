@@ -1,20 +1,20 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\card\giftcard\pay;
+namespace fize\third\wechat\api\card\giftcard\pay;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 白名单
  */
-class Whitelist extends Offiaccount
+class Whitelist extends Api
 {
 
     /**
      * 申请微信支付礼品卡权限
      * @param string $sub_mch_id 微信支付子商户号
-     * @return array|false
+     * @return array
      */
     public function add($sub_mch_id)
     {

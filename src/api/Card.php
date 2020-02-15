@@ -1,15 +1,15 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 
 /**
  * 微信卡券
  */
-class Card extends Offiaccount
+class Card extends Api
 {
 
     /**
@@ -75,7 +75,7 @@ class Card extends Offiaccount
     /**
      * 创建卡券
      * @param array $card 卡券数据
-     * @return array|false 返回数组中card_id为卡券ID
+     * @return array 返回数组中card_id为卡券ID
      * @see https://developers.weixin.qq.com/doc/offiaccount/Cards_and_Offer/Create_a_Coupon_Voucher_or_Card.html
      */
     public function create(array $card)
@@ -89,18 +89,15 @@ class Card extends Offiaccount
     /**
      * 查看卡券详情
      * @param string $card_id 卡券ID
-     * @return array|false
+     * @return array
      */
     public function get($card_id)
     {
         $params = [
             'card_id' => $card_id
         ];
-        $json = $this->httpPost("/card/get?access_token={$this->accessToken}", $params);
-        if (!$json) {
-            return false;
-        }
-        return $json['code'];
+        $result = $this->httpPost("/card/get?access_token={$this->accessToken}", $params);
+        return $result['code'];
     }
 
     /**
@@ -108,7 +105,7 @@ class Card extends Offiaccount
      * @param int $offset 查询卡列表的起始偏移量
      * @param int $count 需要查询的卡片的数量
      * @param array $status_list 拉出指定状态的卡券列表
-     * @return array|false
+     * @return array
      */
     public function batchget($offset, $count, $status_list = null)
     {
@@ -127,7 +124,7 @@ class Card extends Offiaccount
      * @param string $card_id 卡券ID
      * @param string $card_type 卡券类型
      * @param array $data 卡券信息
-     * @return array|false
+     * @return array
      */
     public function update($card_id, $card_type, array $data)
     {
@@ -143,7 +140,6 @@ class Card extends Offiaccount
      * @param string $card_id 卡券ID
      * @param int $increase_stock_value 增加多少库存
      * @param int $reduce_stock_value 减少多少库存
-     * @return bool
      */
     public function modifystock($card_id, $increase_stock_value = null, $reduce_stock_value = null)
     {
@@ -156,27 +152,24 @@ class Card extends Offiaccount
         if (!is_null($reduce_stock_value)) {
             $params['reduce_stock_value'] = $reduce_stock_value;
         }
-        $result = $this->httpPost("/card/modifystock?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/card/modifystock?access_token={$this->accessToken}", $params);
     }
 
     /**
      * 删除卡券
      * @param string $card_id 卡券ID
-     * @return bool
      */
     public function delete($card_id)
     {
         $params = [
             'card_id' => $card_id
         ];
-        $result = $this->httpPost("/card/delete?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/card/delete?access_token={$this->accessToken}", $params);
     }
 
     /**
      * 卡券开放类目查询
-     * @return array|false
+     * @return array
      */
     public function getapplyprotocol()
     {

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\card;
+namespace fize\third\wechat\api\card;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 会议门票
  */
-class Meetingticket extends Offiaccount
+class Meetingticket extends Api
 {
     /**
      * 更新会议门票
@@ -19,14 +19,13 @@ class Meetingticket extends Offiaccount
      * @param string $card_id 卡券ID
      * @param int $begin_time 开场时间戳
      * @param int $end_time 结束时间戳
-     * @return bool
      */
     public function updateuser($code, $zone, $entrance, $seat_number, $card_id = null, $begin_time = null, $end_time = null)
     {
         $params = [
-            'code' => $code,
-            'zone' => $zone,
-            'entrance' => $entrance,
+            'code'        => $code,
+            'zone'        => $zone,
+            'entrance'    => $entrance,
             'seat_number' => $seat_number,
         ];
         if (!is_null($card_id)) {
@@ -38,7 +37,6 @@ class Meetingticket extends Offiaccount
         if (!is_null($end_time)) {
             $params['end_time'] = $end_time;
         }
-        $result = $this->httpPost("/card/meetingticket/updateuser?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/card/meetingticket/updateuser?access_token={$this->accessToken}", $params);
     }
 }

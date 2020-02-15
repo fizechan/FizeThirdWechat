@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\card;
+namespace fize\third\wechat\api\card;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 电影票
  */
-class Movieticket extends Offiaccount
+class Movieticket extends Api
 {
     /**
      * 更新电影票
@@ -19,15 +19,14 @@ class Movieticket extends Offiaccount
      * @param string $card_id 卡券ID
      * @param string $screening_room 影厅
      * @param string $seat_number 座位号
-     * @return bool
      */
     public function updateuser($code, $ticket_class, $show_time, $duration, $card_id = null, $screening_room = null, $seat_number = null)
     {
         $params = [
-            'code' => $code,
+            'code'         => $code,
             'ticket_class' => $ticket_class,
-            'show_time' => $show_time,
-            'duration' => $duration,
+            'show_time'    => $show_time,
+            'duration'     => $duration,
         ];
         if (!is_null($card_id)) {
             $params['card_id'] = $card_id;
@@ -38,7 +37,6 @@ class Movieticket extends Offiaccount
         if (!is_null($seat_number)) {
             $params['seat_number'] = $seat_number;
         }
-        $result = $this->httpPost("/card/movieticket/updateuser?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/card/movieticket/updateuser?access_token={$this->accessToken}", $params);
     }
 }

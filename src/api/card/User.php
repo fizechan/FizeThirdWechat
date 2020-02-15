@@ -1,21 +1,21 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\card;
+namespace fize\third\wechat\api\card;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 卡券用户
  */
-class User extends Offiaccount
+class User extends Api
 {
 
     /**
      * 获取用户已领取卡券
      * @param string $openid 需要查询的用户openid
      * @param string $card_id 卡券ID。不填写时默认查询当前appid下的卡券
-     * @return bool|mixed
+     * @return array
      */
     public function getcardlist($openid, $card_id = null)
     {

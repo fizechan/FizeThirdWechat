@@ -1,15 +1,15 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\card;
+namespace fize\third\wechat\api\card;
 
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 自助核销
  */
-class Selfconsumecell extends Offiaccount
+class Selfconsumecell extends Api
 {
 
     /**
@@ -18,7 +18,6 @@ class Selfconsumecell extends Offiaccount
      * @param bool $is_open 是否开启自助核销功能
      * @param bool $need_verify_cod 用户核销时是否需要输入验证码
      * @param bool $need_remark_amount 用户核销时是否需要备注核销金额
-     * @return bool
      */
     public function set($card_id, $is_open, $need_verify_cod = false, $need_remark_amount = false)
     {
@@ -28,7 +27,6 @@ class Selfconsumecell extends Offiaccount
             'need_verify_cod'    => $need_verify_cod,
             'need_remark_amount' => $need_remark_amount
         ];
-        $result = $this->httpPost("/card/selfconsumecell/set?access_token={$this->accessToken}", $params);
-        return $result ? true : false;
+        $this->httpPost("/card/selfconsumecell/set?access_token={$this->accessToken}", $params);
     }
 }
