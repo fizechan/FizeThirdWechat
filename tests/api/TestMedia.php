@@ -1,43 +1,47 @@
 <?php
 
-namespace app\controller;
+namespace api;
 
-use fize\cache\Cache;
-use fize\loger\Log;
 use fize\third\wechat\api\Media;
+use PHPUnit\Framework\TestCase;
 
-
-class ControllerFizeWechatMedia
+class TestMedia extends TestCase
 {
-    private $wxconfig;
 
-    public function __construct()
+    public function testUpload()
     {
-        //CACHE初始化
-        Cache::init('file');
-        //Loger初始化
-        Log::init('file');
-
-        $this->wxconfig = [
+        $config = [
             'appid' => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
-            'debug' => true
+            'appsecret' => '89212483aa60a23a74ab7a11d78019f0'
         ];
-    }
-
-    public function actionUpload()
-    {
         $file = 'H:\WEB\www.sygame.loc\src\static\game\bafang\common\image\cancel.png';
-        $media = new Media($this->wxconfig);
+        $media = new Media($config);
         $result = $media->upload($file, Media::MEDIA_TYPE_IMAGE);
         var_dump($result);
-        var_dump($media->errCode);
-        var_dump($media->errMsg);
-	}
+    }
 
-    public function actionGet()
+    public function testUploadimg()
     {
-        $media = new Media($this->wxconfig);
+
+    }
+
+    public function testUploadvideo()
+    {
+
+    }
+
+    public function testUploadnews()
+    {
+
+    }
+
+    public function testGet()
+    {
+        $config = [
+            'appid' => 'wx12078319bd1c19dd',
+            'appsecret' => '89212483aa60a23a74ab7a11d78019f0'
+        ];
+        $media = new Media($config);
         $result = $media->get('_xiTlteQRyKM6KKbYB5iRzXlJF6J_llTlk-_RWq9yhiF6LM7ZLvYctC5WQ05TGpA');
         if($result['type'] == 'json'){  //结果返回JSON字符串
             var_dump($result['value']);

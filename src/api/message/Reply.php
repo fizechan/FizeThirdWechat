@@ -11,6 +11,8 @@ use fize\crypt\Xml;
 
 /**
  * 微信信息发送类
+ *
+ * 本接口非微信直接提供
  */
 class Reply extends Message
 {

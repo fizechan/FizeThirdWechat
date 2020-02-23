@@ -8,6 +8,7 @@ use fize\third\wechat\ApiException;
 
 /**
  * 社交网络
+ * @todo 待优化
  */
 class Sns extends Api
 {

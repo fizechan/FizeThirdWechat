@@ -6,6 +6,9 @@ namespace fize\third\wechat\api;
 
 /**
  * JS-SDK
+ *
+ * 本接口非微信直接提供
+ * @todo 待优化
  */
 class Jssdk extends Ticket
 {

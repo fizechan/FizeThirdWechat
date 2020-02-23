@@ -1,14 +1,14 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
-use fize\third\wechat\Offiaccount;
+use fize\third\wechat\Api;
 
 /**
  * 回调
  */
-class Callback extends Offiaccount
+class Callback extends Api
 {
 
     /**

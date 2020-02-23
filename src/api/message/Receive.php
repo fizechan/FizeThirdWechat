@@ -11,6 +11,8 @@ use fize\xml\SimpleXml;
 
 /**
  * 微信信息接收类
+ *
+ * 本接口非微信直接提供
  * @todo 需要服务器配合测试
  */
 class Receive extends Message
