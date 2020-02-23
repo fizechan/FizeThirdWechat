@@ -1,7 +1,7 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\intp;
+namespace fize\third\wechat\api\intp;
 
 
 class Marketcode

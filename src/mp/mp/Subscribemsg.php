@@ -1,7 +1,7 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\mp;
+namespace fize\third\wechat\mp\mp;
 
 use fize\third\wechat\Offiaccount;
 

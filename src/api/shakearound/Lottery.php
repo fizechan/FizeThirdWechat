@@ -1,7 +1,7 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\shakearound;
+namespace fize\third\wechat\api\shakearound;
 
 
 class Lottery

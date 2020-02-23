@@ -1,7 +1,7 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount\shakearound\device;
+namespace fize\third\wechat\api\shakearound\device;
 
 
 class Group

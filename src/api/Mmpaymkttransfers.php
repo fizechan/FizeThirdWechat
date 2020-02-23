@@ -1,7 +1,7 @@
 <?php
 
 
-namespace fize\third\wechat\offiaccount;
+namespace fize\third\wechat\api;
 
 
 class Mmpaymkttransfers
