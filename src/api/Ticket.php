@@ -12,6 +12,11 @@ class Ticket extends Api
 {
 
     /**
+     * 票据类型：微信卡券
+     */
+    const TICKET_TYPE_WX_CARD = 'wx_card';
+
+    /**
      * 获取临时票据
      * @param string $type 类型
      * @return array
