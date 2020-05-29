@@ -102,8 +102,8 @@ class Card extends Api
 
     /**
      * 批量查询卡券列表
-     * @param int $offset 查询卡列表的起始偏移量
-     * @param int $count 需要查询的卡片的数量
+     * @param int   $offset      查询卡列表的起始偏移量
+     * @param int   $count       需要查询的卡片的数量
      * @param array $status_list 拉出指定状态的卡券列表
      * @return array
      */
@@ -121,9 +121,9 @@ class Card extends Api
 
     /**
      * 更改卡券信息
-     * @param string $card_id 卡券ID
+     * @param string $card_id   卡券ID
      * @param string $card_type 卡券类型
-     * @param array $data 卡券信息
+     * @param array  $data      卡券信息
      * @return array
      */
     public function update($card_id, $card_type, array $data)
@@ -137,9 +137,9 @@ class Card extends Api
 
     /**
      * 修改库存
-     * @param string $card_id 卡券ID
-     * @param int $increase_stock_value 增加多少库存
-     * @param int $reduce_stock_value 减少多少库存
+     * @param string $card_id              卡券ID
+     * @param int    $increase_stock_value 增加多少库存
+     * @param int    $reduce_stock_value   减少多少库存
      */
     public function modifystock($card_id, $increase_stock_value = null, $reduce_stock_value = null)
     {

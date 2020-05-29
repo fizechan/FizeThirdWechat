@@ -8,44 +8,6 @@ use PHPUnit\Framework\TestCase;
 class TestMenu extends TestCase
 {
 
-    public function testAddconditional()
-    {
-
-    }
-
-    public function testDelconditional()
-    {
-
-    }
-
-    public function testGet()
-    {
-        $config = [
-            'appid' => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
-            'debug' => true
-        ];
-
-        $wx_menu = new Menu($config);
-        $menus = $wx_menu->get();
-        var_dump($menus);
-    }
-
-    public function testDelete()
-    {
-
-    }
-
-    public function test__construct()
-    {
-
-    }
-
-    public function testTrymatch()
-    {
-
-    }
-
     public function testCreate()
     {
         $config = [
@@ -132,8 +94,53 @@ class TestMenu extends TestCase
         ];
 
         $wx_menu = new Menu($config);
-        $result = $wx_menu->create($data);
-        var_dump($result);
+        $wx_menu->create($data);
+        self::assertIsObject($wx_menu);
+    }
+
+    public function testDelete()
+    {
+
+    }
+
+    public function testGet()
+    {
+        $config = [
+            'appid' => 'wx12078319bd1c19dd',
+            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
+            'debug' => true,
+            'cache' => [
+                'handler' => 'file',
+                'config' => [
+                    'path'    =>  __DIR__ . '/../../temp/cache',
+                ]
+            ]
+        ];
+
+        $wx_menu = new Menu($config);
+        $menus = $wx_menu->get();
+        var_dump($menus);
+        self::assertIsArray($menus);
+    }
+
+    public function testAddconditional()
+    {
+
+    }
+
+    public function testDelconditional()
+    {
+
+    }
+
+    public function test__construct()
+    {
+
+    }
+
+    public function testTrymatch()
+    {
+
     }
 
     public function testGetCurrentSelfmenuInfo()

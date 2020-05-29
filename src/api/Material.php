@@ -21,15 +21,15 @@ class Material extends Api
 
     /**
      * 新增永久图文素材
-     * @param string $title 标题
-     * @param string $thumb_media_id 图文消息的封面图片素材ID
-     * @param int $show_cover_pic 是否显示封面，0为false，即不显示，1为true，即显示
-     * @param string $content 图文消息的具体内容
-     * @param string $content_source_url 图文消息的原文地址
-     * @param string $author 作者
-     * @param string $digest 图文消息的摘要
-     * @param int $need_open_comment 是否打开评论，0不打开，1打开
-     * @param int $only_fans_can_comment 是否粉丝才可评论，0所有人可评论，1粉丝才可评论
+     * @param string $title                 标题
+     * @param string $thumb_media_id        图文消息的封面图片素材ID
+     * @param int    $show_cover_pic        是否显示封面，0为false，即不显示，1为true，即显示
+     * @param string $content               图文消息的具体内容
+     * @param string $content_source_url    图文消息的原文地址
+     * @param string $author                作者
+     * @param string $digest                图文消息的摘要
+     * @param int    $need_open_comment     是否打开评论，0不打开，1打开
+     * @param int    $only_fans_can_comment 是否粉丝才可评论，0所有人可评论，1粉丝才可评论
      * @return string 返回素材ID
      */
     public function addNews($title, $thumb_media_id, $show_cover_pic, $content, $content_source_url, $author = null, $digest = null, $need_open_comment = null, $only_fans_can_comment = null)
@@ -59,9 +59,9 @@ class Material extends Api
 
     /**
      * 新增其他类型永久素材
-     * @param string $type 类型
-     * @param string $file 要上传的文件
-     * @param string $title 视频素材的标题
+     * @param string $type         类型
+     * @param string $file         要上传的文件
+     * @param string $title        视频素材的标题
      * @param string $introduction 视频素材的描述
      * @return array
      */
@@ -122,14 +122,14 @@ class Material extends Api
 
     /**
      * 修改永久图文素材
-     * @param string $media_id 要修改的图文消息的id
-     * @param int $index 要更新的文章在图文消息中的位置
-     * @param string $title 标题
-     * @param string $thumb_media_id 图文消息的封面图片素材id
-     * @param string $author 作者
-     * @param string $digest 图文消息的摘要
-     * @param int $show_cover_pic 是否显示封面，0为false，即不显示，1为true，即显示
-     * @param string $content 图文消息的具体内容
+     * @param string $media_id           要修改的图文消息的id
+     * @param int    $index              要更新的文章在图文消息中的位置
+     * @param string $title              标题
+     * @param string $thumb_media_id     图文消息的封面图片素材id
+     * @param string $author             作者
+     * @param string $digest             图文消息的摘要
+     * @param int    $show_cover_pic     是否显示封面，0为false，即不显示，1为true，即显示
+     * @param string $content            图文消息的具体内容
      * @param string $content_source_url 图文消息的原文地址
      */
     public function updateNews($media_id, $index, $title, $thumb_media_id, $author, $digest, $show_cover_pic, $content, $content_source_url)
@@ -159,9 +159,9 @@ class Material extends Api
 
     /**
      * 获取素材列表
-     * @param string $type 类型
-     * @param int $offset 偏移位置
-     * @param int $count 返回素材的数量
+     * @param string $type   类型
+     * @param int    $offset 偏移位置
+     * @param int    $count  返回素材的数量
      * @return array
      */
     public function batchGetMaterial($type, $offset, $count)

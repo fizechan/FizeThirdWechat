@@ -38,7 +38,7 @@ class Tags extends Api
 
     /**
      * 编辑标签
-     * @param int $id 标签ID
+     * @param int    $id   标签ID
      * @param string $name 标签名
      */
     public function update($id, $name)

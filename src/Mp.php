@@ -1,12 +1,11 @@
 <?php
 
-
 namespace fize\third\wechat;
 
 /**
  * MP接口
  */
-class Mp extends Common
+class Mp extends MpAbstract
 {
 
     /**

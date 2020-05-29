@@ -18,7 +18,7 @@ class User extends Api
      *
      * unionid字段 只有在用户将公众号绑定到微信开放平台账号后，才会出现。建议调用前用isset()检测一下
      * @param string $openid 用户openid
-     * @param string $lang 国家地区语言版本
+     * @param string $lang   国家地区语言版本
      * @return array
      */
     public function info($openid, $lang = null)

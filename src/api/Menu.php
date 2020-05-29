@@ -55,7 +55,7 @@ class Menu extends Api
 
     /**
      * 创建个性化菜单
-     * @param array $buttons 菜单
+     * @param array $buttons   菜单
      * @param array $matchrule 匹配规则
      * @return string 返回menuid
      */

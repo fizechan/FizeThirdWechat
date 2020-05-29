@@ -4,7 +4,7 @@
 namespace fize\third\wechat;
 
 
-class MpAbstract extends Common
+abstract class MpAbstract extends Common
 {
 
 }

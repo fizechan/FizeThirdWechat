@@ -58,8 +58,8 @@ class Poi extends Api
 
     /**
      * 修改门店服务信息
-     * @param string $poi_id 门店ID
-     * @param array $base_info 门店信息
+     * @param string $poi_id    门店ID
+     * @param array  $base_info 门店信息
      */
     public function updatepoi($poi_id, array $base_info)
     {

@@ -3,7 +3,6 @@
 
 namespace fize\third\wechat;
 
-
 /**
  * 微信接口
  */

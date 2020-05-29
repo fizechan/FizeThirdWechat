@@ -1,6 +1,5 @@
 <?php
 
-
 namespace fize\third\wechat;
 
 /**

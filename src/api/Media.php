@@ -5,7 +5,6 @@ namespace fize\third\wechat\api;
 
 use CURLFile;
 use fize\crypt\Json;
-use fize\net\Http;
 use fize\third\wechat\Api;
 use fize\third\wechat\ApiException;
 
@@ -38,12 +37,12 @@ class Media extends Api
     /**
      * 获取临时素材
      * @param string $media_id 媒体文件ID
-     * @return array
+     * @return array ['type' => *, 'value' => *]
      */
     public function get($media_id)
     {
-        $result = $this->httpGet("/media/get?access_token={$this->accessToken}&media_id={$media_id}");
-        $ContentType = Http::getLastResponse()->getHeaderLine('Content-Type');
+        $result = $this->httpGet("/media/get?access_token={$this->accessToken}&media_id={$media_id}", false);
+        $ContentType = $this->response->getHeaderLine('Content-Type');
         if ($ContentType == 'text/plain') {
             $json = Json::decode($result);
             if (isset($json['errcode']) && $json['errcode']) {
@@ -89,7 +88,7 @@ class Media extends Api
 
     /**
      * 上传视频素材
-     * @param $file
+     * @param string $file 要上传的文件
      * @return array
      */
     public function uploadvideo($file)

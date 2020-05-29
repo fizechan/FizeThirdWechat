@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * 企业微信原接口
  * @todo 待参考结束后删除
@@ -119,11 +120,11 @@ class QyWechat
 
     /**
      * XML编码
-     * @param mixed $data 数据
+     * @param mixed  $data 数据
      * @param string $root 根节点名
      * @param string $item 数字索引的子节点名
      * @param string $attr 根节点属性
-     * @param string $id 数字索引子节点key转换的属性名
+     * @param string $id   数字索引子节点key转换的属性名
      * @return string
      */
     private function xml_encode($data, $root = 'xml', $item = 'item', $attr = '', $id = 'id')
@@ -236,8 +237,8 @@ class QyWechat
 
     /**
      * POST 请求
-     * @param string $url
-     * @param array $param
+     * @param string  $url
+     * @param array   $param
      * @param boolean $post_file 是否文件上传
      * @return boolean,string,content
      */
@@ -758,16 +759,16 @@ class QyWechat
     /**
      * 设置回复图文
      * @param array $newsData
-     * 数组结构:
-     *  array(
-     *    "0"=>array(
+     *        数组结构:
+     *        array(
+     *        "0"=>array(
      *        'Title'=>'msg title',
      *        'Description'=>'summary text',
      *        'PicUrl'=>'http://www.domain.com/1.jpg',
      *        'Url'=>'http://www.domain.com/1.html'
-     *    ),
-     *    "1"=>....
-     *  )
+     *        ),
+     *        "1"=>....
+     *        )
      */
     public function news($newsData = array())
     {
@@ -787,8 +788,8 @@ class QyWechat
 
     /**
      * 设置发送消息
-     * @param array $msg 消息数组
-     * @param bool $append 是否在原消息数组追加
+     * @param array $msg    消息数组
+     * @param bool  $append 是否在原消息数组追加
      */
     public function Message($msg = '', $append = false)
     {
@@ -824,8 +825,8 @@ class QyWechat
      *
      * 回复微信服务器, 此函数支持链式操作
      * Example: $this->text('msg tips')->reply();
-     * @param string $msg 要发送的信息, 默认取$this->_msg
-     * @param bool $return 是否返回信息而不抛出到浏览器 默认:否
+     * @param string $msg    要发送的信息, 默认取$this->_msg
+     * @param bool   $return 是否返回信息而不抛出到浏览器 默认:否
      */
     public function reply($msg = array(), $return = false)
     {
@@ -863,9 +864,9 @@ class QyWechat
 
     /**
      * 获取或设置缓存
-     * @param string $p_key 缓存键名
-     * @param string $p_value 设置缓存键值
-     * @param int $p_expires 设置缓存有效时间
+     * @param string $p_key     缓存键名
+     * @param string $p_value   设置缓存键值
+     * @param int    $p_expires 设置缓存有效时间
      * @return bool/string
      */
     private function cache_access_token($p_key, $p_value = "", $p_expires = 0)
@@ -938,56 +939,56 @@ class QyWechat
     /**
      * 创建菜单
      * @param array $data 菜单数组数据
-     * example:
-     *    array (
-     *        'button' => array (
-     *          0 => array (
-     *            'name' => '扫码',
-     *            'sub_button' => array (
-     *                0 => array (
-     *                  'type' => 'scancode_waitmsg',
-     *                  'name' => '扫码带提示',
-     *                  'key' => 'rselfmenu_0_0',
-     *                ),
-     *                1 => array (
-     *                  'type' => 'scancode_push',
-     *                  'name' => '扫码推事件',
-     *                  'key' => 'rselfmenu_0_1',
-     *                ),
-     *            ),
-     *          ),
-     *          1 => array (
-     *            'name' => '发图',
-     *            'sub_button' => array (
-     *                0 => array (
-     *                  'type' => 'pic_sysphoto',
-     *                  'name' => '系统拍照发图',
-     *                  'key' => 'rselfmenu_1_0',
-     *                ),
-     *                1 => array (
-     *                  'type' => 'pic_photo_or_album',
-     *                  'name' => '拍照或者相册发图',
-     *                  'key' => 'rselfmenu_1_1',
-     *                )
-     *            ),
-     *          ),
-     *          2 => array (
-     *            'type' => 'location_select',
-     *            'name' => '发送位置',
-     *            'key' => 'rselfmenu_2_0'
-     *          ),
-     *        ),
-     *    )
-     * type可以选择为以下几种，会收到相应类型的事件推送。请注意，3到8的所有事件，仅支持微信iPhone5.4.1以上版本，
-     * 和Android5.4以上版本的微信用户，旧版本微信用户点击后将没有回应，开发者也不能正常接收到事件推送。
-     * 1、click：点击推事件
-     * 2、view：跳转URL
-     * 3、scancode_push：扫码推事件
-     * 4、scancode_waitmsg：扫码推事件且弹出“消息接收中”提示框
-     * 5、pic_sysphoto：弹出系统拍照发图
-     * 6、pic_photo_or_album：弹出拍照或者相册发图
-     * 7、pic_weixin：弹出微信相册发图器
-     * 8、location_select：弹出地理位置选择器
+     *                    example:
+     *                    array (
+     *                    'button' => array (
+     *                    0 => array (
+     *                    'name' => '扫码',
+     *                    'sub_button' => array (
+     *                    0 => array (
+     *                    'type' => 'scancode_waitmsg',
+     *                    'name' => '扫码带提示',
+     *                    'key' => 'rselfmenu_0_0',
+     *                    ),
+     *                    1 => array (
+     *                    'type' => 'scancode_push',
+     *                    'name' => '扫码推事件',
+     *                    'key' => 'rselfmenu_0_1',
+     *                    ),
+     *                    ),
+     *                    ),
+     *                    1 => array (
+     *                    'name' => '发图',
+     *                    'sub_button' => array (
+     *                    0 => array (
+     *                    'type' => 'pic_sysphoto',
+     *                    'name' => '系统拍照发图',
+     *                    'key' => 'rselfmenu_1_0',
+     *                    ),
+     *                    1 => array (
+     *                    'type' => 'pic_photo_or_album',
+     *                    'name' => '拍照或者相册发图',
+     *                    'key' => 'rselfmenu_1_1',
+     *                    )
+     *                    ),
+     *                    ),
+     *                    2 => array (
+     *                    'type' => 'location_select',
+     *                    'name' => '发送位置',
+     *                    'key' => 'rselfmenu_2_0'
+     *                    ),
+     *                    ),
+     *                    )
+     *                    type可以选择为以下几种，会收到相应类型的事件推送。请注意，3到8的所有事件，仅支持微信iPhone5.4.1以上版本，
+     *                    和Android5.4以上版本的微信用户，旧版本微信用户点击后将没有回应，开发者也不能正常接收到事件推送。
+     *                    1、click：点击推事件
+     *                    2、view：跳转URL
+     *                    3、scancode_push：扫码推事件
+     *                    4、scancode_waitmsg：扫码推事件且弹出“消息接收中”提示框
+     *                    5、pic_sysphoto：弹出系统拍照发图
+     *                    6、pic_photo_or_album：弹出拍照或者相册发图
+     *                    7、pic_weixin：弹出微信相册发图器
+     *                    8、location_select：弹出地理位置选择器
      */
     public function createMenu($data, $agentid = '')
     {
@@ -1062,11 +1063,11 @@ class QyWechat
      * @param array $data {"media":'@Path\filename.jpg'}
      * @param type 媒体文件类型:图片（image）、语音（voice）、视频（video），普通文件(file)
      * @return boolean|array
-     * {
-     *    "type": "image",
-     *    "media_id": "0000001",
-     *    "created_at": "1380000000"
-     * }
+     *                    {
+     *                    "type": "image",
+     *                    "media_id": "0000001",
+     *                    "created_at": "1380000000"
+     *                    }
      */
     public function uploadMedia($data, $type)
     {
@@ -1108,18 +1109,18 @@ class QyWechat
     /**
      * 创建部门
      * @param array $data 结构体为:
-     * array (
-     *     "name" => "邮箱产品组",   //部门名称
-     *     "parentid" => "1"         //父部门id
-     *     "order" =>  "1",            //(非必须)在父部门中的次序。从1开始，数字越大排序越靠后
-     * )
+     *                    array (
+     *                    "name" => "邮箱产品组",   //部门名称
+     *                    "parentid" => "1"         //父部门id
+     *                    "order" =>  "1",            //(非必须)在父部门中的次序。从1开始，数字越大排序越靠后
+     *                    )
      * @return boolean|array
-     * 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "created",  //对返回码的文本描述内容
-     *   "id": 2               //创建的部门id。
-     * }
+     *                    成功返回结果
+     *                    {
+     *                    "errcode": 0,        //返回码
+     *                    "errmsg": "created",  //对返回码的文本描述内容
+     *                    "id": 2               //创建的部门id。
+     *                    }
      */
     public function createDepartment($data)
     {
@@ -1141,17 +1142,17 @@ class QyWechat
     /**
      * 更新部门
      * @param array $data 结构体为:
-     * array(
-     *     "id" => "1"               //(必须)部门id
-     *     "name" =>  "邮箱产品组",   //(非必须)部门名称
-     *     "parentid" =>  "1",         //(非必须)父亲部门id。根部门id为1
-     *     "order" =>  "1",            //(非必须)在父部门中的次序。从1开始，数字越大排序越靠后
-     * )
+     *                    array(
+     *                    "id" => "1"               //(必须)部门id
+     *                    "name" =>  "邮箱产品组",   //(非必须)部门名称
+     *                    "parentid" =>  "1",         //(非必须)父亲部门id。根部门id为1
+     *                    "order" =>  "1",            //(非必须)在父部门中的次序。从1开始，数字越大排序越靠后
+     *                    )
      * @return boolean|array 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "updated"  //对返回码的文本描述内容
-     * }
+     *                    {
+     *                    "errcode": 0,        //返回码
+     *                    "errmsg": "updated"  //对返回码的文本描述内容
+     *                    }
      */
     public function updateDepartment($data)
     {
@@ -1173,10 +1174,10 @@ class QyWechat
      * 删除部门
      * @param $id
      * @return boolean|array 成功返回结果
-     * {
+     *   {
      *   "errcode": 0,        //返回码
      *   "errmsg": "deleted"  //对返回码的文本描述内容
-     * }
+     *   }
      */
     public function deleteDepartment($id)
     {
@@ -1197,16 +1198,16 @@ class QyWechat
     /**
      * 移动部门
      * @param $data
-     * array(
+     *    array(
      *    "department_id" => "5",    //所要移动的部门
      *    "to_parentid" => "2",        //想移动到的父部门节点，根部门为1
      *    "to_position" => "1"        //(非必须)想移动到的父部门下的位置，1表示最上方，往后位置为2，3，4，以此类推，默认为1
-     * )
+     *    )
      * @return boolean|array 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "ok"  //对返回码的文本描述内容
-     * }
+     *    {
+     *    "errcode": 0,        //返回码
+     *    "errmsg": "ok"  //对返回码的文本描述内容
+     *    }
      */
     public function moveDepartment($data)
     {
@@ -1263,23 +1264,23 @@ class QyWechat
     /**
      * 创建成员
      * @param array $data 结构体为:
-     * array(
-     *    "userid" => "zhangsan",
-     *    "name" => "张三",
-     *    "department" => [1, 2],
-     *    "position" => "产品经理",
-     *    "mobile" => "15913215421",
-     *    "gender" => 1,     //性别。gender=0表示男，=1表示女
-     *    "tel" => "62394",
-     *    "email" => "zhangsan@gzdev.com",
-     *    "weixinid" => "zhangsan4dev"
-     * )
+     *                    array(
+     *                    "userid" => "zhangsan",
+     *                    "name" => "张三",
+     *                    "department" => [1, 2],
+     *                    "position" => "产品经理",
+     *                    "mobile" => "15913215421",
+     *                    "gender" => 1,     //性别。gender=0表示男，=1表示女
+     *                    "tel" => "62394",
+     *                    "email" => "zhangsan@gzdev.com",
+     *                    "weixinid" => "zhangsan4dev"
+     *                    )
      * @return boolean|array
-     * 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "created",  //对返回码的文本描述内容
-     * }
+     *                    成功返回结果
+     *                    {
+     *                    "errcode": 0,        //返回码
+     *                    "errmsg": "created",  //对返回码的文本描述内容
+     *                    }
      */
     public function createUser($data)
     {
@@ -1301,22 +1302,22 @@ class QyWechat
     /**
      * 更新成员
      * @param array $data 结构体为:
-     * array(
-     *    "userid" => "zhangsan",
-     *    "name" => "张三",
-     *    "department" => [1, 2],
-     *    "position" => "产品经理",
-     *    "mobile" => "15913215421",
-     *    "gender" => 1,     //性别。gender=0表示男，=1表示女
-     *    "tel" => "62394",
-     *    "email" => "zhangsan@gzdev.com",
-     *    "weixinid" => "zhangsan4dev"
-     * )
+     *                    array(
+     *                    "userid" => "zhangsan",
+     *                    "name" => "张三",
+     *                    "department" => [1, 2],
+     *                    "position" => "产品经理",
+     *                    "mobile" => "15913215421",
+     *                    "gender" => 1,     //性别。gender=0表示男，=1表示女
+     *                    "tel" => "62394",
+     *                    "email" => "zhangsan@gzdev.com",
+     *                    "weixinid" => "zhangsan4dev"
+     *                    )
      * @return boolean|array 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "updated"  //对返回码的文本描述内容
-     * }
+     *                    {
+     *                    "errcode": 0,        //返回码
+     *                    "errmsg": "updated"  //对返回码的文本描述内容
+     *                    }
      */
     public function updateUser($data)
     {
@@ -1338,10 +1339,10 @@ class QyWechat
      * 删除成员
      * @param $userid  员工UserID。对应管理端的帐号
      * @return boolean|array 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "deleted"  //对返回码的文本描述内容
-     * }
+     *                 {
+     *                 "errcode": 0,        //返回码
+     *                 "errmsg": "deleted"  //对返回码的文本描述内容
+     *                 }
      */
     public function deleteUser($userid)
     {
@@ -1363,21 +1364,21 @@ class QyWechat
      * 获取成员信息
      * @param $userid  员工UserID。对应管理端的帐号
      * @return boolean|array     成功返回结果
-     * {
-     *    "errcode": 0,
-     *    "errmsg": "ok",
-     *    "userid": "zhangsan",
-     *    "name": "李四",
-     *    "department": [1, 2],
-     *    "position": "后台工程师",
-     *    "mobile": "15913215421",
-     *    "gender": 1,     //性别。gender=0表示男，=1表示女
-     *    "tel": "62394",
-     *    "email": "zhangsan@gzdev.com",
-     *    "weixinid": "lisifordev",        //微信号
-     *    "avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3W..../0",   //头像url。注：如果要获取小图将url最后的"/0"改成"/64"即可
-     *    "status": 1      //关注状态: 1=已关注，2=已冻结，4=未关注
-     * }
+     *                 {
+     *                 "errcode": 0,
+     *                 "errmsg": "ok",
+     *                 "userid": "zhangsan",
+     *                 "name": "李四",
+     *                 "department": [1, 2],
+     *                 "position": "后台工程师",
+     *                 "mobile": "15913215421",
+     *                 "gender": 1,     //性别。gender=0表示男，=1表示女
+     *                 "tel": "62394",
+     *                 "email": "zhangsan@gzdev.com",
+     *                 "weixinid": "lisifordev",        //微信号
+     *                 "avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3W..../0",   //头像url。注：如果要获取小图将url最后的"/0"改成"/64"即可
+     *                 "status": 1      //关注状态: 1=已关注，2=已冻结，4=未关注
+     *                 }
      */
     public function getUserInfo($userid)
     {
@@ -1398,19 +1399,19 @@ class QyWechat
     /**
      * 获取部门成员
      * @param $department_id   部门id
-     * @param $fetch_child 1/0：是否递归获取子部门下面的成员
-     * @param $status 0获取全部员工，1获取已关注成员列表，2获取禁用成员列表，4获取未关注成员列表。status可叠加
+     * @param $fetch_child     1/0：是否递归获取子部门下面的成员
+     * @param $status          0获取全部员工，1获取已关注成员列表，2获取禁用成员列表，4获取未关注成员列表。status可叠加
      * @return boolean|array     成功返回结果
-     * {
-     *    "errcode": 0,
-     *    "errmsg": "ok",
-     *    "userlist": [
-     *            {
-     *                   "userid": "zhangsan",
-     *                   "name": "李四"
-     *            }
-     *      ]
-     * }
+     *                         {
+     *                         "errcode": 0,
+     *                         "errmsg": "ok",
+     *                         "userlist": [
+     *                         {
+     *                         "userid": "zhangsan",
+     *                         "name": "李四"
+     *                         }
+     *                         ]
+     *                         }
      */
     public function getUserList($department_id, $fetch_child = 0, $status = 0)
     {
@@ -1436,10 +1437,10 @@ class QyWechat
      * @param $code        Oauth2.0或者二次验证时返回的code值
      * @param $agentid     跳转链接时所在的企业应用ID，未填则默认为当前配置的应用id
      * @return boolean|array 成功返回数组
-     * array(
-     *     'UserId' => 'USERID',       //员工UserID
-     *     'DeviceId' => 'DEVICEID'    //手机设备号(由微信在安装时随机生成)
-     * )
+     *                     array(
+     *                     'UserId' => 'USERID',       //员工UserID
+     *                     'DeviceId' => 'DEVICEID'    //手机设备号(由微信在安装时随机生成)
+     *                     )
      */
     public function getUserId($code, $agentid = 0)
     {
@@ -1461,16 +1462,16 @@ class QyWechat
     /**
      * 创建标签
      * @param array $data 结构体为:
-     * array(
-     *    "tagname" => "UI"
-     * )
+     *                    array(
+     *                    "tagname" => "UI"
+     *                    )
      * @return boolean|array
-     * 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "created",  //对返回码的文本描述内容
-     *   "tagid": "1"
-     * }
+     *                    成功返回结果
+     *                    {
+     *                    "errcode": 0,        //返回码
+     *                    "errmsg": "created",  //对返回码的文本描述内容
+     *                    "tagid": "1"
+     *                    }
      */
     public function createTag($data)
     {
@@ -1491,15 +1492,15 @@ class QyWechat
     /**
      * 更新标签
      * @param array $data 结构体为:
-     * array(
-     *    "tagid" => "1",
-     *    "tagname" => "UI design"
-     * )
+     *                    array(
+     *                    "tagid" => "1",
+     *                    "tagname" => "UI design"
+     *                    )
      * @return boolean|array 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "updated"  //对返回码的文本描述内容
-     * }
+     *                    {
+     *                    "errcode": 0,        //返回码
+     *                    "errmsg": "updated"  //对返回码的文本描述内容
+     *                    }
      */
     public function updateTag($data)
     {
@@ -1521,10 +1522,10 @@ class QyWechat
      * 删除标签
      * @param $tagid  标签TagID
      * @return boolean|array 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "deleted"  //对返回码的文本描述内容
-     * }
+     *                {
+     *                "errcode": 0,        //返回码
+     *                "errmsg": "deleted"  //对返回码的文本描述内容
+     *                }
      */
     public function deleteTag($tagid)
     {
@@ -1546,16 +1547,16 @@ class QyWechat
      * 获取标签成员
      * @param $tagid  标签TagID
      * @return boolean|array     成功返回结果
-     * {
-     *    "errcode": 0,
-     *    "errmsg": "ok",
-     *    "userlist": [
-     *          {
-     *              "userid": "zhangsan",
-     *              "name": "李四"
-     *          }
-     *      ]
-     * }
+     *                {
+     *                "errcode": 0,
+     *                "errmsg": "ok",
+     *                "userlist": [
+     *                {
+     *                "userid": "zhangsan",
+     *                "name": "李四"
+     *                }
+     *                ]
+     *                }
      */
     public function getTag($tagid)
     {
@@ -1576,20 +1577,20 @@ class QyWechat
     /**
      * 增加标签成员
      * @param array $data 结构体为:
-     * array (
-     *    "tagid" => "1",
-     *    "userlist" => array(    //企业员工ID列表
-     *         "user1",
-     *         "user2"
-     *     )
-     * )
+     *                    array (
+     *                    "tagid" => "1",
+     *                    "userlist" => array(    //企业员工ID列表
+     *                    "user1",
+     *                    "user2"
+     *                    )
+     *                    )
      * @return boolean|array
-     * 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "ok",  //对返回码的文本描述内容
-     *   "invalidlist"："usr1|usr2|usr"     //若部分userid非法，则会有此段。不在权限内的员工ID列表，以“|”分隔
-     * }
+     *                    成功返回结果
+     *                    {
+     *                    "errcode": 0,        //返回码
+     *                    "errmsg": "ok",  //对返回码的文本描述内容
+     *                    "invalidlist"："usr1|usr2|usr"     //若部分userid非法，则会有此段。不在权限内的员工ID列表，以“|”分隔
+     *                    }
      */
     public function addTagUser($data)
     {
@@ -1610,20 +1611,20 @@ class QyWechat
     /**
      * 删除标签成员
      * @param array $data 结构体为:
-     * array (
-     *    "tagid" => "1",
-     *    "userlist" => array(    //企业员工ID列表
-     *         "user1",
-     *         "user2"
-     *     )
-     * )
+     *                    array (
+     *                    "tagid" => "1",
+     *                    "userlist" => array(    //企业员工ID列表
+     *                    "user1",
+     *                    "user2"
+     *                    )
+     *                    )
      * @return boolean|array
-     * 成功返回结果
-     * {
-     *   "errcode": 0,        //返回码
-     *   "errmsg": "deleted",  //对返回码的文本描述内容
-     *   "invalidlist"："usr1|usr2|usr"     //若部分userid非法，则会有此段。不在权限内的员工ID列表，以“|”分隔
-     * }
+     *                    成功返回结果
+     *                    {
+     *                    "errcode": 0,        //返回码
+     *                    "errmsg": "deleted",  //对返回码的文本描述内容
+     *                    "invalidlist"："usr1|usr2|usr"     //若部分userid非法，则会有此段。不在权限内的员工ID列表，以“|”分隔
+     *                    }
      */
     public function delTagUser($data)
     {
@@ -1672,13 +1673,13 @@ class QyWechat
     /**
      * 主动发送信息接口
      * @param array $data 结构体为:
-     * array(
-     *         "touser" => "UserID1|UserID2|UserID3",
-     *         "toparty" => "PartyID1|PartyID2 ",
-     *         "totag" => "TagID1|TagID2 ",
-     *         "safe":"0"            //是否为保密消息，对于news无效
-     *         "agentid" => "001",    //应用id
-     *         "msgtype" => "text",  //根据信息类型，选择下面对应的信息结构体
+     *                    array(
+     *                    "touser" => "UserID1|UserID2|UserID3",
+     *                    "toparty" => "PartyID1|PartyID2 ",
+     *                    "totag" => "TagID1|TagID2 ",
+     *                    "safe":"0"            //是否为保密消息，对于news无效
+     *                    "agentid" => "001",    //应用id
+     *                    "msgtype" => "text",  //根据信息类型，选择下面对应的信息结构体
      *
      *         "text" => array(
      *                 "content" => "Holiday Request For Pony(http://xxxxx)"
@@ -1766,10 +1767,10 @@ class QyWechat
      *
      * @param $userid
      * @return boolean|array 成功返回结果
-     * {
+     *   {
      *   "errcode": 0,        //返回码
      *   "errmsg": "ok"  //对返回码的文本描述内容
-     * }
+     *   }
      */
     public function authSucc($userid)
     {
@@ -1790,7 +1791,7 @@ class QyWechat
     /**
      * oauth 授权跳转接口
      * @param string $callback 回调URI
-     * @param string $state 重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值
+     * @param string $state    重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值
      * @return string
      */
     public function getOauthRedirect($callback, $state = 'STATE', $scope = 'snsapi_base')

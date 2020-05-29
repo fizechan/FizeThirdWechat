@@ -22,14 +22,14 @@ class Wxa extends Api
 
     /**
      * 创建门店小程序
-     * @param int $first_catid 一级类目ID
-     * @param int $second_catid 二级类目ID
-     * @param string $headimg_mediaid 头像临时素材ID
-     * @param string $nickname 昵称
-     * @param string $intro 介绍
+     * @param int          $first_catid        一级类目ID
+     * @param int          $second_catid       二级类目ID
+     * @param string       $headimg_mediaid    头像临时素材ID
+     * @param string       $nickname           昵称
+     * @param string       $intro              介绍
      * @param string|array $qualification_list 类目相关证件临时素材ID
-     * @param string $org_code 营业执照或组织代码证
-     * @param string|array $other_files 补充材料临时素材ID
+     * @param string       $org_code           营业执照或组织代码证
+     * @param string|array $other_files        补充材料临时素材ID
      * @return bool
      */
     public function applyMerchant($first_catid, $second_catid, $headimg_mediaid, $nickname, $intro, $qualification_list = null, $org_code = null, $other_files = null)
@@ -67,7 +67,7 @@ class Wxa extends Api
     /**
      * 修改门店小程序信息
      * @param string $headimg_mediaid 头像临时素材ID
-     * @param string $intro 介绍
+     * @param string $intro           介绍
      * @return bool
      */
     public function modifyMerchant($headimg_mediaid, $intro)
@@ -91,8 +91,8 @@ class Wxa extends Api
 
     /**
      * 在腾讯地图中搜索门店
-     * @param int $districtid 对应拉取省市区信息接口中的id字段
-     * @param string $keyword 搜索的关键词
+     * @param int    $districtid 对应拉取省市区信息接口中的id字段
+     * @param string $keyword    搜索的关键词
      * @return array
      */
     public function searchMapPoi($districtid, $keyword)
@@ -157,7 +157,7 @@ class Wxa extends Api
     {
         $params = [
             'offset' => $offset,
-            'limit' => $limit
+            'limit'  => $limit
         ];
         return $this->httpPost("/wxa/get_store_list?access_token={$this->accessToken}", $params);
     }

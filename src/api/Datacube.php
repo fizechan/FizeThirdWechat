@@ -10,13 +10,13 @@ use fize\third\wechat\Api;
 /**
  * 数据统计
  */
-class DataCube extends Api
+class Datacube extends Api
 {
 
     /**
      * 获取用户增减数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getusersummary($begin_date, $end_date)
@@ -27,7 +27,7 @@ class DataCube extends Api
     /**
      * 获取累计用户数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getusercumulate($begin_date, $end_date)
@@ -38,7 +38,7 @@ class DataCube extends Api
     /**
      * 获取图文群发每日数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getarticlesummary($begin_date, $end_date)
@@ -49,7 +49,7 @@ class DataCube extends Api
     /**
      * 获取图文群发总数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getarticletotal($begin_date, $end_date)
@@ -60,7 +60,7 @@ class DataCube extends Api
     /**
      * 获取图文统计数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getuserread($begin_date, $end_date)
@@ -71,7 +71,7 @@ class DataCube extends Api
     /**
      * 获取图文统计分时数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getuserreadhour($begin_date, $end_date)
@@ -82,7 +82,7 @@ class DataCube extends Api
     /**
      * 获取图文分享转发数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getusershare($begin_date, $end_date)
@@ -93,7 +93,7 @@ class DataCube extends Api
     /**
      * 获取图文分享转发分时数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getusersharehour($begin_date, $end_date)
@@ -104,7 +104,7 @@ class DataCube extends Api
     /**
      * 获取消息发送概况数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getupstreammsg($begin_date, $end_date)
@@ -115,7 +115,7 @@ class DataCube extends Api
     /**
      * 获取消息分送分时数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getupstreammsghour($begin_date, $end_date)
@@ -126,7 +126,7 @@ class DataCube extends Api
     /**
      * 获取消息发送周数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getupstreammsgweek($begin_date, $end_date)
@@ -137,7 +137,7 @@ class DataCube extends Api
     /**
      * 获取消息发送月数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getupstreammsgmonth($begin_date, $end_date)
@@ -148,7 +148,7 @@ class DataCube extends Api
     /**
      * 获取消息发送分布数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getupstreammsgdist($begin_date, $end_date)
@@ -159,7 +159,7 @@ class DataCube extends Api
     /**
      * 获取消息发送分布周数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getupstreammsgdistweek($begin_date, $end_date)
@@ -170,7 +170,7 @@ class DataCube extends Api
     /**
      * 获取消息发送分布月数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getupstreammsgdistmonth($begin_date, $end_date)
@@ -181,7 +181,7 @@ class DataCube extends Api
     /**
      * 获取接口分析数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getinterfacesummary($begin_date, $end_date)
@@ -192,7 +192,7 @@ class DataCube extends Api
     /**
      * 获取接口分析分时数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     public function getinterfacesummaryhour($begin_date, $end_date)
@@ -202,9 +202,9 @@ class DataCube extends Api
 
     /**
      * 拉取卡券概况数据
-     * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
-     * @param int $cond_source 卡券来源
+     * @param string $begin_date  开始日期
+     * @param string $end_date    结束日期
+     * @param int    $cond_source 卡券来源
      * @return array
      */
     public function getcardbizuininfo($begin_date, $end_date, $cond_source)
@@ -220,10 +220,10 @@ class DataCube extends Api
 
     /**
      * 获取免费券数据
-     * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
-     * @param int $cond_source 卡券来源
-     * @param string $card_id 卡券ID
+     * @param string $begin_date  开始日期
+     * @param string $end_date    结束日期
+     * @param int    $cond_source 卡券来源
+     * @param string $card_id     卡券ID
      * @return array
      */
     public function getcardcardinfo($begin_date, $end_date, $cond_source, $card_id = null)
@@ -242,9 +242,9 @@ class DataCube extends Api
 
     /**
      * 拉取会员卡概况数据
-     * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
-     * @param int $cond_source 卡券来源
+     * @param string $begin_date  开始日期
+     * @param string $end_date    结束日期
+     * @param int    $cond_source 卡券来源
      * @return array
      */
     public function getcardmembercardinfo($begin_date, $end_date, $cond_source)
@@ -261,8 +261,8 @@ class DataCube extends Api
     /**
      * 拉取会员卡概况数据
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
-     * @param string $card_id 卡券ID
+     * @param string $end_date   结束日期
+     * @param string $card_id    卡券ID
      * @return array
      */
     public function getcardmembercarddetail($begin_date, $end_date, $card_id)
@@ -278,9 +278,9 @@ class DataCube extends Api
 
     /**
      * 数据统计底层方法
-     * @param string $action 动作
+     * @param string $action     动作
      * @param string $begin_date 开始日期
-     * @param string $end_date 结束日期
+     * @param string $end_date   结束日期
      * @return array
      */
     private function action($action, $begin_date, $end_date)

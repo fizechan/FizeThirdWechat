@@ -2,13 +2,13 @@
 
 namespace api;
 
-use fize\third\wechat\api\Jssdk;
+use fize\third\wechat\api\Callback;
 use PHPUnit\Framework\TestCase;
 
-class TestJssdk extends TestCase
+class TestCallback extends TestCase
 {
 
-    public function testGetConfig()
+    public function testCheck()
     {
         $config = [
             'appid' => 'wx12078319bd1c19dd',
@@ -21,9 +21,11 @@ class TestJssdk extends TestCase
                 ]
             ]
         ];
-        $jssdk = new JsSdk($config);
-        $sign = $jssdk->getConfig();
-        var_dump($sign);
-        self::assertIsArray($sign);
+
+        $api = new Callback($config);
+        $result = $api->check(Callback::ACTION_ALL, Callback::CHECK_OPERATOR_DEFAULT);
+        var_dump($result);
+        self::assertIsArray($result);
+        self::assertNotEmpty($result);
     }
 }

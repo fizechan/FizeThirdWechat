@@ -37,7 +37,7 @@ class Merchant extends Api
     /**
      * 修改商品
      * @param string $product_id 商品ID
-     * @param array $params 参数
+     * @param array  $params     参数
      * @return bool
      */
     public function update($product_id, array $params)
@@ -75,14 +75,14 @@ class Merchant extends Api
     /**
      * 商品上下架
      * @param string $product_id 商品ID
-     * @param int $status 上下架
+     * @param int    $status     上下架
      * @return array
      */
     public function modproductstatus($product_id, $status)
     {
         $params = [
             'product_id' => $product_id,
-            'status' => $status
+            'status'     => $status
         ];
         return $this->httpPost("/merchant/modproductstatus?access_token={$this->accessToken}", $params);
     }

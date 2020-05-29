@@ -1,6 +1,5 @@
 <?php
 
-
 namespace fize\third\wechat;
 
 /**
@@ -30,7 +29,7 @@ class Open extends Common
      */
     public function __construct(array $options)
     {
-        $this->appid = $options['appid'] ;
+        $this->appid = $options['appid'];
         $this->appsecret = $options['appsecret'];
     }
 }

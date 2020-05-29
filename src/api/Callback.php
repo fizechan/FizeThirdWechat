@@ -13,7 +13,7 @@ class Callback extends Api
 
     /**
      * 网络检测
-     * @param string $action 执行的检测动作
+     * @param string $action         执行的检测动作
      * @param string $check_operator 指定平台从某个运营商进行检测
      * @return mixed
      */

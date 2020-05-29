@@ -3,15 +3,17 @@
 
 namespace fize\third\wechat;
 
-use fize\cache\Cache;
+use fize\cache\CacheFactory;
 use fize\cache\CacheInterface;
 use fize\crypt\Json;
+use fize\http\Response;
+use fize\http\ResponseException;
 use fize\net\Http;
 
 /**
  * 微信接口基类
  */
-abstract class ApiAbstract
+abstract class ApiAbstract extends Common
 {
     /**
      * 通用域名
@@ -88,6 +90,11 @@ abstract class ApiAbstract
     protected $cache;
 
     /**
+     * @var Response 响应体
+     */
+    protected $response;
+
+    /**
      * @var bool 是否初始化时马上检测AccessToken
      */
     protected $checkAccessToken = true;
@@ -108,7 +115,7 @@ abstract class ApiAbstract
         }
         $cache_handler = isset($options['cache']['handler']) ? $options['cache']['handler'] : 'file';
         $cache_config = isset($options['cache']['config']) ? $options['cache']['config'] : [];
-        $this->cache = Cache::getInstance($cache_handler, $cache_config);
+        $this->cache = CacheFactory::create($cache_handler, $cache_config);
 
         if ($this->checkAccessToken) {  // 检测TOKEN以便于URI中的token字段马上有效
             $this->checkAccessToken();
@@ -117,11 +124,11 @@ abstract class ApiAbstract
 
     /**
      * 核心GET函数
-     * @param string $path 请求路径
-     * @param bool $response_json_decode 是否对结果进行JSON解码
-     * @param bool $check_token 是否检查当前的TOKEN
-     * @param string $path_prefix 路径前缀
-     * @param string $scheme 协议
+     * @param string $path                 请求路径
+     * @param bool   $response_json_decode 是否对结果进行JSON解码
+     * @param bool   $check_token          是否检查当前的TOKEN
+     * @param string $path_prefix          路径前缀
+     * @param string $scheme               协议
      * @return array|string
      */
     protected function httpGet($path, $response_json_decode = true, $check_token = true, $path_prefix = self::PREFIX_CGI, $scheme = 'https')
@@ -132,9 +139,10 @@ abstract class ApiAbstract
             }
         }
         $uri = $this->getUri($path, $path_prefix, $scheme);
-        $result = Http::get($uri);
-        if (!$result) {
-            throw new ApiException(Http::getLastErrMsg(), Http::getLastErrCode());
+        $this->response = Http::get($uri);
+        $result = $this->response->getBody();
+        if (empty($result)) {
+            throw new ResponseException($this->response);
         }
 
         if ($response_json_decode) {
@@ -150,13 +158,13 @@ abstract class ApiAbstract
 
     /**
      * 核心POST函数
-     * @param string $path 请求路径
-     * @param array|string $params 提交的参数，可以是数组或者字符串，如果需要上传文件必须使用数组
-     * @param bool $params_json_encode 是否对参数进行JSON编码
-     * @param bool $response_json_decode 是否对结果进行JSON解码
-     * @param bool $check_token 是否检查当前的TOKEN
-     * @param string $path_prefix 路径前缀
-     * @param string $scheme 协议
+     * @param string       $path                 请求路径
+     * @param array|string $params               提交的参数，可以是数组或者字符串，如果需要上传文件必须使用数组
+     * @param bool         $params_json_encode   是否对参数进行JSON编码
+     * @param bool         $response_json_decode 是否对结果进行JSON解码
+     * @param bool         $check_token          是否检查当前的TOKEN
+     * @param string       $path_prefix          路径前缀
+     * @param string       $scheme               协议
      * @return array|string
      */
     protected function httpPost($path, $params, $params_json_encode = true, $response_json_decode = true, $check_token = true, $path_prefix = self::PREFIX_CGI, $scheme = 'https')
@@ -170,9 +178,10 @@ abstract class ApiAbstract
         if ($params_json_encode) {
             $params = Json::encode($params, JSON_UNESCAPED_UNICODE);
         }
-        $result = Http::post($uri, $params);
+        $this->response = Http::post($uri, $params);
+        $result = (string)$this->response->getBody();
         if (!$result) {
-            throw new ApiException(Http::getLastErrMsg(), Http::getLastErrCode());
+            throw new ResponseException($this->response);
         }
 
         if ($response_json_decode) {
@@ -191,7 +200,7 @@ abstract class ApiAbstract
      */
     protected function checkAccessToken()
     {
-        $cache = $this->cache->get($this->cacheKey . $this->appid);  //获取当前缓存的access_token
+        $cache = $this->cache->get($this->cacheKey . $this->appid);
         if ($cache) {
             $this->accessToken = $cache;
             return;
@@ -199,12 +208,12 @@ abstract class ApiAbstract
         $json = $this->httpGet("/token?grant_type=client_credential&appid={$this->appid}&secret={$this->appsecret}", true, false);
         $this->accessToken = $json['access_token'];
         $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;
-        $this->cache->set($this->cacheKey . $this->appid, $json['access_token'], $expire);  //将access_token缓存
+        $this->cache->set($this->cacheKey . $this->appid, $json['access_token'], $expire);
     }
 
     /**
      * 补齐完整URI
-     * @param string $path 路径
+     * @param string $path   路径
      * @param string $prefix 路径前缀
      * @param string $scheme 协议
      * @return string

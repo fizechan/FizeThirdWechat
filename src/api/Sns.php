@@ -25,8 +25,8 @@ class Sns extends Api
     /**
      * 拉取用户信息
      * @param string $access_token 授权access_token
-     * @param string $openid 用户openid
-     * @param string $lang 国家地区语言版本
+     * @param string $openid       用户openid
+     * @param string $lang         国家地区语言版本
      * @return array
      */
     public function userinfo($access_token, $openid, $lang = 'zh_CN')
@@ -37,7 +37,7 @@ class Sns extends Api
     /**
      * 检验授权凭证是否有效
      * @param string $access_token 授权access_token
-     * @param string $openid 用户openid
+     * @param string $openid       用户openid
      * @return bool
      */
     public function auth($access_token, $openid)

@@ -33,9 +33,9 @@ class Qrcode extends Api
 
     /**
      * 创建二维码ticket
-     * @param string $action_name 二维码类型
-     * @param array|int|string $scene 场景值
-     * @param int $expire_seconds 该二维码有效时间，以秒为单位
+     * @param string           $action_name    二维码类型
+     * @param array|int|string $scene          场景值
+     * @param int              $expire_seconds 该二维码有效时间，以秒为单位
      * @return array
      */
     public function create($action_name, $scene, $expire_seconds = null)
