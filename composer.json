@@ -20,7 +20,7 @@
     "ext-libxml": "*",
     "fize/cache": "~3.2.0",
     "fize/crypt": "~3.2.0",
-    "fize/net": "~4.1.0",
+    "fize/net": "~4.2.0",
     "fize/xml": "~2.1.0"
   },
   "require-dev": {

@@ -6,8 +6,6 @@ namespace fize\third\wechat;
 use fize\cache\CacheFactory;
 use fize\cache\CacheInterface;
 use fize\crypt\Json;
-use fize\http\Response;
-use fize\http\ResponseException;
 use fize\net\Http;
 
 /**
@@ -90,11 +88,6 @@ abstract class ApiAbstract extends Common
     protected $cache;
 
     /**
-     * @var Response 响应体
-     */
-    protected $response;
-
-    /**
      * @var bool 是否初始化时马上检测AccessToken
      */
     protected $checkAccessToken = true;
@@ -139,20 +132,15 @@ abstract class ApiAbstract extends Common
             }
         }
         $uri = $this->getUri($path, $path_prefix, $scheme);
-        $this->response = Http::get($uri);
-        $result = $this->response->getBody();
-        if (empty($result)) {
-            throw new ResponseException($this->response);
-        }
-
+        $content = Http::get($uri);
         if ($response_json_decode) {
-            $json = Json::decode($result);
+            $json = Json::decode($content);
             if (isset($json['errcode']) && $json['errcode'] != 0) {
                 throw new ApiException($json['errmsg'], $json['errcode']);
             }
             return $json;
         } else {
-            return $result;
+            return $content;
         }
     }
 
@@ -178,20 +166,15 @@ abstract class ApiAbstract extends Common
         if ($params_json_encode) {
             $params = Json::encode($params, JSON_UNESCAPED_UNICODE);
         }
-        $this->response = Http::post($uri, $params);
-        $result = (string)$this->response->getBody();
-        if (!$result) {
-            throw new ResponseException($this->response);
-        }
-
+        $content = Http::post($uri, $params);
         if ($response_json_decode) {
-            $json = Json::decode($result);
+            $json = Json::decode($content);
             if (isset($json['errcode']) && $json['errcode'] != 0) {
                 throw new ApiException($json['errmsg'], $json['errcode']);
             }
             return $json;
         } else {
-            return $result;
+            return $content;
         }
     }
 
