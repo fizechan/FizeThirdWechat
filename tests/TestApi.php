@@ -36,7 +36,7 @@ class TestApi extends TestCase
         //
     }
 
-    public function testGetCallBackIp()
+    public function testGetcallbackip()
     {
         $config = [
             'appid' => 'wx12078319bd1c19dd',
@@ -51,7 +51,7 @@ class TestApi extends TestCase
         ];
 
         $api = new Api($config);
-        $ips = $api->getCallBackIp();
+        $ips = $api->getcallbackip();
         var_dump($ips);
         self::assertIsArray($ips);
         self::assertNotEmpty($ips);
