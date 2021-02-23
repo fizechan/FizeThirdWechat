@@ -26,12 +26,12 @@ class Menu extends Api
 
     /**
      * 创建
-     * @param array $button 菜单数组
+     * @param array $buttons 菜单数组
      */
-    public function create(array $button)
+    public function create(array $buttons)
     {
         $params = [
-            'button' => $button
+            'button' => $buttons
         ];
         $this->httpPost("/menu/create?access_token={$this->accessToken}", $params);
     }
