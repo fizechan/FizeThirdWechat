@@ -21,7 +21,7 @@ class Message
      */
     public function __construct(array $options)
     {
-        $this->token = isset($options['token']) ? $options['token'] : '';
-        $this->encodingAesKey = isset($options['encodingaeskey']) ? $options['encodingaeskey'] : '';
+        $this->token = $options['token'] ?? '';
+        $this->encodingAesKey = $options['encodingaeskey'] ?? '';
     }
 }

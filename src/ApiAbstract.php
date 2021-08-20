@@ -98,7 +98,7 @@ abstract class ApiAbstract extends Common
      */
     public function __construct(array $options)
     {
-        $this->host = isset($options['host']) ? $options['host'] : self::HOST1;
+        $this->host = $options['host'] ?? self::HOST1;
 
         $this->appid = $options['appid'];
         $this->appsecret = $options['appsecret'];
@@ -106,8 +106,8 @@ abstract class ApiAbstract extends Common
         if (isset($options['cache']['key'])) {
             $this->cacheKey = $options['cache']['key'];
         }
-        $cache_handler = isset($options['cache']['handler']) ? $options['cache']['handler'] : 'file';
-        $cache_config = isset($options['cache']['config']) ? $options['cache']['config'] : [];
+        $cache_handler = $options['cache']['handler'] ?? 'file';
+        $cache_config = $options['cache']['config'] ?? [];
         $this->cache = CacheFactory::create($cache_handler, $cache_config);
 
         if ($this->checkAccessToken) {  // 检测TOKEN以便于URI中的token字段马上有效

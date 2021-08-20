@@ -12,7 +12,7 @@ abstract class Common
      * 判断当前浏览器是否为微信内置浏览器
      * @return bool
      */
-    public static function isWechatBrowser()
+    public static function isWechatBrowser(): bool
     {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             return true;
