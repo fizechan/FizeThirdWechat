@@ -9,6 +9,11 @@ abstract class Common
 {
 
     /**
+     * CGI路径前缀
+     */
+    const PREFIX_CGI = '/cgi-bin';
+
+    /**
      * 判断当前浏览器是否为微信内置浏览器
      * @return bool
      */

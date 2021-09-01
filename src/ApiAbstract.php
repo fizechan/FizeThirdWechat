@@ -17,32 +17,27 @@ abstract class ApiAbstract extends Common
     /**
      * 通用域名
      */
-    const HOST1 = 'api.weixin.qq.com';
+    const HOST_API = 'api.weixin.qq.com';
 
     /**
      * 通用异地容灾域名
      */
-    const HOST2 = 'api2.weixin.qq.com';
+    const HOST_API2 = 'api2.weixin.qq.com';
 
     /**
      * 上海域名
      */
-    const HOST3 = 'sh.api.weixin.qq.com';
+    const HOST_SH_API = 'sh.api.weixin.qq.com';
 
     /**
      * 深圳域名
      */
-    const HOST4 = 'sz.api.weixin.qq.com';
+    const HOST_SZ_API = 'sz.api.weixin.qq.com';
 
     /**
      * 香港域名
      */
-    const HOST5 = 'hk.api.weixin.qq.com';
-
-    /**
-     * CGI路径前缀
-     */
-    const PREFIX_CGI = '/cgi-bin';
+    const HOST_HK_API = 'hk.api.weixin.qq.com';
 
     const ACTION_DNS = 'dns';
 
@@ -102,7 +97,7 @@ abstract class ApiAbstract extends Common
      */
     public function __construct(string $appid, string $appsecret, CacheInterface $cache = null, array $options = [])
     {
-        $this->host = $options['host'] ?? self::HOST1;
+        $this->host = $options['host'] ?? self::HOST_API;
 
         $this->appid = $appid;
         $this->appsecret = $appsecret;
