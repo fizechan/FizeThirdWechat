@@ -39,20 +39,6 @@ abstract class ApiAbstract extends Common
      */
     const HOST_HK_API = 'hk.api.weixin.qq.com';
 
-    const ACTION_DNS = 'dns';
-
-    const ACTION_PING = 'ping';
-
-    const ACTION_ALL = 'all';
-
-    const CHECK_OPERATOR_CHINANET = 'CHINANET';
-
-    const CHECK_OPERATOR_UNICOM = 'UNICOM';
-
-    const CHECK_OPERATOR_CAP = 'CAP';
-
-    const CHECK_OPERATOR_DEFAULT = 'DEFAULT';
-
     /**
      * @var string 唯一凭证
      */

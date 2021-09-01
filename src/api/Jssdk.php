@@ -4,8 +4,7 @@
 namespace fize\third\wechat\api;
 
 
-use fize\cache\CacheFactory;
-use fize\cache\CacheInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * JS-SDK
@@ -37,19 +36,17 @@ class Jssdk
 
     /**
      * 构造
-     * @param array  $options             配置参数
-     * @param string $jsapiTicketCacheKey jsapiTicket缓存名
+     * @param string              $appid               APPID
+     * @param string              $appsecret           APP密钥
+     * @param string|null         $jsapiTicketCacheKey jsapiTicket缓存名
+     * @param CacheInterface|null $cache               指定缓存器
+     * @param array               $options             其他配置参数
      */
-    public function __construct(array $options, $jsapiTicketCacheKey = null)
+    public function __construct(string $appid, string $appsecret, string $jsapiTicketCacheKey = null, CacheInterface $cache = null, array $options = [])
     {
-        $this->ticket = new Ticket($options);
-
-        $this->appid = $options['appid'];
-
-        $cache_handler = isset($options['cache']['handler']) ? $options['cache']['handler'] : 'file';
-        $cache_config = isset($options['cache']['config']) ? $options['cache']['config'] : [];
-        $this->cache = CacheFactory::create($cache_handler, $cache_config);
-
+        $this->appid = $appid;
+        $this->ticket = new Ticket($appid, $appsecret, $cache, $options);
+        $this->cache = $cache;
         if ($jsapiTicketCacheKey) {
             $this->jsapiTicketCacheKey = $jsapiTicketCacheKey;
         }
@@ -62,7 +59,7 @@ class Jssdk
      * @param string $noncestr  随机串 (为空则自动生成)
      * @return array
      */
-    public function getConfig($url = '', $timestamp = 0, $noncestr = '')
+    public function getConfig(string $url = '', int $timestamp = 0, string $noncestr = ''): array
     {
         $jsapi_ticket = $this->getJsApiTicket();
         if (!$timestamp) {
@@ -81,8 +78,8 @@ class Jssdk
             if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) {
                 $protocol = 'https://';
             }
-            $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-            $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+            $host = $_SERVER['HTTP_HOST'] ?? '';
+            $uri = $_SERVER['REQUEST_URI'] ?? '';
             $url = $protocol . $host . $uri;
         }
         $arrdata = [
@@ -105,7 +102,7 @@ class Jssdk
      * 获取JSAPI授权TICKET
      * @return string
      */
-    private function getJsApiTicket()
+    private function getJsApiTicket(): string
     {
         $cache = $this->cache->get($this->jsapiTicketCacheKey . $this->appid);
         if ($cache) {
@@ -123,7 +120,7 @@ class Jssdk
      * @param array $arrdata 签名数组
      * @return string 签名值
      */
-    private function getSignature($arrdata)
+    private function getSignature(array $arrdata): string
     {
         ksort($arrdata);
         $paramstring = "";
