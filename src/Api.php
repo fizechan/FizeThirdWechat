@@ -23,7 +23,7 @@ class Api extends ApiAbstract
      * 获取微信服务器IP地址列表
      * @return array
      */
-    public function getcallbackip()
+    public function getcallbackip(): array
     {
         $result = $this->httpGet("/getcallbackip?access_token={$this->accessToken}");
         return $result['ip_list'];
