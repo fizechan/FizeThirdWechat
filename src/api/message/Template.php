@@ -16,12 +16,12 @@ class Template extends Api
      * @param string       $touser      接收者openid
      * @param string       $template_id 模板ID
      * @param array        $data        模板数据
-     * @param string       $url         模板跳转链接
+     * @param string|null  $url         模板跳转链接
      * @param string|array $miniprogram 小程序
-     * @param string       $color       字体颜色
+     * @param string|null  $color       字体颜色
      * @return int 返回消息id
      */
-    public function send($touser, $template_id, array $data, $url = null, $miniprogram = null, $color = null)
+    public function send(string $touser, string $template_id, array $data, string $url = null, $miniprogram = null, string $color = null): int
     {
         $params = [
             'touser'      => $touser,
@@ -31,19 +31,17 @@ class Template extends Api
         if (!is_null($url)) {
             $params['url'] = $url;
         }
-        if (is_null($miniprogram)) {
-            if (is_string($miniprogram)) {
-                $miniprogram = [
-                    'appid' => $miniprogram
-                ];
-                $params['miniprogram'] = $miniprogram;
-            }
+        if (is_string($miniprogram)) {
+            $miniprogram = [
+                'appid' => $miniprogram
+            ];
+            $params['miniprogram'] = $miniprogram;
         }
         if (!is_null($color)) {
             $params['color'] = $color;
         }
 
-        $result = $this->httpPost("/message/template/send?access_token={$this->accessToken}", $params);
+        $result = $this->httpPost("/message/template/send?access_token=$this->accessToken", $params);
         return $result['msgid'];
     }
 
@@ -54,10 +52,10 @@ class Template extends Api
      * @param string       $template_id 订阅消息模板ID
      * @param string       $title       消息标题
      * @param array        $data        消息正文
-     * @param string       $url         点击消息跳转的链接
+     * @param string|null  $url         点击消息跳转的链接
      * @param string|array $miniprogram 小程序
      */
-    public function subscribe($touser, $scene, $template_id, $title, array $data, $url = null, $miniprogram = null)
+    public function subscribe(string $touser, int $scene, string $template_id, string $title, array $data, string $url = null, $miniprogram = null)
     {
         $params = [
             'touser'      => $touser,
@@ -69,14 +67,12 @@ class Template extends Api
         if (!is_null($url)) {
             $params['url'] = $url;
         }
-        if (is_null($miniprogram)) {
-            if (is_string($miniprogram)) {
-                $miniprogram = [
-                    'appid' => $miniprogram
-                ];
-                $params['miniprogram'] = $miniprogram;
-            }
+        if (is_string($miniprogram)) {
+            $miniprogram = [
+                'appid' => $miniprogram
+            ];
+            $params['miniprogram'] = $miniprogram;
         }
-        $this->httpPost("/message/template/subscribe?access_token={$this->accessToken}", $params);
+        $this->httpPost("/message/template/subscribe?access_token=$this->accessToken", $params);
     }
 }

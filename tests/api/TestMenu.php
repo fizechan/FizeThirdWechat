@@ -2,6 +2,7 @@
 
 namespace api;
 
+use fize\cache\CacheFactory;
 use fize\third\wechat\api\Menu;
 use PHPUnit\Framework\TestCase;
 
@@ -10,10 +11,11 @@ class TestMenu extends TestCase
 
     public function testCreate()
     {
-        $config = [
-            'appid'     => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
-            'debug'     => true
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
+            'debug' => true,
         ];
 
         $buttons = [
@@ -91,39 +93,35 @@ class TestMenu extends TestCase
             ]
         ];
 
-        $wx_menu = new Menu($config);
+        $wx_menu = new Menu($appid, $appsecret, $cache, $options);
         $wx_menu->create($buttons);
         self::assertIsObject($wx_menu);
     }
 
     public function testDelete()
     {
-        $config = [
-            'appid'     => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
-            'debug'     => true
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
+            'debug' => true,
         ];
 
-        $wx_menu = new Menu($config);
+        $wx_menu = new Menu($appid, $appsecret, $cache, $options);
         $wx_menu->delete();
         self::assertIsObject($wx_menu);
     }
 
     public function testGet()
     {
-        $config = [
-            'appid'     => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
-            'debug'     => true,
-            'cache'     => [
-                'handler' => 'file',
-                'config'  => [
-                    'path' => __DIR__ . '/../../temp/cache',
-                ]
-            ]
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
+            'debug' => true,
         ];
 
-        $wx_menu = new Menu($config);
+        $wx_menu = new Menu($appid, $appsecret, $cache, $options);
         $menus = $wx_menu->get();
         var_dump($menus);
         self::assertIsArray($menus);

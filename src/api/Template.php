@@ -19,22 +19,22 @@ class Template extends Api
      * @param string $industry_id2 公众号模板消息所属行业编号
      * @see https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Template_Message_Interface.html#0
      */
-    public function apiSetIndustry($industry_id1, $industry_id2)
+    public function apiSetIndustry(string $industry_id1, string $industry_id2)
     {
         $params = [
             'industry_id1' => $industry_id1,
             'industry_id2' => $industry_id2
         ];
-        $this->httpPost("/template/api_set_industry?access_token={$this->accessToken}", $params);
+        $this->httpPost("/template/api_set_industry?access_token=$this->accessToken", $params);
     }
 
     /**
      * 获取设置的行业信息
      * @return array
      */
-    public function getIndustry()
+    public function getIndustry(): array
     {
-        return $this->httpGet("/template/get_industry?access_token={$this->accessToken}");
+        return $this->httpGet("/template/get_industry?access_token=$this->accessToken");
     }
 
     /**
@@ -43,10 +43,10 @@ class Template extends Api
      * @param string $template_id_short 模板库中模板的编号
      * @return string
      */
-    public function apiAddTemplate($template_id_short)
+    public function apiAddTemplate(string $template_id_short): string
     {
         $params = ['template_id_short' => $template_id_short];
-        $result = $this->httpPost("/template/api_add_template?access_token={$this->accessToken}", $params);
+        $result = $this->httpPost("/template/api_add_template?access_token=$this->accessToken", $params);
         return $result['template_id'];
     }
 
@@ -54,9 +54,9 @@ class Template extends Api
      * 获取模板列表
      * @return array
      */
-    public function getAllPrivateTemplate()
+    public function getAllPrivateTemplate(): array
     {
-        $result = $this->httpGet("/template/get_all_private_template?access_token={$this->accessToken}");
+        $result = $this->httpGet("/template/get_all_private_template?access_token=$this->accessToken");
         return $result['template_list'];
     }
 
@@ -64,9 +64,9 @@ class Template extends Api
      * 删除模板
      * @param string $template_id 公众帐号下模板消息ID
      */
-    public function delPrivateTemplate($template_id)
+    public function delPrivateTemplate(string $template_id)
     {
         $params = ['template_id' => $template_id];
-        $this->httpPost("/template/del_private_template?access_token={$this->accessToken}", $params);
+        $this->httpPost("/template/del_private_template?access_token=$this->accessToken", $params);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace api\message;
 
+use fize\cache\CacheFactory;
 use fize\third\wechat\api\message\Template;
 use PHPUnit\Framework\TestCase;
 
@@ -10,18 +11,13 @@ class TestTemplate extends TestCase
 
     public function testSend()
     {
-        $config = [
-            'appid' => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 4) . '/temp/cache']);
+        $options = [
             'debug' => true,
-            'cache' => [
-                'handler' => 'file',
-                'config' => [
-                    'path'    =>  __DIR__ . '/../../../temp/cache',
-                ]
-            ]
         ];
-        $tpmsg = new Template($config);
+        $tpmsg = new Template($appid, $appsecret, $cache, $options);
         $data = [
             "first" => [
                 "value" =>"恭喜你购买成功！",

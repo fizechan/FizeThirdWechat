@@ -2,6 +2,7 @@
 
 namespace api;
 
+use fize\cache\CacheFactory;
 use fize\third\wechat\api\Template;
 use PHPUnit\Framework\TestCase;
 
@@ -10,36 +11,26 @@ class TestTemplate extends TestCase
 
     public function testApiSetIndustry()
     {
-        $config = [
-            'appid' => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
             'debug' => true,
-            'cache' => [
-                'handler' => 'file',
-                'config' => [
-                    'path'    =>  __DIR__ . '/../../temp/cache',
-                ]
-            ]
         ];
-        $tpmsg = new Template($config);
+        $tpmsg = new Template($appid, $appsecret, $cache, $options);
         $tpmsg->apiSetIndustry(1, 4);
         self::assertIsObject($tpmsg);
     }
 
     public function testGetIndustry()
     {
-        $config = [
-            'appid' => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
             'debug' => true,
-            'cache' => [
-                'handler' => 'file',
-                'config' => [
-                    'path'    =>  __DIR__ . '/../../temp/cache',
-                ]
-            ]
         ];
-        $tpmsg = new Template($config);
+        $tpmsg = new Template($appid, $appsecret, $cache, $options);
         $rst = $tpmsg->getIndustry();
         var_dump($rst);
         self::assertIsArray($rst);
@@ -47,18 +38,13 @@ class TestTemplate extends TestCase
 
     public function testApiAddTemplate()
     {
-        $config = [
-            'appid' => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
             'debug' => true,
-            'cache' => [
-                'handler' => 'file',
-                'config' => [
-                    'path'    =>  __DIR__ . '/../../temp/cache',
-                ]
-            ]
         ];
-        $tpmsg = new Template($config);
+        $tpmsg = new Template($appid, $appsecret, $cache, $options);
         $template_id = $tpmsg->apiAddTemplate('TM00015');
         var_dump($template_id);
         self::assertIsString($template_id);
@@ -66,18 +52,13 @@ class TestTemplate extends TestCase
 
     public function testGetAllPrivateTemplate()
     {
-        $config = [
-            'appid' => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0',
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
             'debug' => true,
-            'cache' => [
-                'handler' => 'file',
-                'config' => [
-                    'path'    =>  __DIR__ . '/../../temp/cache',
-                ]
-            ]
         ];
-        $tpmsg = new Template($config);
+        $tpmsg = new Template($appid, $appsecret, $cache, $options);
         $templates = $tpmsg->getAllPrivateTemplate();
         var_dump($templates);
         self::assertIsArray($templates);
@@ -85,11 +66,13 @@ class TestTemplate extends TestCase
 
     public function testDelPrivateTemplate()
     {
-        $config = [
-            'appid' => 'wx12078319bd1c19dd',
-            'appsecret' => '89212483aa60a23a74ab7a11d78019f0'
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
+            'debug' => true,
         ];
-        $tpmsg = new Template($config);
+        $tpmsg = new Template($appid, $appsecret, $cache, $options);
         $tpmsg->delPrivateTemplate('TM00015');
         self::assertIsObject($tpmsg);
     }

@@ -5,6 +5,7 @@ namespace fize\third\wechat\api;
 
 use CURLFile;
 use fize\crypt\Json;
+use fize\http\ClientSimple;
 use fize\third\wechat\Api;
 use fize\third\wechat\ApiException;
 
@@ -14,9 +15,25 @@ use fize\third\wechat\ApiException;
  */
 class Media extends Api
 {
+
+    /**
+     * 素材类型：图片
+     */
     const MEDIA_TYPE_IMAGE = 'image';
+
+    /**
+     * 素材类型：语音
+     */
     const MEDIA_TYPE_VOICE = 'voice';
+
+    /**
+     * 素材类型：视频
+     */
     const MEDIA_TYPE_VIDEO = 'video';
+
+    /**
+     * 素材类型：缩略图
+     */
     const MEDIA_TYPE_THUMB = 'thumb';
 
     /**
@@ -26,12 +43,12 @@ class Media extends Api
      * @param string $type 类型：图片:image 语音:voice 视频:video 缩略图:thumb
      * @return array
      */
-    public function upload($file, $type)
+    public function upload(string $file, string $type): array
     {
         $params = [
-            'media' => new CURLFile(realpath($file))
+            'media' => new CURLFile($file)
         ];
-        return $this->httpPost("/media/upload?access_token={$this->accessToken}&type={$type}", $params, false);
+        return $this->httpPost("/media/upload?access_token=$this->accessToken&type=$type", $params, false);
     }
 
     /**
@@ -39,23 +56,31 @@ class Media extends Api
      * @param string $media_id 媒体文件ID
      * @return array ['type' => *, 'value' => *]
      */
-    public function get($media_id)
+    public function get(string $media_id): array
     {
-        $result = $this->httpGet("/media/get?access_token={$this->accessToken}&media_id={$media_id}", false);
-        $ContentType = $this->response->getHeaderLine('Content-Type');
+        if (!$this->accessToken) {
+            $this->checkAccessToken();
+        }
+        $path_prefix = self::PREFIX_CGI;
+        $scheme = 'https';
+        $path = "/media/get?access_token=$this->accessToken&media_id=$media_id";
+        $uri = $this->getUri($path, $path_prefix, $scheme);
+        $response = ClientSimple::get($uri);
+        $ContentType = $response->getHeaderLine('Content-Type');
+        $content = $response->getBody()->getContents();
         if ($ContentType == 'text/plain') {
-            $json = Json::decode($result);
+            $json = Json::decode($content);
             if (isset($json['errcode']) && $json['errcode']) {
                 throw new ApiException($json['errmsg'], $json['errcode']);
             }
-            return [  //返回JSON
+            return [  // 返回JSON
                 'type'  => 'json',
                 'value' => $json
             ];
         }
-        return [  //返回二进制流
+        return [  // 返回二进制流
             'type'  => 'binary',
-            'value' => $result
+            'value' => $content
         ];
     }
 
@@ -64,12 +89,12 @@ class Media extends Api
      * @param string $file 要上传的文件
      * @return string 返回URI
      */
-    public function uploadimg($file)
+    public function uploadimg(string $file): string
     {
         $params = [
-            'media' => new CURLFile(realpath($file))
+            'media' => new CURLFile($file)
         ];
-        $result = $this->httpPost("/media/uploadimg?access_token={$this->accessToken}", $params, false);
+        $result = $this->httpPost("/media/uploadimg?access_token=$this->accessToken", $params, false);
         return $result['url'];
     }
 
@@ -78,12 +103,12 @@ class Media extends Api
      * @param array $articles 图文消息
      * @return array
      */
-    public function uploadnews(array $articles)
+    public function uploadnews(array $articles): array
     {
         $params = [
             'articles' => $articles
         ];
-        return $this->httpPost("/media/uploadnews?access_token={$this->accessToken}", $params);
+        return $this->httpPost("/media/uploadnews?access_token=$this->accessToken", $params);
     }
 
     /**
@@ -91,11 +116,11 @@ class Media extends Api
      * @param string $file 要上传的文件
      * @return array
      */
-    public function uploadvideo($file)
+    public function uploadvideo(string $file): array
     {
         $params = [
-            'media' => new CURLFile(realpath($file))
+            'media' => new CURLFile($file)
         ];
-        return $this->httpPost("/media/uploadvideo?access_token={$this->accessToken}", $params, false);
+        return $this->httpPost("/media/uploadvideo?access_token=$this->accessToken", $params, false);
     }
 }
