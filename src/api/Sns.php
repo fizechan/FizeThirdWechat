@@ -3,24 +3,19 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 use fize\third\wechat\ApiException;
 
 /**
  * 社交网络
- * @todo 待优化
  */
-class Sns extends Api
+class Sns extends ApiAbstract
 {
 
     /**
-     * 构造
-     * @param array $options 参数数组
+     * @var bool 是否初始化时马上检测AccessToken
      */
-    public function __construct($options)
-    {
-        parent::__construct($options, false);
-    }
+    protected $checkAccessToken = false;
 
     /**
      * 拉取用户信息
@@ -29,9 +24,9 @@ class Sns extends Api
      * @param string $lang         国家地区语言版本
      * @return array
      */
-    public function userinfo($access_token, $openid, $lang = 'zh_CN')
+    public function userinfo(string $access_token, string $openid, string $lang = 'zh_CN'): array
     {
-        return $this->httpGet("/sns/userinfo?access_token={$access_token}&openid={$openid}&lang={$lang}", true, false, '');
+        return $this->httpGet("/sns/userinfo?access_token=$access_token&openid=$openid&lang=$lang", true, false, '');
     }
 
     /**
@@ -40,10 +35,10 @@ class Sns extends Api
      * @param string $openid       用户openid
      * @return bool
      */
-    public function auth($access_token, $openid)
+    public function auth(string $access_token, string $openid): bool
     {
         try {
-            $this->httpGet("/sns/auth?access_token={$access_token}&openid={$openid}", true, false, '');
+            $this->httpGet("/sns/auth?access_token=$access_token&openid=$openid", true, false, '');
             return true;
         } catch (ApiException $exception) {
             return false;

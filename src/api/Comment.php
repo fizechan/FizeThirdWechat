@@ -3,12 +3,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 图文消息留言管理
  */
-class Comment extends Api
+class Comment extends ApiAbstract
 {
 
     /**

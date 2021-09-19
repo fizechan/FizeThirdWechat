@@ -1,10 +1,9 @@
 <?php
 
 
-namespace fize\third\wechat\message;
+namespace fize\third\wechat;
 
 
-use fize\third\wechat\Message;
 use fize\third\wechat\Prpcrypt;
 use fize\xml\SimpleXml;
 
@@ -15,7 +14,7 @@ use fize\xml\SimpleXml;
  * 本接口非微信直接提供
  * @todo 需要服务器配合测试
  */
-class Receive extends Message
+class MessageReceive extends Message
 {
     private $postxml;
     private $_receive;

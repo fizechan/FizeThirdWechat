@@ -3,7 +3,7 @@
   "description": "微信接口API，与官方文档同步实现。",
   "authors": [
     {
-      "name": "FizeChan",
+      "name": "Fize",
       "email": "chenfengzhan@qq.com"
     }
   ],
@@ -14,7 +14,7 @@
     }
   },
   "require": {
-    "php": ">=7.0.0",
+    "php": ">=7.1.0",
     "ext-curl": "*",
     "ext-json": "*",
     "ext-libxml": "*",

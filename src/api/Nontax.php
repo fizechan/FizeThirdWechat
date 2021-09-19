@@ -3,12 +3,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 非税票据
  */
-class Nontax extends Api
+class Nontax extends ApiAbstract
 {
 
     /**

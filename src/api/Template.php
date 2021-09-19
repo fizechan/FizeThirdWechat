@@ -4,13 +4,13 @@
 namespace fize\third\wechat\api;
 
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 
 /**
  * 模版消息
  */
-class Template extends Api
+class Template extends ApiAbstract
 {
 
     /**

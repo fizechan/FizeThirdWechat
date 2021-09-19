@@ -3,12 +3,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 商品管理
  */
-class Merchant extends Api
+class Merchant extends ApiAbstract
 {
 
     /**

@@ -3,12 +3,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 回调
  */
-class Callback extends Api
+class Callback extends ApiAbstract
 {
 
     const ACTION_DNS = 'dns';

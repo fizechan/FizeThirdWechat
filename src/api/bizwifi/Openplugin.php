@@ -3,12 +3,12 @@
 
 namespace fize\third\wechat\api\bizwifi;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 开放插件
  */
-class Openplugin extends Api
+class Openplugin extends ApiAbstract
 {
 
     /**
@@ -16,11 +16,11 @@ class Openplugin extends Api
      * @param string $callback_url 回调URL
      * @return array
      */
-    public function token($callback_url)
+    public function token(string $callback_url): array
     {
         $params = [
             'callback_url' => $callback_url
         ];
-        return $this->httpPost("/bizwifi/openplugin/token?access_token={$this->accessToken}", $params);
+        return $this->httpPost("/bizwifi/openplugin/token?access_token=$this->accessToken", $params);
     }
 }

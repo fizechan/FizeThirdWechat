@@ -10,13 +10,18 @@ class Api extends ApiAbstract
 {
 
     /**
+     * @var bool 是否初始化时马上检测AccessToken
+     */
+    protected $checkAccessToken = false;
+
+    /**
      * 获取token
      * @param string $grant_type 获取类型
      * @return array
      */
-    public function token($grant_type)
+    public function token(string $grant_type): array
     {
-        return $this->httpGet("/token?grant_type={$grant_type}&appid={$this->appid}&secret={$this->appsecret}", true, false);
+        return $this->httpGet("/token?grant_type=$grant_type&appid=$this->appid&secret=$this->appsecret", true, false);
     }
 
     /**
@@ -25,7 +30,8 @@ class Api extends ApiAbstract
      */
     public function getcallbackip(): array
     {
-        $result = $this->httpGet("/getcallbackip?access_token={$this->accessToken}");
+        $this->getAccessToken();
+        $result = $this->httpGet("/getcallbackip?access_token=$this->accessToken");
         return $result['ip_list'];
     }
 
@@ -34,13 +40,14 @@ class Api extends ApiAbstract
      * @param string $long_url 需要转换的长链接
      * @return string
      */
-    public function shorturl($long_url)
+    public function shorturl(string $long_url): string
     {
+        $this->getAccessToken();
         $params = [
             'action'   => 'long2short',
             'long_url' => $long_url
         ];
-        $result = $this->httpPost("/shorturl?access_token={$this->accessToken}", $params);
+        $result = $this->httpPost("/shorturl?access_token=$this->accessToken", $params);
         return $result['short_url'];
     }
 
@@ -48,9 +55,10 @@ class Api extends ApiAbstract
      * 查询自定义菜单
      * @return array
      */
-    public function getCurrentSelfmenuInfo()
+    public function getCurrentSelfmenuInfo(): array
     {
-        return $this->httpGet("/get_current_selfmenu_info?access_token={$this->accessToken}");
+        $this->getAccessToken();
+        return $this->httpGet("/get_current_selfmenu_info?access_token=$this->accessToken");
     }
 
     /**
@@ -58,18 +66,19 @@ class Api extends ApiAbstract
      */
     public function clearQuota()
     {
+        $this->getAccessToken();
         $params = [
             'appid' => $this->appid
         ];
-        $this->httpPost("/clear_quota?access_token={$this->accessToken}", $params);
+        $this->httpPost("/clear_quota?access_token=$this->accessToken", $params);
     }
 
     /**
      * 获取公众号的自动回复规则
      * @return array
      */
-    public function getCurrentAutoreplyInfo()
+    public function getCurrentAutoreplyInfo(): array
     {
-        return $this->httpGet("/get_current_autoreply_info?access_token={$this->accessToken}");
+        return $this->httpGet("/get_current_autoreply_info?access_token=$this->accessToken");
     }
 }

@@ -2,12 +2,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 临时票据
  */
-class Ticket extends Api
+class Ticket extends ApiAbstract
 {
 
     /**

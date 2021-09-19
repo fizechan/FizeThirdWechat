@@ -4,13 +4,13 @@
 namespace fize\third\wechat\api;
 
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 
 /**
  * 数据统计
  */
-class Datacube extends Api
+class Datacube extends ApiAbstract
 {
 
     /**

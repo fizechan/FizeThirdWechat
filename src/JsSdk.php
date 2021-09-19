@@ -1,9 +1,9 @@
 <?php
 
 
-namespace fize\third\wechat\api;
+namespace fize\third\wechat;
 
-
+use fize\third\wechat\api\Ticket;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -11,13 +11,13 @@ use Psr\SimpleCache\CacheInterface;
  *
  * 本接口非微信直接提供
  */
-class Jssdk
+class JsSdk extends ApiAbstract
 {
 
     /**
-     * @var string 唯一凭证
+     * @var bool 是否初始化时马上检测AccessToken
      */
-    private $appid;
+    protected $checkAccessToken = false;
 
     /**
      * @var Ticket 临时票据
@@ -25,31 +25,16 @@ class Jssdk
     private $ticket;
 
     /**
-     * @var CacheInterface 缓存
-     */
-    private $cache;
-
-    /**
-     * @var string jsapiTicket缓存名
-     */
-    private $jsapiTicketCacheKey = "_WEIXIN_JSAPI_TICKET_";
-
-    /**
      * 构造
-     * @param string              $appid               APPID
-     * @param string              $appsecret           APP密钥
-     * @param string|null         $jsapiTicketCacheKey jsapiTicket缓存名
-     * @param CacheInterface|null $cache               指定缓存器
-     * @param array               $options             其他配置参数
+     * @param string              $appid     APPID
+     * @param string              $appsecret APP密钥
+     * @param array               $options   其他配置参数
+     * @param CacheInterface|null $cache     指定缓存器
      */
-    public function __construct(string $appid, string $appsecret, string $jsapiTicketCacheKey = null, CacheInterface $cache = null, array $options = [])
+    public function __construct(string $appid, string $appsecret, array $options = [], CacheInterface $cache = null)
     {
-        $this->appid = $appid;
-        $this->ticket = new Ticket($appid, $appsecret, $cache, $options);
-        $this->cache = $cache;
-        if ($jsapiTicketCacheKey) {
-            $this->jsapiTicketCacheKey = $jsapiTicketCacheKey;
-        }
+        parent::__construct($appid, $appsecret, $options, $cache);
+        $this->ticket = new Ticket($appid, $appsecret, $options, $cache);
     }
 
     /**
@@ -99,19 +84,33 @@ class Jssdk
     }
 
     /**
+     * 判断当前浏览器是否为微信内置浏览器
+     * @return bool
+     */
+    public static function isWechatBrowser(): bool
+    {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 获取JSAPI授权TICKET
      * @return string
      */
     private function getJsApiTicket(): string
     {
-        $cache = $this->cache->get($this->jsapiTicketCacheKey . $this->appid);
-        if ($cache) {
-            return $cache;
+        $cacheKey = $this->cacheKeyPre . '_JSAPI_TICKET_' . $this->appid;
+        $jsapiTicketCache = $this->cache->get($cacheKey);
+        if ($jsapiTicketCache) {
+            return $jsapiTicketCache;
         }
 
-        $result = $this->ticket->getticket('jsapi');
+        $result = $this->ticket->getticket(Ticket::TICKET_TYPE_JSAPI);
         $expire = $result['expires_in'] ? intval($result['expires_in']) - 100 : 3600;
-        $this->cache->set($this->jsapiTicketCacheKey . $this->appid, $result['ticket'], $expire);
+        $this->cache->set($cacheKey, $result['ticket'], $expire);
         return $result['ticket'];
     }
 

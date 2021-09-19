@@ -21,6 +21,6 @@ class Mp extends MpAbstract
     public function showqrcode(string $ticket): string
     {
         $ticket = urlencode($ticket);
-        return "https://" . self::HOST_MP . self::PREFIX_CGI . "/showqrcode?ticket=$ticket";
+        return "https://" . self::HOST_MP . "/cgi-bin/showqrcode?ticket=$ticket";
     }
 }

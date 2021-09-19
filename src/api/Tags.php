@@ -3,12 +3,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 用户标签管理
  */
-class Tags extends Api
+class Tags extends ApiAbstract
 {
 
     /**

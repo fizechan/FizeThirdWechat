@@ -3,13 +3,13 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 
 /**
  * 微信卡券
  */
-class Card extends Api
+class Card extends ApiAbstract
 {
 
     /**

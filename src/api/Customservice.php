@@ -2,12 +2,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 客服信息
  */
-class Customservice extends Api
+class Customservice extends ApiAbstract
 {
 
     /**

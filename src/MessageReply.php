@@ -1,10 +1,9 @@
 <?php
 
 
-namespace fize\third\wechat\message;
+namespace fize\third\wechat;
 
 
-use fize\third\wechat\Message;
 use fize\third\wechat\Prpcrypt;
 use fize\crypt\Xml;
 
@@ -14,7 +13,7 @@ use fize\crypt\Xml;
  *
  * 本接口非微信直接提供
  */
-class Reply extends Message
+class MessageReply extends Message
 {
 
     const MSGTYPE_TEXT = 'text';

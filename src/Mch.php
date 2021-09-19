@@ -3,7 +3,7 @@
 namespace fize\third\wechat;
 
 /**
- * MCH接口
+ * MCH
  */
 class Mch
 {

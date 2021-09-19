@@ -4,13 +4,13 @@
 namespace fize\third\wechat\api;
 
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 
 /**
  * 自定义菜单
  */
-class Menu extends Api
+class Menu extends ApiAbstract
 {
 
     /**

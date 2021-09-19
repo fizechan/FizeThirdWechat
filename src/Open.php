@@ -5,7 +5,7 @@ namespace fize\third\wechat;
 /**
  * 开放平台
  */
-class Open extends Common
+class Open
 {
 
     /**
@@ -25,11 +25,12 @@ class Open extends Common
 
     /**
      * 构造
-     * @param array $options 配置参数
+     * @param string $appid     APPID
+     * @param string $appsecret APP密钥
      */
-    public function __construct(array $options)
+    public function __construct(string $appid, string $appsecret)
     {
-        $this->appid = $options['appid'];
-        $this->appsecret = $options['appsecret'];
+        $this->appid = $appid;
+        $this->appsecret = $appsecret;
     }
 }

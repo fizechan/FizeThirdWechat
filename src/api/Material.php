@@ -5,14 +5,14 @@ namespace fize\third\wechat\api;
 use CURLFile;
 use fize\crypt\Json;
 use fize\net\Http;
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 use fize\third\wechat\ApiException;
 
 
 /**
  * 永久素材
  */
-class Material extends Api
+class Material extends ApiAbstract
 {
     const MEDIA_TYPE_IMAGE = 'image';
     const MEDIA_TYPE_VOICE = 'voice';

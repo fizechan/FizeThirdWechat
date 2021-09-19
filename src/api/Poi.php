@@ -2,12 +2,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 微信门店
  */
-class Poi extends Api
+class Poi extends ApiAbstract
 {
 
     /**

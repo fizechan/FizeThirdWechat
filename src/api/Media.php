@@ -6,14 +6,14 @@ namespace fize\third\wechat\api;
 use CURLFile;
 use fize\crypt\Json;
 use fize\http\ClientSimple;
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 use fize\third\wechat\ApiException;
 
 
 /**
  * 临时素材
  */
-class Media extends Api
+class Media extends ApiAbstract
 {
 
     /**
@@ -59,12 +59,10 @@ class Media extends Api
     public function get(string $media_id): array
     {
         if (!$this->accessToken) {
-            $this->checkAccessToken();
+            $this->getAccessToken();
         }
-        $path_prefix = self::PREFIX_CGI;
-        $scheme = 'https';
         $path = "/media/get?access_token=$this->accessToken&media_id=$media_id";
-        $uri = $this->getUri($path, $path_prefix, $scheme);
+        $uri = $this->getUri($path);
         $response = ClientSimple::get($uri);
         $ContentType = $response->getHeaderLine('Content-Type');
         $content = $response->getBody()->getContents();

@@ -3,12 +3,12 @@
 
 namespace fize\third\wechat\api;
 
-use fize\third\wechat\Api;
+use fize\third\wechat\ApiAbstract;
 
 /**
  * 二维码
  */
-class Qrcode extends Api
+class Qrcode extends ApiAbstract
 {
 
     /**
