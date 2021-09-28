@@ -301,14 +301,14 @@ EOF;
      */
     public function transferCustomerService($customer_account = '')
     {
-        $msg = array(
+        $msg = [
             'ToUserName' => $this->_to,
             'FromUserName' => $this->_from,
             'CreateTime' => time(),
             'MsgType' => self::MSGTYPE_TRANSFER,
-        );
+        ];
         if (!empty($customer_account)) {
-            $msg['TransInfo'] = array('KfAccount' => $customer_account);
+            $msg['TransInfo'] = ['KfAccount' => $customer_account];
         }
         $this->send($msg);
     }
