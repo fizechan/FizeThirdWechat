@@ -3,85 +3,23 @@
 
 namespace fize\third\wechat;
 
-
 use fize\third\wechat\Prpcrypt;
-use fize\xml\SimpleXml;
+use OutOfBoundsException;
 
 
 /**
  * 微信信息接收类
  *
  * 本接口非微信直接提供
- * @todo 需要服务器配合测试
  */
 class MessageReceive extends Message
 {
-    private $postxml;
-    private $_receive;
-
-    const MSGTYPE_TEXT = 'text';                    //类型 - 文本
-    const MSGTYPE_IMAGE = 'image';                    //类型 - 图片
-    const MSGTYPE_LOCATION = 'location';            //类型 - 定位
-    const MSGTYPE_LINK = 'link';                    //类型 - 链接
-    const MSGTYPE_EVENT = 'event';                    //类型 - 事件
-    const MSGTYPE_MUSIC = 'music';                    //类型 - 音乐
-    const MSGTYPE_NEWS = 'news';                    //类型 - 新闻(无)
-    const MSGTYPE_VOICE = 'voice';                    //类型 - 语音
-    const MSGTYPE_VIDEO = 'video';                    //类型 - 视频
-    const MSGTYPE_TRANSFER = 'transfer_customer_service';
-
-    const EVENT_SUBSCRIBE = 'subscribe';       //订阅
-    const EVENT_UNSUBSCRIBE = 'unsubscribe';   //取消订阅
-    const EVENT_SCAN = 'SCAN';                 //扫描带参数二维码
-    const EVENT_LOCATION = 'LOCATION';         //上报地理位置
-
-    const EVENT_MENU_CLICK = 'CLICK';                   //菜单 - 点击菜单拉取消息
-    const EVENT_MENU_VIEW = 'VIEW';                     //菜单 - 点击菜单跳转链接
-    const EVENT_MENU_SCAN_PUSH = 'scancode_push';       //菜单 - 扫码推事件(客户端跳URL)
-    const EVENT_MENU_SCAN_WAITMSG = 'scancode_waitmsg'; //菜单 - 扫码推事件(客户端不跳URL)
-    const EVENT_MENU_PIC_SYS = 'pic_sysphoto';          //菜单 - 弹出系统拍照发图
-    const EVENT_MENU_PIC_PHOTO = 'pic_photo_or_album';  //菜单 - 弹出拍照或者相册发图
-    const EVENT_MENU_PIC_WEIXIN = 'pic_weixin';         //菜单 - 弹出微信相册发图器
-    const EVENT_MENU_LOCATION = 'location_select';      //菜单 - 弹出地理位置选择器
-
-    const EVENT_SEND_MASS = 'MASSSENDJOBFINISH';        //发送结果 - 高级群发完成
-    const EVENT_SEND_TEMPLATE = 'TEMPLATESENDJOBFINISH';//发送结果 - 模板消息发送结果
-
-    const EVENT_KF_SEESION_CREATE = 'kf_create_session';  //多客服 - 接入会话
-    const EVENT_KF_SEESION_CLOSE = 'kf_close_session';    //多客服 - 关闭会话
-    const EVENT_KF_SEESION_SWITCH = 'kf_switch_session';  //多客服 - 转接会话
-
-    const EVENT_CARD_PASS = 'card_pass_check';          //卡券 - 审核通过
-    const EVENT_CARD_NOTPASS = 'card_not_pass_check';   //卡券 - 审核未通过
-    const EVENT_CARD_USER_GET = 'user_get_card';        //卡券 - 用户领取卡券
-    const EVENT_CARD_USER_DEL = 'user_del_card';        //卡券 - 用户删除卡券
-
-    const EVENT_MERCHANT_ORDER = 'merchant_order';        //订单 - 付款成功
+    private $postXml;
 
     /**
-     * 验证信息是否来自微信服务器
-     * @param string $str
-     * @return boolean
+     * @var array 消息体
      */
-    private function check_signature($str = '')
-    {
-        $signature = isset($_GET["signature"]) ? $_GET["signature"] : '';
-        $signature = isset($_GET["msg_signature"]) ? $_GET["msg_signature"] : $signature; //如果存在加密验证则用加密验证段
-        $timestamp = isset($_GET["timestamp"]) ? $_GET["timestamp"] : '';
-        $nonce = isset($_GET["nonce"]) ? $_GET["nonce"] : '';
-
-        $token = $this->token;
-        $tmpArr = array($token, $timestamp, $nonce, $str);
-        sort($tmpArr, SORT_STRING);
-        $tmpStr = implode($tmpArr);
-        $tmpStr = sha1($tmpStr);
-
-        if ($tmpStr == $signature) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    private $message;
 
     /**
      * 微信验证，包括post来的xml解密
@@ -94,7 +32,7 @@ class MessageReceive extends Message
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $postStr = file_get_contents("php://input");
             $array = (array)Simplexml::loadString($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-            $this->encrypt_type = isset($_GET["encrypt_type"]) ? $_GET["encrypt_type"] : '';
+            $this->encrypt_type = $_GET["encrypt_type"] ?? '';
             if ($this->encrypt_type == 'aes') { //aes加密
                 //Log::write($postStr);
                 $encryptStr = $array['Encrypt'];
@@ -107,31 +45,31 @@ class MessageReceive extends Message
                         return false;
                     }
                 }
-                $this->postxml = $array[1];
+                $this->postXml = $array[1];
                 if (!$this->appid) {
                     //为了没有appid的订阅号。
                     $this->appid = $array[2];
                 }
             } else {
-                $this->postxml = $postStr;
+                $this->postXml = $postStr;
             }
         } elseif (isset($_GET["echostr"])) {
             $echoStr = $_GET["echostr"];
             if ($return) {
-                if ($this->check_signature()) {
+                if ($this->checkSignature('')) {
                     return $echoStr;
                 } else {
                     return false;
                 }
             } else {
-                if ($this->check_signature()) {
+                if ($this->checkSignature('')) {
                     die($echoStr);
                 } else {
                     die('no access');
                 }
             }
         }
-        if (!$this->check_signature($encryptStr)) {
+        if (!$this->checkSignature($encryptStr)) {
             if ($return) {
                 return false;
             } else {
@@ -143,196 +81,167 @@ class MessageReceive extends Message
 
     /**
      * 获取微信服务器发来的信息
+     * @return array
      */
-    public function getRev()
+    public function get(): array
     {
-        if ($this->_receive) return $this;
-        $postStr = !empty($this->postxml) ? $this->postxml : file_get_contents("php://input");
-        //兼顾使用明文又不想调用valid()方法的情况
-        //Log::write($postStr);
-        if (!empty($postStr)) {
-            $this->_receive = (array)Simplexml::loadString($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if ($this->message) {
+            return $this->message;
         }
-        return $this;
+        $postXml = !empty($this->postXml) ? $this->postXml : file_get_contents("php://input");  // 兼顾使用明文又不想调用valid()方法的情况
+        if (!empty($postXml)) {
+            $this->message = $this->xmlToArray($postXml);
+        }
+        return $this->message;
     }
 
     /**
-     * 获取微信服务器发来的信息(信息本体)
+     * 判断消息体是否含有指定字段
+     * @param string $key 字段名
+     * @return bool
      */
-    public function getRevData()
+    public function messageHasKey(string $key): bool
     {
-        return $this->_receive;
+        $message = $this->get();
+        return isset($message[$key]);
     }
 
     /**
-     * 获取消息发送者
+     * 获取接收者(开发者微信号)
+     * @return string
      */
-    public function getRevFrom()
+    public function getToUserName(): string
     {
-        if (isset($this->_receive['FromUserName'])) {
-            return $this->_receive['FromUserName'];
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('ToUserName');
     }
 
     /**
-     * 获取消息接受者
+     * 获取发送方帐号（一个OpenID）
+     * @return string
      */
-    public function getRevTo()
+    public function getFromUserName(): string
     {
-        if (isset($this->_receive['ToUserName'])) {
-            return $this->_receive['ToUserName'];
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('FromUserName');
     }
 
     /**
-     * 获取接收消息的类型
+     * 获取消息创建时间
+     * @return int
      */
-    public function getRevType()
+    public function getCreateTime(): int
     {
-        if (isset($this->_receive['MsgType'])) {
-            return $this->_receive['MsgType'];
-        } else {
-            return false;
-        }
+        return (int)$this->getMessageKeyValue('CreateTime');
+    }
+
+    /**
+     * 获取消息类型
+     * @return string
+     */
+    public function getMsgType(): string
+    {
+        return $this->getMessageKeyValue('MsgType');
     }
 
     /**
      * 获取消息ID
+     * @return string
      */
-    public function getRevID()
+    public function getMsgId(): string
     {
-        if (isset($this->_receive['MsgId'])) {
-            return $this->_receive['MsgId'];
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('MsgId');
     }
 
     /**
-     * 获取消息发送时间
+     * 获取文本消息
+     * @return string
      */
-    public function getRevCtime()
+    public function getContent(): string
     {
-        if (isset($this->_receive['CreateTime'])) {
-            return $this->_receive['CreateTime'];
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('Content');
     }
 
     /**
-     * 获取接收消息内容正文
+     * 获取图片消息
+     * @return array ['PicUrl' => *, 'MediaId' => *]
      */
-    public function getRevContent()
+    public function getImage(): array
     {
-        if (isset($this->_receive['Content'])) {
-            return $this->_receive['Content'];
-        } else if (isset($this->_receive['Recognition'])) {
-            //获取语音识别文字内容，需申请开通
-            return $this->_receive['Recognition'];
-        } else {
-            return false;
-        }
+        return [
+            'PicUrl'  => $this->getMessageKeyValue('PicUrl'),
+            'MediaId' => $this->getMessageKeyValue('MediaId')
+        ];
     }
 
     /**
-     * 获取接收消息图片
+     * 获取语音消息
+     * @return array ['MediaId' => *, 'Format' => *]
      */
-    public function getRevPic()
+    public function getVoice(): array
     {
-        if (isset($this->_receive['PicUrl'])) {
-            return array(
-                'mediaid' => $this->_receive['MediaId'],
-                'picurl' => (string)$this->_receive['PicUrl'],    //防止picurl为空导致解析出错
-            );
-        } else {
-            return false;
-        }
+        return [
+            'MediaId' => $this->getMessageKeyValue('MediaId'),
+            'Format'  => $this->getMessageKeyValue('Format')
+        ];
     }
 
     /**
-     * 获取接收语音推送
+     * 获取视频消息
+     * @return array ['MediaId' => *, 'ThumbMediaId' => *]
      */
-    public function getRevVoice()
+    public function getVideo(): array
     {
-        if (isset($this->_receive['MediaId'])) {
-            return array(
-                'mediaid' => $this->_receive['MediaId'],
-                'format' => $this->_receive['Format'],
-            );
-        } else {
-            return false;
-        }
+        return [
+            'MediaId'      => $this->getMessageKeyValue('MediaId'),
+            'ThumbMediaId' => $this->getMessageKeyValue('ThumbMediaId')
+        ];
     }
 
     /**
-     * 获取接收视频推送
+     * 获取小视频消息
+     * @return array ['MediaId' => *, 'ThumbMediaId' => *]
      */
-    public function getRevVideo()
+    public function getShortvideo(): array
     {
-        if (isset($this->_receive['MediaId'])) {
-            return array(
-                'mediaid' => $this->_receive['MediaId'],
-                'thumbmediaid' => $this->_receive['ThumbMediaId']
-            );
-        } else {
-            return false;
-        }
+        return [
+            'MediaId'      => $this->getMessageKeyValue('MediaId'),
+            'ThumbMediaId' => $this->getMessageKeyValue('ThumbMediaId')
+        ];
     }
 
     /**
-     * 获取接收地理位置
+     * 获取地理位置消息
+     * @return array ['Location_X' => *, 'Location_Y' => *, 'Scale' => *, 'Label' => *]
      */
-    public function getRevGeo()
+    public function getLocation(): array
     {
-        if (isset($this->_receive['Location_X'])) {
-            return array(
-                'x' => $this->_receive['Location_X'],
-                'y' => $this->_receive['Location_Y'],
-                'scale' => $this->_receive['Scale'],
-                'label' => $this->_receive['Label']
-            );
-        } else {
-            return false;
-        }
+        return [
+            'Location_X' => $this->getMessageKeyValue('Location_X'),
+            'Location_Y' => $this->getMessageKeyValue('Location_Y'),
+            'Scale'      => $this->getMessageKeyValue('Scale'),
+            'Label'      => $this->getMessageKeyValue('Label')
+        ];
     }
 
     /**
-     * 获取接收消息链接
+     * 获取链接消息
+     * @return array ['Title' => *, 'Description' => *, 'Url' => *]
      */
-    public function getRevLink()
+    public function getLink(): array
     {
-        if (isset($this->_receive['Url'])) {
-            return array(
-                'url' => $this->_receive['Url'],
-                'title' => $this->_receive['Title'],
-                'description' => $this->_receive['Description']
-            );
-        } else {
-            return false;
-        }
+        return [
+            'Title'       => $this->getMessageKeyValue('Title'),
+            'Description' => $this->getMessageKeyValue('Description'),
+            'Url'         => $this->getMessageKeyValue('Url')
+        ];
     }
 
     /**
      * 获取接收事件推送
+     * @return string
      */
-    public function getRevEvent()
+    public function getEvent(): string
     {
-        if (isset($this->_receive['Event'])) {
-            $array['event'] = $this->_receive['Event'];
-        }
-        if (isset($this->_receive['EventKey'])) {
-            $array['key'] = $this->_receive['EventKey'];
-        }
-        if (isset($array) && count($array) > 0) {
-            return $array;
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('Event');
     }
 
     /**
@@ -340,8 +249,8 @@ class MessageReceive extends Message
      */
     public function getRevTicket()
     {
-        if (isset($this->_receive['Ticket'])) {
-            return $this->_receive['Ticket'];
+        if (isset($this->message['Ticket'])) {
+            return $this->message['Ticket'];
         } else {
             return false;
         }
@@ -352,8 +261,8 @@ class MessageReceive extends Message
      */
     public function getRevSceneId()
     {
-        if (isset($this->_receive['EventKey'])) {
-            return str_replace('qrscene_', '', $this->_receive['EventKey']);
+        if (isset($this->message['EventKey'])) {
+            return str_replace('qrscene_', '', $this->message['EventKey']);
         } else {
             return false;
         }
@@ -364,12 +273,12 @@ class MessageReceive extends Message
      */
     public function getRevEventGeo()
     {
-        if (isset($this->_receive['Latitude'])) {
-            return array(
-                'x' => $this->_receive['Latitude'],
-                'y' => $this->_receive['Longitude'],
-                'precision' => $this->_receive['Precision'],
-            );
+        if (isset($this->message['Latitude'])) {
+            return [
+                'x'         => $this->message['Latitude'],
+                'y'         => $this->message['Longitude'],
+                'precision' => $this->message['Precision'],
+            ];
         } else {
             return false;
         }
@@ -390,12 +299,12 @@ class MessageReceive extends Message
      */
     public function getRevScanInfo()
     {
-        if (isset($this->_receive['ScanCodeInfo'])) {
-            if (!is_array($this->_receive['ScanCodeInfo'])) {
-                $array = (array)$this->_receive['ScanCodeInfo'];
-                $this->_receive['ScanCodeInfo'] = $array;
+        if (isset($this->message['ScanCodeInfo'])) {
+            if (!is_array($this->message['ScanCodeInfo'])) {
+                $array = (array)$this->message['ScanCodeInfo'];
+                $this->message['ScanCodeInfo'] = $array;
             } else {
-                $array = $this->_receive['ScanCodeInfo'];
+                $array = $this->message['ScanCodeInfo'];
             }
         }
         if (isset($array) && count($array) > 0) {
@@ -427,20 +336,20 @@ class MessageReceive extends Message
      */
     public function getRevSendPicsInfo()
     {
-        if (isset($this->_receive['SendPicsInfo'])) {
-            if (!is_array($this->_receive['SendPicsInfo'])) {
-                $array = (array)$this->_receive['SendPicsInfo'];
+        if (isset($this->message['SendPicsInfo'])) {
+            if (!is_array($this->message['SendPicsInfo'])) {
+                $array = (array)$this->message['SendPicsInfo'];
                 if (isset($array['PicList'])) {
                     $array['PicList'] = (array)$array['PicList'];
                     $item = $array['PicList']['item'];
-                    $array['PicList']['item'] = array();
+                    $array['PicList']['item'] = [];
                     foreach ($item as $key => $value) {
                         $array['PicList']['item'][$key] = (array)$value;
                     }
                 }
-                $this->_receive['SendPicsInfo'] = $array;
+                $this->message['SendPicsInfo'] = $array;
             } else {
-                $array = $this->_receive['SendPicsInfo'];
+                $array = $this->message['SendPicsInfo'];
             }
         }
         if (isset($array) && count($array) > 0) {
@@ -468,18 +377,18 @@ class MessageReceive extends Message
      */
     public function getRevSendGeoInfo()
     {
-        if (isset($this->_receive['SendLocationInfo'])) {
-            if (!is_array($this->_receive['SendLocationInfo'])) {
-                $array = (array)$this->_receive['SendLocationInfo'];
+        if (isset($this->message['SendLocationInfo'])) {
+            if (!is_array($this->message['SendLocationInfo'])) {
+                $array = (array)$this->message['SendLocationInfo'];
                 if (empty($array['Poiname'])) {
                     $array['Poiname'] = "";
                 }
                 if (empty($array['Label'])) {
                     $array['Label'] = "";
                 }
-                $this->_receive['SendLocationInfo'] = $array;
+                $this->message['SendLocationInfo'] = $array;
             } else {
-                $array = $this->_receive['SendLocationInfo'];
+                $array = $this->message['SendLocationInfo'];
             }
         }
         if (isset($array) && count($array) > 0) {
@@ -496,8 +405,8 @@ class MessageReceive extends Message
      */
     public function getRevTplMsgID()
     {
-        if (isset($this->_receive['MsgID'])) {
-            return $this->_receive['MsgID'];
+        if (isset($this->message['MsgID'])) {
+            return $this->message['MsgID'];
         } else {
             return false;
         }
@@ -508,8 +417,8 @@ class MessageReceive extends Message
      */
     public function getRevStatus()
     {
-        if (isset($this->_receive['Status'])) {
-            return $this->_receive['Status'];
+        if (isset($this->message['Status'])) {
+            return $this->message['Status'];
         } else {
             return false;
         }
@@ -521,20 +430,20 @@ class MessageReceive extends Message
      */
     public function getRevResult()
     {
-        if (isset($this->_receive['Status'])) //发送是否成功，具体的返回值请参考 高级群发/模板消息 的事件推送说明
-            $array['Status'] = $this->_receive['Status'];
-        if (isset($this->_receive['MsgID'])) //发送的消息id
-            $array['MsgID'] = $this->_receive['MsgID'];
+        if (isset($this->message['Status'])) //发送是否成功，具体的返回值请参考 高级群发/模板消息 的事件推送说明
+            $array['Status'] = $this->message['Status'];
+        if (isset($this->message['MsgID'])) //发送的消息id
+            $array['MsgID'] = $this->message['MsgID'];
 
         //以下仅当群发消息时才会有的事件内容
-        if (isset($this->_receive['TotalCount']))     //分组或openid列表内粉丝数量
-            $array['TotalCount'] = $this->_receive['TotalCount'];
-        if (isset($this->_receive['FilterCount']))    //过滤（过滤是指特定地区、性别的过滤、用户设置拒收的过滤，用户接收已超4条的过滤）后，准备发送的粉丝数
-            $array['FilterCount'] = $this->_receive['FilterCount'];
-        if (isset($this->_receive['SentCount']))     //发送成功的粉丝数
-            $array['SentCount'] = $this->_receive['SentCount'];
-        if (isset($this->_receive['ErrorCount']))    //发送失败的粉丝数
-            $array['ErrorCount'] = $this->_receive['ErrorCount'];
+        if (isset($this->message['TotalCount']))     //分组或openid列表内粉丝数量
+            $array['TotalCount'] = $this->message['TotalCount'];
+        if (isset($this->message['FilterCount']))    //过滤（过滤是指特定地区、性别的过滤、用户设置拒收的过滤，用户接收已超4条的过滤）后，准备发送的粉丝数
+            $array['FilterCount'] = $this->message['FilterCount'];
+        if (isset($this->message['SentCount']))     //发送成功的粉丝数
+            $array['SentCount'] = $this->message['SentCount'];
+        if (isset($this->message['ErrorCount']))    //发送失败的粉丝数
+            $array['ErrorCount'] = $this->message['ErrorCount'];
         if (isset($array) && count($array) > 0) {
             return $array;
         } else {
@@ -549,8 +458,8 @@ class MessageReceive extends Message
      */
     public function getRevKfCreate()
     {
-        if (isset($this->_receive['KfAccount'])) {
-            return $this->_receive['KfAccount'];
+        if (isset($this->message['KfAccount'])) {
+            return $this->message['KfAccount'];
         } else {
             return false;
         }
@@ -563,8 +472,8 @@ class MessageReceive extends Message
      */
     public function getRevKfClose()
     {
-        if (isset($this->_receive['KfAccount'])) {
-            return $this->_receive['KfAccount'];
+        if (isset($this->message['KfAccount'])) {
+            return $this->message['KfAccount'];
         } else {
             return false;
         }
@@ -581,10 +490,10 @@ class MessageReceive extends Message
      */
     public function getRevKfSwitch()
     {
-        if (isset($this->_receive['FromKfAccount']))     //原接入客服
-            $array['FromKfAccount'] = $this->_receive['FromKfAccount'];
-        if (isset($this->_receive['ToKfAccount']))    //转接到客服
-            $array['ToKfAccount'] = $this->_receive['ToKfAccount'];
+        if (isset($this->message['FromKfAccount']))     //原接入客服
+            $array['FromKfAccount'] = $this->message['FromKfAccount'];
+        if (isset($this->message['ToKfAccount']))    //转接到客服
+            $array['ToKfAccount'] = $this->message['ToKfAccount'];
         if (isset($array) && count($array) > 0) {
             return $array;
         } else {
@@ -599,8 +508,8 @@ class MessageReceive extends Message
      */
     public function getRevCardPass()
     {
-        if (isset($this->_receive['CardId']))
-            return $this->_receive['CardId'];
+        if (isset($this->message['CardId']))
+            return $this->message['CardId'];
         else {
             return false;
         }
@@ -613,17 +522,17 @@ class MessageReceive extends Message
      */
     public function getRevCardGet()
     {
-        if (isset($this->_receive['CardId'])) {
+        if (isset($this->message['CardId'])) {
             //卡券 ID
-            $array['CardId'] = $this->_receive['CardId'];
+            $array['CardId'] = $this->message['CardId'];
         }
-        if (isset($this->_receive['IsGiveByFriend'])) {
+        if (isset($this->message['IsGiveByFriend'])) {
             //是否为转赠，1 代表是，0 代表否。
-            $array['IsGiveByFriend'] = $this->_receive['IsGiveByFriend'];
+            $array['IsGiveByFriend'] = $this->message['IsGiveByFriend'];
         }
-        if (isset($this->_receive['UserCardCode']) && !empty($this->_receive['UserCardCode'])) {
+        if (isset($this->message['UserCardCode']) && !empty($this->message['UserCardCode'])) {
             //code 序列号。自定义 code 及非自定义 code的卡券被领取后都支持事件推送。
-            $array['UserCardCode'] = $this->_receive['UserCardCode'];
+            $array['UserCardCode'] = $this->message['UserCardCode'];
         }
         if (isset($array) && count($array) > 0) {
             return $array;
@@ -639,16 +548,81 @@ class MessageReceive extends Message
      */
     public function getRevCardDel()
     {
-        if (isset($this->_receive['CardId'])) {
+        if (isset($this->message['CardId'])) {
             //卡券 ID
-            $array['CardId'] = $this->_receive['CardId'];
+            $array['CardId'] = $this->message['CardId'];
         }
-        if (isset($this->_receive['UserCardCode']) && !empty($this->_receive['UserCardCode'])) {
+        if (isset($this->message['UserCardCode']) && !empty($this->message['UserCardCode'])) {
             //code 序列号。自定义 code 及非自定义 code的卡券被领取后都支持事件推送。
-            $array['UserCardCode'] = $this->_receive['UserCardCode'];
+            $array['UserCardCode'] = $this->message['UserCardCode'];
         }
         if (isset($array) && count($array) > 0) {
             return $array;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 获取接收消息内容正文
+     */
+    public function getRevContent()
+    {
+        if (isset($this->message['Content'])) {
+            return $this->message['Content'];
+        } else if (isset($this->message['Recognition'])) {
+            //获取语音识别文字内容，需申请开通
+            return $this->message['Recognition'];
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 获取标签值
+     * @param string $key 标签名
+     * @return array|string
+     */
+    protected function getMessageKeyValue(string $key)
+    {
+        $message = $this->get();
+        if (!isset($message[$key])) {
+            throw new OutOfBoundsException("XML消息体不存在标签$key");
+        }
+        return $message[$key];
+    }
+
+    /**
+     * 将XML转为array
+     * @param string $xml XML字符串
+     * @return array
+     */
+    protected function xmlToArray(string $xml): array
+    {
+        libxml_disable_entity_loader(true);  // 禁止引用外部xml实体
+        return json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+    }
+
+    /**
+     * 验证信息是否来自微信服务器
+     * @param string $str 消息体
+     * @return bool
+     */
+    protected function checkSignature(string $str): bool
+    {
+        $signature = $_GET["signature"] ?? '';
+        $signature = $_GET["msg_signature"] ?? $signature;  // 如果存在加密验证则用加密验证段
+        $timestamp = $_GET["timestamp"] ?? '';
+        $nonce = $_GET["nonce"] ?? '';
+
+        $token = $this->token;
+        $tmpArr = [$token, $timestamp, $nonce, $str];
+        sort($tmpArr, SORT_STRING);
+        $tmpStr = implode($tmpArr);
+        $tmpStr = sha1($tmpStr);
+
+        if ($tmpStr == $signature) {
+            return true;
         } else {
             return false;
         }

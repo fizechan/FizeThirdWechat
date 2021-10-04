@@ -17,13 +17,15 @@
     "php": ">=7.1.0",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-libxml": "*",
     "fize/cache": "*",
     "fize/crypt": "*",
-    "fize/http": "*",
-    "fize/xml": "*"
+    "fize/http": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5.0"
+  },
+  "suggest": {
+    "ext-libxml": "*",
+    "ext-simplexml": "*"
   }
 }
