@@ -14,10 +14,14 @@ use OutOfBoundsException;
  */
 class MessageReceive extends Message
 {
+
+    /**
+     * @var string XML消息体
+     */
     private $postXml;
 
     /**
-     * @var array 消息体
+     * @var array 数组消息体
      */
     private $message;
 
@@ -245,73 +249,91 @@ class MessageReceive extends Message
     }
 
     /**
-     * 获取接收二维码TICKET
+     * 获取事件KEY值
+     * @return string
      */
-    public function getRevTicket()
+    public function getEventKey(): string
     {
-        if (isset($this->message['Ticket'])) {
-            return $this->message['Ticket'];
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('EventKey');
     }
 
     /**
      * 获取二维码的场景值
+     * @return string
      */
-    public function getRevSceneId()
+    public function getQrscene(): string
     {
-        if (isset($this->message['EventKey'])) {
-            return str_replace('qrscene_', '', $this->message['EventKey']);
-        } else {
-            return false;
-        }
+        return str_replace('qrscene_', '', $this->getEventKey());
     }
 
     /**
-     * 获取上报地理位置事件
+     * 获取接收二维码TICKET
+     * @return string
      */
-    public function getRevEventGeo()
+    public function getTicket(): string
     {
-        if (isset($this->message['Latitude'])) {
-            return [
-                'x'         => $this->message['Latitude'],
-                'y'         => $this->message['Longitude'],
-                'precision' => $this->message['Precision'],
-            ];
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('Ticket');
+    }
+
+
+    /**
+     * 获取上报地理位置事件
+     * @return array ['Latitude' => *, 'Longitude' => *, 'Precision' => *]
+     */
+    public function getEventLocation(): array
+    {
+        return [
+            'Latitude'  => $this->getMessageKeyValue('Latitude'),
+            'Longitude' => $this->getMessageKeyValue('Longitude'),
+            'Precision' => $this->getMessageKeyValue('Precision')
+        ];
+    }
+
+    /**
+     * 获取主动推送的消息ID
+     *
+     * 经过验证，这个和普通的消息MsgId不一样
+     * 当Event为 MASSSENDJOBFINISH 或 TEMPLATESENDJOBFINISH
+     * @return string
+     */
+    public function getTplMsgID(): string
+    {
+        return $this->getMessageKeyValue('MsgID');
+    }
+
+    /**
+     * 获取模板消息发送状态
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->getMessageKeyValue('Status');
+    }
+
+    /**
+     * 获取群发或模板消息发送结果
+     * @return array ['MsgID' => *, 'Status' => *, 'TotalCount' => *, 'FilterCount' => *, 'SentCount' => *, 'ErrorCount' => *, 'CopyrightCheckResult' => *]
+     */
+    public function getMassResult(): array
+    {
+        return [
+            'MsgID'                => $this->getMessageKeyValue('MsgID'),
+            'Status'               => $this->getMessageKeyValue('Status'),
+            'TotalCount'           => $this->getMessageKeyValue('TotalCount'),
+            'FilterCount'          => $this->getMessageKeyValue('FilterCount'),
+            'SentCount'            => $this->getMessageKeyValue('SentCount'),
+            'ErrorCount'           => $this->getMessageKeyValue('ErrorCount'),
+            'CopyrightCheckResult' => $this->getMessageKeyValue('CopyrightCheckResult'),
+        ];
     }
 
     /**
      * 获取自定义菜单的扫码推事件信息
-     *
-     * 事件类型为以下两种时则调用此方法有效
-     * Event     事件类型，scancode_push
-     * Event     事件类型，scancode_waitmsg
-     *
-     * @return mixed
-     * array (
-     *     'ScanType'=>'qrcode',
-     *     'ScanResult'=>'123123'
-     * )
+     * @return array ['ScanType' => *, 'ScanResult' => *]
      */
-    public function getRevScanInfo()
+    public function getScanCodeInfo(): array
     {
-        if (isset($this->message['ScanCodeInfo'])) {
-            if (!is_array($this->message['ScanCodeInfo'])) {
-                $array = (array)$this->message['ScanCodeInfo'];
-                $this->message['ScanCodeInfo'] = $array;
-            } else {
-                $array = $this->message['ScanCodeInfo'];
-            }
-        }
-        if (isset($array) && count($array) > 0) {
-            return $array;
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('ScanCodeInfo');
     }
 
     /**
@@ -321,42 +343,11 @@ class MessageReceive extends Message
      * Event     事件类型，pic_sysphoto        弹出系统拍照发图的事件推送
      * Event     事件类型，pic_photo_or_album  弹出拍照或者相册发图的事件推送
      * Event     事件类型，pic_weixin          弹出微信相册发图器的事件推送
-     *
-     * @return mixed
-     * array (
-     *   'Count' => '2',
-     *   'PicList' =>array (
-     *         'item' =>array (
-     *             0 =>array ('PicMd5Sum' => 'aaae42617cf2a14342d96005af53624c'),
-     *             1 =>array ('PicMd5Sum' => '149bd39e296860a2adc2f1bb81616ff8'),
-     *         ),
-     *   ),
-     * )
-     *
+     * @return array ['Count' => *, 'PicList' => *]
      */
-    public function getRevSendPicsInfo()
+    public function getSendPicsInfo(): array
     {
-        if (isset($this->message['SendPicsInfo'])) {
-            if (!is_array($this->message['SendPicsInfo'])) {
-                $array = (array)$this->message['SendPicsInfo'];
-                if (isset($array['PicList'])) {
-                    $array['PicList'] = (array)$array['PicList'];
-                    $item = $array['PicList']['item'];
-                    $array['PicList']['item'] = [];
-                    foreach ($item as $key => $value) {
-                        $array['PicList']['item'][$key] = (array)$value;
-                    }
-                }
-                $this->message['SendPicsInfo'] = $array;
-            } else {
-                $array = $this->message['SendPicsInfo'];
-            }
-        }
-        if (isset($array) && count($array) > 0) {
-            return $array;
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('SendPicsInfo');
     }
 
     /**
@@ -364,218 +355,217 @@ class MessageReceive extends Message
      *
      * 事件类型为以下时则可以调用此方法有效
      * Event     事件类型，location_select        弹出地理位置选择器的事件推送
-     *
-     * @return mixed
-     * array (
-     *   'Location_X' => '33.731655000061',
-     *   'Location_Y' => '113.29955200008047',
-     *   'Scale' => '16',
-     *   'Label' => '某某市某某区某某路',
-     *   'Poiname' => '',
-     * )
-     *
+     * @return array ['Location_X' => *, 'Location_Y' => *, 'Scale' => *, 'Label' => *, 'Poiname' => *]
      */
-    public function getRevSendGeoInfo()
+    public function getSendLocationInfo(): array
     {
-        if (isset($this->message['SendLocationInfo'])) {
-            if (!is_array($this->message['SendLocationInfo'])) {
-                $array = (array)$this->message['SendLocationInfo'];
-                if (empty($array['Poiname'])) {
-                    $array['Poiname'] = "";
-                }
-                if (empty($array['Label'])) {
-                    $array['Label'] = "";
-                }
-                $this->message['SendLocationInfo'] = $array;
-            } else {
-                $array = $this->message['SendLocationInfo'];
-            }
-        }
-        if (isset($array) && count($array) > 0) {
-            return $array;
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('SendLocationInfo');
     }
 
     /**
-     * 获取主动推送的消息ID
-     * 经过验证，这个和普通的消息MsgId不一样
-     * 当Event为 MASSSENDJOBFINISH 或 TEMPLATESENDJOBFINISH
+     * 获取菜单ID
+     * @return string
      */
-    public function getRevTplMsgID()
+    public function getMenuID(): string
     {
-        if (isset($this->message['MsgID'])) {
-            return $this->message['MsgID'];
-        } else {
-            return false;
-        }
+        return $this->getMessageKeyValue('MenuID');
     }
 
     /**
-     * 获取模板消息发送状态
-     */
-    public function getRevStatus()
-    {
-        if (isset($this->message['Status'])) {
-            return $this->message['Status'];
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 获取群发或模板消息发送结果
-     * 当Event为 MASSSENDJOBFINISH 或 TEMPLATESENDJOBFINISH，即高级群发/模板消息
-     */
-    public function getRevResult()
-    {
-        if (isset($this->message['Status'])) //发送是否成功，具体的返回值请参考 高级群发/模板消息 的事件推送说明
-            $array['Status'] = $this->message['Status'];
-        if (isset($this->message['MsgID'])) //发送的消息id
-            $array['MsgID'] = $this->message['MsgID'];
-
-        //以下仅当群发消息时才会有的事件内容
-        if (isset($this->message['TotalCount']))     //分组或openid列表内粉丝数量
-            $array['TotalCount'] = $this->message['TotalCount'];
-        if (isset($this->message['FilterCount']))    //过滤（过滤是指特定地区、性别的过滤、用户设置拒收的过滤，用户接收已超4条的过滤）后，准备发送的粉丝数
-            $array['FilterCount'] = $this->message['FilterCount'];
-        if (isset($this->message['SentCount']))     //发送成功的粉丝数
-            $array['SentCount'] = $this->message['SentCount'];
-        if (isset($this->message['ErrorCount']))    //发送失败的粉丝数
-            $array['ErrorCount'] = $this->message['ErrorCount'];
-        if (isset($array) && count($array) > 0) {
-            return $array;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 获取多客服会话状态推送事件 - 接入会话
-     * 当Event为 kfcreatesession 即接入会话
-     * @return string | boolean  返回分配到的客服
-     */
-    public function getRevKfCreate()
-    {
-        if (isset($this->message['KfAccount'])) {
-            return $this->message['KfAccount'];
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 获取多客服会话状态推送事件 - 关闭会话
-     * 当Event为 kfclosesession 即关闭会话
-     * @return string | boolean  返回分配到的客服
-     */
-    public function getRevKfClose()
-    {
-        if (isset($this->message['KfAccount'])) {
-            return $this->message['KfAccount'];
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 获取多客服会话状态推送事件 - 转接会话
-     * 当Event为 kfswitchsession 即转接会话
-     * @return array | boolean  返回分配到的客服
-     * {
-     *     'FromKfAccount' => '',      //原接入客服
-     *     'ToKfAccount' => ''            //转接到客服
-     * }
-     */
-    public function getRevKfSwitch()
-    {
-        if (isset($this->message['FromKfAccount']))     //原接入客服
-            $array['FromKfAccount'] = $this->message['FromKfAccount'];
-        if (isset($this->message['ToKfAccount']))    //转接到客服
-            $array['ToKfAccount'] = $this->message['ToKfAccount'];
-        if (isset($array) && count($array) > 0) {
-            return $array;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 获取卡券事件推送 - 卡卷审核是否通过
+     * 获取卡券ID
      * 当Event为 card_pass_check(审核通过) 或 card_not_pass_check(未通过)
-     * @return string|boolean  返回卡券ID
+     * @return string  返回卡券ID
      */
-    public function getRevCardPass()
+    public function getCardId(): string
     {
-        if (isset($this->message['CardId']))
-            return $this->message['CardId'];
-        else {
-            return false;
-        }
+        return $this->getMessageKeyValue('CardId');
+    }
+
+    /**
+     * 获取卡券审核不通过原因
+     * 当Event为 card_not_pass_check(未通过)
+     * @return string  返回审核不通过原因
+     */
+    public function getRefuseReason(): string
+    {
+        return $this->getMessageKeyValue('RefuseReason');
     }
 
     /**
      * 获取卡券事件推送 - 领取卡券
      * 当Event为 user_get_card(用户领取卡券)
-     * @return array|boolean
+     * @return array ['CardId' => *, 'IsGiveByFriend' => *, 'UserCardCode' => *, 'FriendUserName' => *, 'OuterId' => *, 'OldUserCardCode' => *, 'OuterStr' => *, 'IsRestoreMemberCard' => *, 'IsRecommendByFriend' => *, 'UnionId' => *]
      */
-    public function getRevCardGet()
+    public function getUserGetCard(): array
     {
-        if (isset($this->message['CardId'])) {
-            //卡券 ID
-            $array['CardId'] = $this->message['CardId'];
-        }
-        if (isset($this->message['IsGiveByFriend'])) {
-            //是否为转赠，1 代表是，0 代表否。
-            $array['IsGiveByFriend'] = $this->message['IsGiveByFriend'];
-        }
-        if (isset($this->message['UserCardCode']) && !empty($this->message['UserCardCode'])) {
-            //code 序列号。自定义 code 及非自定义 code的卡券被领取后都支持事件推送。
-            $array['UserCardCode'] = $this->message['UserCardCode'];
-        }
-        if (isset($array) && count($array) > 0) {
-            return $array;
-        } else {
-            return false;
-        }
+        return [
+            'CardId'              => $this->getMessageKeyValue('CardId'),
+            'IsGiveByFriend'      => $this->getMessageKeyValue('IsGiveByFriend'),
+            'UserCardCode'        => $this->getMessageKeyValue('UserCardCode'),
+            'FriendUserName'      => $this->getMessageKeyValue('FriendUserName'),
+            'OuterId'             => $this->getMessageKeyValue('OuterId'),
+            'OldUserCardCode'     => $this->getMessageKeyValue('OldUserCardCode'),
+            'OuterStr'            => $this->getMessageKeyValue('OuterStr'),
+            'IsRestoreMemberCard' => $this->getMessageKeyValue('IsRestoreMemberCard'),
+            'IsRecommendByFriend' => $this->getMessageKeyValue('IsRecommendByFriend'),
+            'UnionId'             => $this->getMessageKeyValue('UnionId')
+        ];
+    }
+
+    /**
+     * 获取卡券事件推送 - 转赠卡券
+     * 当Event为 user_gifting_card(用户转赠卡券)
+     * @return array
+     */
+    public function getUserGiftingCard(): array
+    {
+        return [
+            'CardId'         => $this->getMessageKeyValue('CardId'),
+            'UserCardCode'   => $this->getMessageKeyValue('UserCardCode'),
+            'IsReturnBack'   => $this->getMessageKeyValue('IsReturnBack'),
+            'FriendUserName' => $this->getMessageKeyValue('FriendUserName'),
+            'IsChatRoom'     => $this->getMessageKeyValue('IsChatRoom')
+        ];
     }
 
     /**
      * 获取卡券事件推送 - 删除卡券
      * 当Event为 user_del_card(用户删除卡券)
-     * @return array|boolean
+     * @return array
      */
-    public function getRevCardDel()
+    public function getUserDelCard(): array
     {
-        if (isset($this->message['CardId'])) {
-            //卡券 ID
-            $array['CardId'] = $this->message['CardId'];
-        }
-        if (isset($this->message['UserCardCode']) && !empty($this->message['UserCardCode'])) {
-            //code 序列号。自定义 code 及非自定义 code的卡券被领取后都支持事件推送。
-            $array['UserCardCode'] = $this->message['UserCardCode'];
-        }
-        if (isset($array) && count($array) > 0) {
-            return $array;
-        } else {
-            return false;
-        }
+        return [
+            'CardId'       => $this->getMessageKeyValue('CardId'),
+            'UserCardCode' => $this->getMessageKeyValue('UserCardCode')
+        ];
     }
 
     /**
-     * 获取接收消息内容正文
+     * 获取卡券事件推送 - 卡券被核销
+     * 当Event为 user_consume_card(卡券被核销)
+     * @return array
      */
-    public function getRevContent()
+    public function getUserConsumeCard(): array
     {
-        if (isset($this->message['Content'])) {
-            return $this->message['Content'];
-        } else if (isset($this->message['Recognition'])) {
-            //获取语音识别文字内容，需申请开通
-            return $this->message['Recognition'];
-        } else {
-            return false;
-        }
+        return [
+            'CardId'        => $this->getMessageKeyValue('CardId'),
+            'UserCardCode'  => $this->getMessageKeyValue('UserCardCode'),
+            'ConsumeSource' => $this->getMessageKeyValue('ConsumeSource'),
+            'LocationName'  => $this->getMessageKeyValue('LocationName'),
+            'StaffOpenId'   => $this->getMessageKeyValue('StaffOpenId'),
+            'VerifyCode'    => $this->getMessageKeyValue('VerifyCode'),
+            'RemarkAmount'  => $this->getMessageKeyValue('RemarkAmount'),
+            'OuterStr'      => $this->getMessageKeyValue('OuterStr')
+        ];
+    }
+
+    /**
+     * 获取买单事件推送
+     * 当Event为 user_pay_from_pay_cell(买单事件推送)
+     * @return array
+     */
+    public function getUserPayFromPayCell(): array
+    {
+        return [
+            'CardId'       => $this->getMessageKeyValue('CardId'),
+            'UserCardCode' => $this->getMessageKeyValue('UserCardCode'),
+            'TransId'      => $this->getMessageKeyValue('TransId'),
+            'LocationId'   => $this->getMessageKeyValue('LocationId'),
+            'Fee'          => $this->getMessageKeyValue('Fee'),
+            'OriginalFee'  => $this->getMessageKeyValue('OriginalFee')
+        ];
+    }
+
+    /**
+     * 获取进入会员卡事件推送
+     * 当Event为 user_view_card(进入会员卡)
+     * @return array
+     */
+    public function getUserViewCard(): array
+    {
+        return [
+            'CardId'       => $this->getMessageKeyValue('CardId'),
+            'UserCardCode' => $this->getMessageKeyValue('UserCardCode'),
+            'OuterStr'     => $this->getMessageKeyValue('OuterStr')
+        ];
+    }
+
+    /**
+     * 获取从卡券进入公众号会话事件推送
+     * 当Event为 user_enter_session_from_card(进入会员卡)
+     * @return array
+     */
+    public function getUserEnterSessionFromCard(): array
+    {
+        return [
+            'CardId'       => $this->getMessageKeyValue('CardId'),
+            'UserCardCode' => $this->getMessageKeyValue('UserCardCode')
+        ];
+    }
+
+    /**
+     * 获取会员卡内容更新事件
+     * 当Event为 update_member_card(会员卡内容更新)
+     * @return array
+     */
+    public function getUpdateMemberCard(): array
+    {
+        return [
+            'CardId'        => $this->getMessageKeyValue('CardId'),
+            'UserCardCode'  => $this->getMessageKeyValue('UserCardCode'),
+            'ModifyBonus'   => $this->getMessageKeyValue('ModifyBonus'),
+            'ModifyBalance' => $this->getMessageKeyValue('ModifyBalance')
+        ];
+    }
+
+    /**
+     * 获取库存报警事件
+     * 当Event为 card_sku_remind(库存报警)
+     * @return array
+     */
+    public function getCardSkuRemind(): array
+    {
+        return [
+            'CardId' => $this->getMessageKeyValue('CardId'),
+            'Detail' => $this->getMessageKeyValue('Detail')
+        ];
+    }
+
+    /**
+     * 获取券点流水详情事件
+     * 当Event为 card_pay_order(券点流水详情)
+     * @return array
+     */
+    public function getCardPayOrder(): array
+    {
+        return [
+            'OrderId'             => $this->getMessageKeyValue('OrderId'),
+            'Status'              => $this->getMessageKeyValue('Status'),
+            'CreateOrderTime'     => $this->getMessageKeyValue('CreateOrderTime'),
+            'PayFinishTime'       => $this->getMessageKeyValue('PayFinishTime'),
+            'Desc'                => $this->getMessageKeyValue('Desc'),
+            'FreeCoinCount'       => $this->getMessageKeyValue('FreeCoinCount'),
+            'PayCoinCount'        => $this->getMessageKeyValue('PayCoinCount'),
+            'RefundFreeCoinCount' => $this->getMessageKeyValue('RefundFreeCoinCount'),
+            'RefundPayCoinCount'  => $this->getMessageKeyValue('RefundPayCoinCount'),
+            'OrderType'           => $this->getMessageKeyValue('OrderType'),
+            'Memo'                => $this->getMessageKeyValue('Memo'),
+            'ReceiptInfo'         => $this->getMessageKeyValue('ReceiptInfo')
+        ];
+    }
+
+    /**
+     * 获取会员卡激活事件
+     * 当Event为 submit_membercard_user_info(会员卡激活)
+     * @return array
+     */
+    public function getSubmitMembercardUserInfo(): array
+    {
+        return [
+            'CardId'       => $this->getMessageKeyValue('CardId'),
+            'UserCardCode' => $this->getMessageKeyValue('UserCardCode')
+        ];
     }
 
     /**

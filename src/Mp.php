@@ -9,11 +9,6 @@ class Mp extends MpAbstract
 {
 
     /**
-     * 域名
-     */
-    const HOST_MP = 'mp.weixin.qq.com';
-
-    /**
      * 通过ticket换取二维码
      * @param string $ticket 二维码ticket
      * @return string 返回二维码URL
@@ -21,6 +16,6 @@ class Mp extends MpAbstract
     public function showqrcode(string $ticket): string
     {
         $ticket = urlencode($ticket);
-        return "https://" . self::HOST_MP . "/cgi-bin/showqrcode?ticket=$ticket";
+        return $this->getUri("/cgi-bin/showqrcode?ticket=$ticket");
     }
 }

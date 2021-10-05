@@ -194,32 +194,42 @@ class MessageReply extends Message
     }
 
     /**
-     * 设置回复图文
-     * @param array $newsData
-     * @return mixed
-     *        数组结构:
-     *        array(
-     *        "0"=>array(
-     *        'Title'=>'msg title',
-     *        'Description'=>'summary text',
-     *        'PicUrl'=>'http://www.domain.com/1.jpg',
-     *        'Url'=>'http://www.domain.com/1.html'
-     *        ),
-     *        "1"=>....
-     *        )
+     * 设置回复图文消息
+     * @param array $articles 图文数组，每项为['Title' => *, 'Description' => *, 'PicUrl' => *, 'Url' => *]
+     * @return $this
      */
-    public function news($newsData)
+    public function news(array $articles): MessageReply
     {
-        $count = count($newsData);
         $msg = [
             'ToUserName'   => $this->toUserName,
             'FromUserName' => $this->fromUserName,
             'CreateTime'   => time(),
             'MsgType'      => self::MSGTYPE_NEWS,
-            'ArticleCount' => $count,
-            'Articles'     => $newsData
+            'ArticleCount' => count($articles),
+            'Articles'     => $articles
         ];
-        $this->Message($msg);
+        $this->message($msg);
+        return $this;
+    }
+
+    /**
+     * 消息转发到多客服
+     * Example: $obj->transferCustomerService($customer_account);
+     * @param string|null $kfAccount 转发到指定客服帐号
+     * @return $this
+     */
+    public function transferCustomerService(string $kfAccount = null): MessageReply
+    {
+        $msg = [
+            'ToUserName'   => $this->toUserName,
+            'FromUserName' => $this->fromUserName,
+            'CreateTime'   => time(),
+            'MsgType'      => self::MSGTYPE_TRANSFER,
+        ];
+        if (!empty($kfAccount)) {
+            $msg['TransInfo'] = ['KfAccount' => $kfAccount];
+        }
+        $this->message($msg);
         return $this;
     }
 
@@ -267,25 +277,6 @@ class MessageReply extends Message
     public function send()
     {
         echo $this->xml();
-    }
-
-    /**
-     * 消息转发到多客服
-     * Example: $obj->transferCustomerService($customer_account);
-     * @param string $customer_account 转发到指定客服帐号：test1@test
-     */
-    public function transferCustomerService($customer_account = '')
-    {
-        $msg = [
-            'ToUserName'   => $this->toUserName,
-            'FromUserName' => $this->fromUserName,
-            'CreateTime'   => time(),
-            'MsgType'      => self::MSGTYPE_TRANSFER,
-        ];
-        if (!empty($customer_account)) {
-            $msg['TransInfo'] = ['KfAccount' => $customer_account];
-        }
-        $this->send($msg);
     }
 
     /**

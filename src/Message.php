@@ -58,7 +58,9 @@ abstract class Message
      */
     const MSGTYPE_NEWS = 'news';
 
-
+    /**
+     * 消息类型：消息转发到客服
+     */
     const MSGTYPE_TRANSFER = 'transfer_customer_service';
 
     /**
@@ -76,28 +78,130 @@ abstract class Message
      */
     const EVENT_SCAN = 'SCAN';
 
-    const EVENT_LOCATION = 'LOCATION';         //上报地理位置
+    /**
+     * 事件类型：上报地理位置
+     */
+    const EVENT_LOCATION = 'LOCATION';
 
-    const EVENT_MENU_CLICK = 'CLICK';                   //菜单 - 点击菜单拉取消息
-    const EVENT_MENU_VIEW = 'VIEW';                     //菜单 - 点击菜单跳转链接
-    const EVENT_MENU_SCAN_PUSH = 'scancode_push';       //菜单 - 扫码推事件(客户端跳URL)
-    const EVENT_MENU_SCAN_WAITMSG = 'scancode_waitmsg'; //菜单 - 扫码推事件(客户端不跳URL)
-    const EVENT_MENU_PIC_SYS = 'pic_sysphoto';          //菜单 - 弹出系统拍照发图
-    const EVENT_MENU_PIC_PHOTO = 'pic_photo_or_album';  //菜单 - 弹出拍照或者相册发图
-    const EVENT_MENU_PIC_WEIXIN = 'pic_weixin';         //菜单 - 弹出微信相册发图器
-    const EVENT_MENU_LOCATION = 'location_select';      //菜单 - 弹出地理位置选择器
+    /**
+     * 事件类型：菜单 - 点击菜单拉取消息
+     */
+    const EVENT_MENU_CLICK = 'CLICK';
 
-    const EVENT_SEND_MASS = 'MASSSENDJOBFINISH';        //发送结果 - 高级群发完成
-    const EVENT_SEND_TEMPLATE = 'TEMPLATESENDJOBFINISH';//发送结果 - 模板消息发送结果
+    /**
+     * 事件类型：菜单 - 点击菜单跳转链接
+     */
+    const EVENT_MENU_VIEW = 'VIEW';
 
-    const EVENT_KF_SEESION_CREATE = 'kf_create_session';  //多客服 - 接入会话
-    const EVENT_KF_SEESION_CLOSE = 'kf_close_session';    //多客服 - 关闭会话
-    const EVENT_KF_SEESION_SWITCH = 'kf_switch_session';  //多客服 - 转接会话
+    /**
+     * 事件类型：菜单 - 扫码推事件(客户端跳URL)
+     */
+    const EVENT_MENU_SCAN_PUSH = 'scancode_push';
 
-    const EVENT_CARD_PASS = 'card_pass_check';          //卡券 - 审核通过
-    const EVENT_CARD_NOTPASS = 'card_not_pass_check';   //卡券 - 审核未通过
-    const EVENT_CARD_USER_GET = 'user_get_card';        //卡券 - 用户领取卡券
-    const EVENT_CARD_USER_DEL = 'user_del_card';        //卡券 - 用户删除卡券
+    /**
+     * 事件类型：菜单 - 扫码推事件(客户端不跳URL)
+     */
+    const EVENT_MENU_SCAN_WAITMSG = 'scancode_waitmsg';
+
+    /**
+     * 事件类型：菜单 - 弹出系统拍照发图
+     */
+    const EVENT_MENU_PIC_SYS = 'pic_sysphoto';
+
+    /**
+     * 事件类型：菜单 - 弹出拍照或者相册发图
+     */
+    const EVENT_MENU_PIC_PHOTO = 'pic_photo_or_album';
+
+    /**
+     * 事件类型：菜单 - 弹出微信相册发图器
+     */
+    const EVENT_MENU_PIC_WEIXIN = 'pic_weixin';
+
+    /**
+     * 事件类型：菜单 - 弹出地理位置选择器
+     */
+    const EVENT_MENU_LOCATION = 'location_select';
+
+    /**
+     * 事件类型：菜单 - 跳转小程序
+     */
+    const EVENT_MENU_MINIPROGRAM = 'view_miniprogram';
+
+    /**
+     * 事件类型：发送结果 - 模板消息发送结果
+     */
+    const EVENT_SEND_TEMPLATE = 'TEMPLATESENDJOBFINISH';
+
+    /**
+     * 事件类型：发送结果 - 事件推送群发结果
+     */
+    const EVENT_SEND_MASS = 'MASSSENDJOBFINISH';
+
+    /**
+     * 事件类型：卡券 - 审核通过
+     */
+    const EVENT_CARD_PASS = 'card_pass_check';
+
+    /**
+     * 事件类型：卡券 - 审核未通过
+     */
+    const EVENT_CARD_NOTPASS = 'card_not_pass_check';
+
+    /**
+     * 事件类型：用户 - 领取卡券
+     */
+    const EVENT_USER_GET_CARD = 'user_get_card';
+
+    /**
+     * 事件类型：用户 - 转赠卡券
+     */
+    const EVENT_USER_GIFTING_CARD = 'user_gifting_card';
+
+    /**
+     * 事件类型：用户 - 删除卡券
+     */
+    const EVENT_USER_DEL_CARD = 'user_del_card';
+
+    /**
+     * 事件类型：用户 - 卡券被核销
+     */
+    const EVENT_USER_CONSUME_CARD = 'user_consume_card';
+
+    /**
+     * 事件类型：用户 - 买单
+     */
+    const EVENT_USER_PAY_FROM_PAY_CELL = 'user_pay_from_pay_cell';
+
+    /**
+     * 事件类型：用户 - 进入会员卡
+     */
+    const EVENT_USER_VIEW_CARD = 'user_view_card';
+
+    /**
+     * 事件类型：用户 - 从卡券进入公众号会话
+     */
+    const EVENT_USER_ENTER_SESSION_FROM_CARD = 'user_enter_session_from_card';
+
+    /**
+     * 事件类型：会员卡内容更新
+     */
+    const EVENT_UPDATE_MEMBER_CARD = 'update_member_card';
+
+    /**
+     * 事件类型：卡券 - 库存报警
+     */
+    const EVENT_CARD_SKU_REMIND = 'card_sku_remind';
+
+    /**
+     * 事件类型：卡券 - 券点流水详情
+     */
+    const EVENT_CARD_PAY_ORDER = 'card_pay_order';
+
+    /**
+     * 事件类型：会员卡激活
+     */
+    const EVENT_SUBMIT_MEMBERCARD_USER_INFO = 'submit_membercard_user_info';
 
     const EVENT_MERCHANT_ORDER = 'merchant_order';        //订单 - 付款成功
 

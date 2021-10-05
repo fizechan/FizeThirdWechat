@@ -35,8 +35,87 @@ switch ($mrec->getMsgType()) {
         break;
     case Message::MSGTYPE_LINK:
         $link = $mrec->getLink();
+        $articles = [
+            [
+                'Title'       => $link['Title'],
+                'Description' => $link['Description'],
+                'PicUrl'      => 'http://picurl.jpg',
+                'Url'         => $link['Url']
+            ]
+        ];
+        $mrep->news($articles);
+        break;
+    case Message::MSGTYPE_EVENT:
+        $event = $mrec->getEvent();
+        switch ($event) {
+            case Message::EVENT_SUBSCRIBE:
+                if ($mrec->messageHasKey('EventKey')) {
+                    $qrscene = $mrec->getQrscene();
+                    $mrep->text("事件KEY值：$qrscene");
+                } else {
+                    $mrep->text("感谢您的关注。");
+                }
+                break;
+            case Message::EVENT_UNSUBSCRIBE:
+                // 取消关注后无法再发送消息
+                syslog(LOG_INFO, "用户{$mrec->getFromUserName()}取消关注。");
+                break;
+            case Message::EVENT_SCAN:
+                $mrep->text("事件KEY值：" . $mrec->getEventKey() . "，二维码的ticket：" . $mrec->getTicket());
+                break;
+            case Message::EVENT_LOCATION:
+                $location = $mrec->getEventLocation();
+                $mrep->text("Latitude：{$location['Latitude']}，Longitude：{$location['Longitude']}，Precision：{$location['Precision']}");
+                break;
+            case Message::EVENT_MENU_CLICK:
+                $mrep->text("事件KEY值：" . $mrec->getEventKey());
+                break;
+            case Message::EVENT_MENU_VIEW:
+                $mrep->text("你即将访问URL：" . $mrec->getEventKey());
+                break;
+            case Message::EVENT_MENU_SCAN_PUSH:
+                $codeInfo = $mrec->getScanCodeInfo();
+                $mrep->text("如果是URL则跳转访问：" . $codeInfo['ScanResult']);
+                break;
+            case Message::EVENT_MENU_SCAN_WAITMSG:
+                $codeInfo = $mrec->getScanCodeInfo();
+                $mrep->text("感谢等待，你的事件KEY值：" . $mrec->getEventKey() . "，二维码信息：" . $codeInfo['ScanResult']);
+                break;
+            case Message::EVENT_MENU_PIC_SYS:
+            case Message::EVENT_MENU_PIC_PHOTO:
+            case Message::EVENT_MENU_PIC_WEIXIN:
+                $SendPicsInfo = $mrec->getSendPicsInfo();
+                $mrep->text("你发送了{$SendPicsInfo['Count']}张图片");
+                break;
+            case Message::EVENT_MENU_LOCATION:
+                $SendLocationInfo = $mrec->getSendLocationInfo();
+                $mrep->text("你的位置是X：{$SendLocationInfo['Location_X']}，Y：{$SendLocationInfo['Location_Y']}");
+                break;
+            case Message::EVENT_MENU_MINIPROGRAM:
+                $menuId = $mrec->getMenuID();
+                $mrep->text("你点击的菜单是：$menuId");
+                break;
+            case Message::EVENT_SEND_TEMPLATE:
+                // 本处发送消息没有意义
+                $status = $mrec->getStatus();
+                if ($status == 'success') {
+                    $status = '成功';
+                } else {
+                    $status = '失败：' . $status;
+                }
+                syslog(LOG_INFO, "消息ID{$mrec->getTplMsgID()}，发送结果：" . $status);
+                break;
+            case Message::EVENT_SEND_MASS:
+                $massResult = $mrec->getMassResult();
+                syslog(LOG_INFO, "消息ID{$massResult['MsgID']}，成功：" . $massResult['SentCount']. "，失败：" . $massResult['ErrorCount']);
+                break;
+            default:
+                $createTime = $mrec->getCreateTime();
+                $msgId = $mrec->getMsgId();
+                $mrep->text("你在：$createTime 发送了信息，ID为 $msgId");
+                break;
+        }
 }
 
 // 输出XML
-$xml = $mrep->xml();
-echo $xml;
+$mrep->send();
