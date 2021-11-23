@@ -21,4 +21,11 @@ class TestJsSdk extends TestCase
         var_dump($config);
         self::assertIsArray($config);
     }
+
+    public function testIsWechatBrowser()
+    {
+        $is = JsSdk::isWechatBrowser();
+        var_dump($is);
+        self::assertIsBool($is);
+    }
 }

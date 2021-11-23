@@ -47,11 +47,6 @@ class TestApi extends TestCase
         self::assertIsObject($api);
     }
 
-    public function testIsWechatBrowser()
-    {
-        //
-    }
-
     public function testToken()
     {
         //
