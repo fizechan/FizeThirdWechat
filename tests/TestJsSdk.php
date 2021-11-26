@@ -1,7 +1,9 @@
 <?php
 
-use fize\cache\CacheFactory;
-use fize\third\wechat\JsSdk;
+namespace Tests;
+
+use Fize\Cache\CacheFactory;
+use Fize\Third\Wechat\JsSdk;
 use PHPUnit\Framework\TestCase;
 
 class TestJsSdk extends TestCase

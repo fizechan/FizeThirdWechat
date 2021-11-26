@@ -1,9 +1,9 @@
 <?php
 
 
-namespace fize\third\wechat;
+namespace Fize\Third\Wechat;
 
-use fize\third\wechat\api\Ticket;
+use Fize\Third\Wechat\Api\Ticket;
 use Psr\SimpleCache\CacheInterface;
 
 /**

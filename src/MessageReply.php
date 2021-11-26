@@ -1,11 +1,11 @@
 <?php
 
 
-namespace fize\third\wechat;
+namespace Fize\Third\Wechat;
 
 
-use fize\third\wechat\Prpcrypt;
-use fize\crypt\Xml;
+use Fize\Third\Wechat\Prpcrypt;
+use Fize\Crypt\Xml;
 use OutOfBoundsException;
 
 

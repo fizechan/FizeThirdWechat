@@ -1,6 +1,6 @@
 <?php
 
-namespace fize\third\wechat;
+namespace Fize\Third\Wechat;
 
 /**
  * 开放平台

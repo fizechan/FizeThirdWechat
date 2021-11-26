@@ -1,12 +1,12 @@
 <?php
 
 
-namespace fize\third\wechat;
+namespace Fize\Third\Wechat;
 
-use fize\cache\CacheFactory;
-use fize\crypt\Json;
-use fize\http\ClientSimple;
-use fize\http\Response;
+use Fize\Cache\CacheFactory;
+use Fize\Crypt\Json;
+use Fize\Http\ClientSimple;
+use Fize\Http\Response;
 use Psr\SimpleCache\CacheInterface;
 
 /**

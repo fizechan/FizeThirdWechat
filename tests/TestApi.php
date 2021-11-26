@@ -1,8 +1,9 @@
 <?php
 
+namespace Tests;
 
-use fize\third\wechat\Api;
-use fize\cache\CacheFactory;
+use Fize\Cache\CacheFactory;
+use Fize\Third\Wechat\Api;
 use PHPUnit\Framework\TestCase;
 
 class TestApi extends TestCase

@@ -1,9 +1,9 @@
 <?php
 require_once "../vendor/autoload.php";
 
-use fize\third\wechat\Message;
-use fize\third\wechat\MessageReceive;
-use fize\third\wechat\MessageReply;
+use Fize\Third\Wechat\Message;
+use Fize\Third\Wechat\MessageReceive;
+use Fize\Third\Wechat\MessageReply;
 
 $appId = 'wx12078319bd1c19dd';
 $token = 'chenfengzhan';
