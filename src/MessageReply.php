@@ -1,13 +1,10 @@
 <?php
 
-
 namespace Fize\Third\Wechat;
 
-
-use Fize\Third\Wechat\Prpcrypt;
 use Fize\Crypt\Xml;
+use Fize\Third\Wechat\Prpcrypt;
 use OutOfBoundsException;
-
 
 /**
  * 微信信息发送类
@@ -266,7 +263,6 @@ class MessageReply extends Message
             $signature = implode($tmpArr);
             $signature = sha1($signature);
             $xmldata = $this->generate($encrypt, $signature, $timestamp, $nonce);
-            //Log::write($xmldata);
         }
         return $xmldata;
     }
@@ -302,15 +298,15 @@ class MessageReply extends Message
      */
     private function generate($encrypt, $signature, $timestamp, $nonce): string
     {
-        //格式化加密信息
-        $format = <<<EOF
+        // 格式化加密信息
+        $format = <<<XML
 <xml>
 <Encrypt><![CDATA[%s]]></Encrypt>
 <MsgSignature><![CDATA[%s]]></MsgSignature>
 <TimeStamp>%s</TimeStamp>
 <Nonce><![CDATA[%s]]></Nonce>
 </xml>
-EOF;
+XML;
         return sprintf($format, $encrypt, $signature, $timestamp, $nonce);
     }
 }

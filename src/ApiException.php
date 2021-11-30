@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Fize\Third\Wechat;
 
 use RuntimeException;

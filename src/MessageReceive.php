@@ -1,11 +1,9 @@
 <?php
 
-
 namespace Fize\Third\Wechat;
 
 use Fize\Third\Wechat\Prpcrypt;
 use OutOfBoundsException;
-
 
 /**
  * 微信信息接收类

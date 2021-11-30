@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Fize\Third\Wechat;
 
 use Fize\Third\Wechat\Api\Ticket;

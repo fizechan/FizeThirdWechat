@@ -1,12 +1,10 @@
 <?php
 
-
 namespace Fize\Third\Wechat;
 
-
-use Fize\Third\Wechat\open\Connect\Oauth2 as OpenOauth2;
-use Fize\Third\Wechat\Api\SNS\Oauth2 as ApiOauth2;
 use Fize\Third\Wechat\Api\SNS;
+use Fize\Third\Wechat\Api\SNS\Oauth2 as ApiOauth2;
+use Fize\Third\Wechat\Open\Connect\Oauth2 as OpenOauth2;
 
 /**
  * 网页授权
