@@ -18,6 +18,7 @@ class Api extends ApiAbstract
      * 获取token
      * @param string $grant_type 获取类型
      * @return array
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Get_access_token.html
      */
     public function token(string $grant_type): array
     {
@@ -25,8 +26,21 @@ class Api extends ApiAbstract
     }
 
     /**
-     * 获取微信服务器IP地址列表
+     * 获取微信API接口 IP地址
      * @return array
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Get_the_WeChat_server_IP_address.html
+     */
+    public function getApiDomainIp(): array
+    {
+        $this->getAccessToken();
+        $result = $this->httpGet("/get_api_domain_ip?access_token=$this->accessToken");
+        return $result['ip_list'];
+    }
+
+    /**
+     * 获取微信callback IP地址
+     * @return array
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Get_the_WeChat_server_IP_address.html
      */
     public function getcallbackip(): array
     {
@@ -39,6 +53,8 @@ class Api extends ApiAbstract
      * 长连接转短链接
      * @param string $long_url 需要转换的长链接
      * @return string
+     * @deprecated 2021年03月15日后将停止该接口生成短链能力
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Account_Management/URL_Shortener.html
      */
     public function shorturl(string $long_url): string
     {
@@ -54,6 +70,7 @@ class Api extends ApiAbstract
     /**
      * 查询自定义菜单
      * @return array
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Querying_Custom_Menus.html
      */
     public function getCurrentSelfmenuInfo(): array
     {
@@ -62,7 +79,8 @@ class Api extends ApiAbstract
     }
 
     /**
-     * APi调用次数进行清零
+     * 清空api的调用quota
+     * @see https://developers.weixin.qq.com/doc/offiaccount/openApi/clear_quota.html
      */
     public function clearQuota()
     {
@@ -76,9 +94,11 @@ class Api extends ApiAbstract
     /**
      * 获取公众号的自动回复规则
      * @return array
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Getting_Rules_for_Auto_Replies.html
      */
     public function getCurrentAutoreplyInfo(): array
     {
+        $this->getAccessToken();
         return $this->httpGet("/get_current_autoreply_info?access_token=$this->accessToken");
     }
 }
