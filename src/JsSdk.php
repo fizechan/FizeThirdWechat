@@ -89,7 +89,9 @@ class JsSdk extends ApiAbstract
      */
     public static function isWechatBrowser(): bool
     {
-        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            return false;
+        } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
             return true;
         } else {
             return false;
