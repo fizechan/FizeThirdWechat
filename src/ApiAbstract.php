@@ -4,8 +4,9 @@ namespace Fize\Third\Wechat;
 
 use Fize\Cache\CacheFactory;
 use Fize\Crypt\Json;
+use Fize\Exception\ThirdException;
 use Fize\Http\ClientSimple;
-use Fize\Http\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -205,20 +206,20 @@ abstract class ApiAbstract
 
     /**
      * 统一处理响应
-     * @param Response $response          响应对象
+     * @param ResponseInterface $response          响应对象
      * @param bool     $contentJsonDecode 是否对结果进行JSON解码
      * @return array|string
      */
-    protected function handleResponse(Response $response, bool $contentJsonDecode = true)
+    protected function handleResponse(ResponseInterface $response, bool $contentJsonDecode = true)
     {
         if ($response->getStatusCode() != 200) {
-            throw new ApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new ThirdException('Wechat', $response->getReasonPhrase(), $response->getStatusCode());
         }
         $content = $response->getBody()->getContents();
         if ($contentJsonDecode) {
             $json = Json::decode($content);
             if (isset($json['errcode']) && $json['errcode'] != 0) {
-                throw new ApiException($json['errmsg'], $json['errcode']);
+                throw new ThirdException('Wechat', $json['errmsg'], $json['errcode']);
             }
             return $json;
         } else {

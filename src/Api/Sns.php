@@ -3,8 +3,8 @@
 
 namespace Fize\Third\Wechat\Api;
 
+use Fize\Exception\ThirdException;
 use Fize\Third\Wechat\ApiAbstract;
-use Fize\Third\Wechat\ApiException;
 
 /**
  * 社交网络
@@ -40,7 +40,7 @@ class Sns extends ApiAbstract
         try {
             $this->httpGet("/sns/auth?access_token=$access_token&openid=$openid", true, false, '');
             return true;
-        } catch (ApiException $exception) {
+        } catch (ThirdException $exception) {
             return false;
         }
     }

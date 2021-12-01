@@ -1,14 +1,12 @@
 <?php
 
-
 namespace Fize\Third\Wechat\Api;
 
 use CURLFile;
 use Fize\Crypt\Json;
+use Fize\Exception\ThirdException;
 use Fize\Http\ClientSimple;
 use Fize\Third\Wechat\ApiAbstract;
-use Fize\Third\Wechat\ApiException;
-
 
 /**
  * 临时素材
@@ -69,7 +67,7 @@ class Media extends ApiAbstract
         if ($ContentType == 'text/plain') {
             $json = Json::decode($content);
             if (isset($json['errcode']) && $json['errcode']) {
-                throw new ApiException($json['errmsg'], $json['errcode']);
+                throw new ThirdException('Wechat', $json['errmsg'], $json['errcode']);
             }
             return [  // 返回JSON
                 'type'  => 'json',

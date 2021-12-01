@@ -19,6 +19,7 @@
     "ext-json": "*",
     "fize/cache": "*",
     "fize/crypt": "*",
+    "fize/exception": "*",
     "fize/http": "*"
   },
   "suggest": {
