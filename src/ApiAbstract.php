@@ -206,17 +206,17 @@ abstract class ApiAbstract
 
     /**
      * 统一处理响应
-     * @param ResponseInterface $response          响应对象
-     * @param bool     $contentJsonDecode 是否对结果进行JSON解码
+     * @param ResponseInterface $response   响应对象
+     * @param bool              $jsonDecode 是否对结果进行JSON解码
      * @return array|string
      */
-    protected function handleResponse(ResponseInterface $response, bool $contentJsonDecode = true)
+    protected function handleResponse(ResponseInterface $response, bool $jsonDecode = true)
     {
         if ($response->getStatusCode() != 200) {
             throw new ThirdException('Wechat', $response->getReasonPhrase(), $response->getStatusCode());
         }
         $content = $response->getBody()->getContents();
-        if ($contentJsonDecode) {
+        if ($jsonDecode) {
             $json = Json::decode($content);
             if (isset($json['errcode']) && $json['errcode'] != 0) {
                 throw new ThirdException('Wechat', $json['errmsg'], $json['errcode']);
