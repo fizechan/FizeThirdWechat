@@ -58,6 +58,11 @@ abstract class Message
      */
     const MSGTYPE_NEWS = 'news';
 
+    const MSGTYPE_MPNEWS = 'mpnews';
+    const MSGTYPE_MSGMENU = 'msgmenu';
+    const MSGTYPE_WXCARD = 'wxcard';
+    const MSGTYPE_MINIPROGRAMPAGE = 'miniprogrampage';
+
     /**
      * 消息类型：消息转发到客服
      */
