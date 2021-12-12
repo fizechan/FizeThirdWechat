@@ -13,7 +13,7 @@ class TestQuota extends TestCase
     {
         $appid = 'wx12078319bd1c19dd';
         $appsecret = '89212483aa60a23a74ab7a11d78019f0';
-        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 4) . '/temp/cache']);
         $options = [
             'debug' => true,
         ];

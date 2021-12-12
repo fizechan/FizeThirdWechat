@@ -65,6 +65,11 @@ abstract class ApiAbstract
     protected $cache;
 
     /**
+     * @var string access_token缓存键名
+     */
+    protected $accessTokenCacheKey;
+
+    /**
      * @var string 全局唯一接口调用凭据
      */
     protected $accessToken;
@@ -116,6 +121,7 @@ abstract class ApiAbstract
             $cache = CacheFactory::create($cache_handler, $cache_config);
         }
         $this->cache = $cache;
+        $this->accessTokenCacheKey = $this->cacheKeyPre . '_ACCESS_TOKEN_' . $this->appid;
 
         if ($this->checkAccessToken) {  // 检测TOKEN以便于URI中的token字段马上有效
             $this->getAccessToken();
@@ -177,8 +183,7 @@ abstract class ApiAbstract
      */
     protected function getAccessToken(): string
     {
-        $cacheKey = $this->cacheKeyPre . '_ACCESS_TOKEN_' . $this->appid;
-        $accessTokenCache = $this->cache->get($cacheKey);
+        $accessTokenCache = $this->cache->get($this->accessTokenCacheKey);
         if ($accessTokenCache) {
             $this->accessToken = $accessTokenCache;
             return $this->accessToken;
@@ -186,7 +191,7 @@ abstract class ApiAbstract
         $json = $this->httpGet("/token?grant_type=client_credential&appid=$this->appid&secret=$this->appsecret", true, false);
         $this->accessToken = $json['access_token'];
         $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;
-        $this->cache->set($cacheKey, $json['access_token'], $expire);
+        $this->cache->set($this->accessTokenCacheKey, $json['access_token'], $expire);
         return $this->accessToken;
     }
 
@@ -219,6 +224,9 @@ abstract class ApiAbstract
         if ($jsonDecode) {
             $json = Json::decode($content);
             if (isset($json['errcode']) && $json['errcode'] != 0) {
+                if ($json['errcode'] == 40001 && strstr($json['errmsg'], 'access_token is invalid') !== false) {
+                    $this->cache->delete($this->accessTokenCacheKey);
+                }
                 throw new ThirdException('Wechat', $json['errmsg'], $json['errcode']);
             }
             return $json;
