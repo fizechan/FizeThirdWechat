@@ -139,26 +139,102 @@ class TestMenu extends TestCase
 
     public function testAddconditional()
     {
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
+            'debug' => true,
+        ];
 
+        $button = [
+            [
+                'name'       => '功能1',
+                'sub_button' => [
+                    [
+                        "type" => Menu::BUTTON_TYPE_CLICK,
+                        "name" => "触发点击",
+                        "key"  => "V1001_GOOD"
+                    ],
+                    [
+                        "type" => Menu::BUTTON_TYPE_VIEW,
+                        "name" => "网页跳转",
+                        "url"  => "http://www.soso.com/"
+                    ],
+                    [
+                        'type' => Menu::BUTTON_TYPE_LOCATION_SELECT,
+                        'name' => '发送位置',
+                        'key'  => 'rselfmenu_3_1'
+                    ],
+                ]
+            ],
+            [
+                'name'       => '功能2',
+                'sub_button' => [
+                    [
+                        'type' => Menu::BUTTON_TYPE_SCANCODE_PUSH,
+                        'name' => '扫码推事件',
+                        'key'  => 'rselfmenu_2_1',
+                    ],
+                    [
+                        'type' => Menu::BUTTON_TYPE_SCANCODE_WAITMSG,
+                        'name' => '扫码带提示',
+                        'key'  => 'rselfmenu_2_2',
+                    ],
+                    [
+                        'type' => Menu::BUTTON_TYPE_PIC_SYSPHOTO,
+                        'name' => '系统拍照发图',
+                        'key'  => 'rselfmenu_2_3',
+                    ],
+                    [
+                        'type' => Menu::BUTTON_TYPE_PIC_WEIXIN,
+                        'name' => '微信相册发图',
+                        'key'  => 'rselfmenu_2_4',
+                    ],
+                    [
+                        'type' => Menu::BUTTON_TYPE_PIC_PHOTO_OR_ALBUM,
+                        'name' => '选择拍照或相册',
+                        'key'  => 'rselfmenu_2_5',
+                    ]
+                ]
+            ]
+        ];
+        $matchrule = [
+            "tag_id"               => "2",
+            "client_platform_type" => "2",
+        ];
+
+        $menu = new Menu($appid, $appsecret, $options, $cache);
+        $menuid = $menu->addconditional($button, $matchrule);
+        var_export($menuid);
+        self::assertIsString($menuid);
     }
 
     public function testDelconditional()
     {
-
-    }
-
-    public function test__construct()
-    {
-
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
+            'debug' => true,
+        ];
+        $menu = new Menu($appid, $appsecret, $options, $cache);
+        $menuid = '533255344';
+        $menu->delconditional($menuid);
+        self::assertIsObject($menu);
     }
 
     public function testTrymatch()
     {
-
-    }
-
-    public function testGetCurrentSelfmenuInfo()
-    {
-
+        $appid = 'wx12078319bd1c19dd';
+        $appsecret = '89212483aa60a23a74ab7a11d78019f0';
+        $cache = CacheFactory::create('file', ['path' => dirname(__FILE__, 3) . '/temp/cache']);
+        $options = [
+            'debug' => true,
+        ];
+        $menu = new Menu($appid, $appsecret, $options, $cache);
+        $user_id = 'chenfengzhan';
+        $button = $menu->trymatch($user_id);
+        var_export($button);
+        self::assertIsArray($button);
     }
 }

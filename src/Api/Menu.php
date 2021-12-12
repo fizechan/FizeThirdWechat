@@ -110,7 +110,7 @@ class Menu extends ApiAbstract
 
     /**
      * 创建个性化菜单
-     * @param array $button   菜单
+     * @param array $button    菜单
      * @param array $matchrule 匹配规则
      * @return string 返回menuid
      * @see https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Personalized_menu_interface.html#0
@@ -128,6 +128,7 @@ class Menu extends ApiAbstract
     /**
      * 删除个性化菜单
      * @param string $menuid 菜单ID
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Personalized_menu_interface.html#1
      */
     public function delconditional(string $menuid)
     {
@@ -141,6 +142,7 @@ class Menu extends ApiAbstract
      * 测试个性化菜单匹配结果
      * @param string $user_id 可以是粉丝的OpenID，也可以是粉丝的微信号。
      * @return array
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Personalized_menu_interface.html#2
      */
     public function trymatch(string $user_id): array
     {
