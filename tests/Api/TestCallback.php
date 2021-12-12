@@ -18,19 +18,25 @@ class TestCallback extends TestCase
             'debug' => true,
         ];
 
-        $api = new Callback($appid, $appsecret, $cache, $options);
+        $api = new Callback($appid, $appsecret, $options, $cache);
 
         $result = $api->check(Callback::ACTION_ALL, Callback::CHECK_OPERATOR_DEFAULT);
         var_dump($result);
         self::assertIsArray($result);
 
+        sleep(20);  // 由于接口间隔时间限制，暂停一定时间。
+
         $result = $api->check(Callback::ACTION_DNS, Callback::CHECK_OPERATOR_CHINANET);
         var_dump($result);
         self::assertNotEmpty($result);
 
+        sleep(60);  // 由于接口间隔时间限制，暂停一定时间。
+
         $result = $api->check(Callback::ACTION_PING, Callback::CHECK_OPERATOR_UNICOM);
         var_dump($result);
         self::assertIsArray($result);
+
+        sleep(60);  // 由于接口间隔时间限制，暂停一定时间。
 
         $result = $api->check(Callback::ACTION_ALL, Callback::CHECK_OPERATOR_CAP);
         var_dump($result);
