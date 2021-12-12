@@ -2,7 +2,7 @@
 
 namespace Fize\Third\Wechat;
 
-use Fize\Crypt\Xml;
+use Fize\Crypt\XML;
 use Fize\Third\Wechat\Prpcrypt;
 use OutOfBoundsException;
 
@@ -221,7 +221,7 @@ class MessageReply extends Message
             'ToUserName'   => $this->toUserName,
             'FromUserName' => $this->fromUserName,
             'CreateTime'   => time(),
-            'MsgType'      => self::MSGTYPE_TRANSFER,
+            'MsgType'      => self::MSGTYPE_TRANSFER_CUSTOMER_SERVICE,
         ];
         if (!empty($kfAccount)) {
             $msg['TransInfo'] = ['KfAccount' => $kfAccount];

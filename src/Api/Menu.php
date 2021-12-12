@@ -1,11 +1,8 @@
 <?php
 
-
 namespace Fize\Third\Wechat\Api;
 
-
 use Fize\Third\Wechat\ApiAbstract;
-
 
 /**
  * 自定义菜单
@@ -60,8 +57,19 @@ class Menu extends ApiAbstract
 
     /**
      * 按钮类型：跳转图文消息URL
+     * @deprecated 草稿接口灰度完成后，将不再支持图文信息类型的 media_id 和 view_limited，有需要的，请使用 article_id 和 article_view_limited 代替
      */
     const BUTTON_TYPE_VIEW_LIMITED = 'view_limited';
+
+    /**
+     * 按钮类型：图文消息ID
+     */
+    const BUTTON_TYPE_ARTICLE_ID = 'article_id';
+
+    /**
+     * 按钮类型：跳转图文消息ID，类似 view_limited，但不使用 media_id 而使用 article_id
+     */
+    const BUTTON_TYPE_ARTICLE_VIEW_LIMITED = 'article_view_limited';
 
     /**
      * 按钮类型：小程序
@@ -70,18 +78,20 @@ class Menu extends ApiAbstract
 
     /**
      * 创建
-     * @param array $buttons 菜单数组
+     * @param array $button 菜单数组
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Creating_Custom-Defined_Menu.html
      */
-    public function create(array $buttons)
+    public function create(array $button)
     {
         $params = [
-            'button' => $buttons
+            'button' => $button
         ];
         $this->httpPost("/menu/create?access_token=$this->accessToken", $params);
     }
 
     /**
      * 删除
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Deleting_Custom-Defined_Menu.html
      */
     public function delete()
     {
@@ -91,6 +101,7 @@ class Menu extends ApiAbstract
     /**
      * 获取自定义菜单配置菜单
      * @return array
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Getting_Custom_Menu_Configurations.html
      */
     public function get(): array
     {
@@ -99,14 +110,15 @@ class Menu extends ApiAbstract
 
     /**
      * 创建个性化菜单
-     * @param array $buttons   菜单
+     * @param array $button   菜单
      * @param array $matchrule 匹配规则
      * @return string 返回menuid
+     * @see https://developers.weixin.qq.com/doc/offiaccount/Custom_Menus/Personalized_menu_interface.html#0
      */
-    public function addconditional(array $buttons, array $matchrule): string
+    public function addconditional(array $button, array $matchrule): string
     {
         $params = [
-            'button'    => $buttons,
+            'button'    => $button,
             'matchrule' => $matchrule
         ];
         $result = $this->httpPost("/menu/addconditional?access_token=$this->accessToken", $params);

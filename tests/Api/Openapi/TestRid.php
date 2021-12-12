@@ -19,8 +19,8 @@ class TestRid extends TestCase
         ];
 
         $api = new Rid($appid, $appsecret, $options, $cache);
-        $request = $api->get('61b57a77-7cb440d5-6d920ac3');
-        var_dump($request);
+        $request = $api->get('61b57fec-043c4db6-7ca8caea');
+        var_export($request);
         self::assertIsArray($request);
     }
 }

@@ -67,35 +67,35 @@ switch ($mrec->getMsgType()) {
                 $location = $mrec->getEventLocation();
                 $mrep->text("Latitude：{$location['Latitude']}，Longitude：{$location['Longitude']}，Precision：{$location['Precision']}");
                 break;
-            case Message::EVENT_MENU_CLICK:
+            case Message::EVENT_CLICK:
                 $mrep->text("事件KEY值：" . $mrec->getEventKey());
                 break;
-            case Message::EVENT_MENU_VIEW:
+            case Message::EVENT_VIEW:
                 $mrep->text("你即将访问URL：" . $mrec->getEventKey());
                 break;
-            case Message::EVENT_MENU_SCAN_PUSH:
+            case Message::EVENT_SCANCODE_PUSH:
                 $codeInfo = $mrec->getScanCodeInfo();
                 $mrep->text("如果是URL则跳转访问：" . $codeInfo['ScanResult']);
                 break;
-            case Message::EVENT_MENU_SCAN_WAITMSG:
+            case Message::EVENT_SCANCODE_WAITMSG:
                 $codeInfo = $mrec->getScanCodeInfo();
                 $mrep->text("感谢等待，你的事件KEY值：" . $mrec->getEventKey() . "，二维码信息：" . $codeInfo['ScanResult']);
                 break;
-            case Message::EVENT_MENU_PIC_SYS:
-            case Message::EVENT_MENU_PIC_PHOTO:
-            case Message::EVENT_MENU_PIC_WEIXIN:
+            case Message::EVENT_PIC_SYSPHOTO:
+            case Message::EVENT_PIC_PHOTO_OR_ALBUM:
+            case Message::EVENT_PIC_WEIXIN:
                 $SendPicsInfo = $mrec->getSendPicsInfo();
                 $mrep->text("你发送了{$SendPicsInfo['Count']}张图片");
                 break;
-            case Message::EVENT_MENU_LOCATION:
+            case Message::EVENT_LOCATION_SELECT:
                 $SendLocationInfo = $mrec->getSendLocationInfo();
                 $mrep->text("你的位置是X：{$SendLocationInfo['Location_X']}，Y：{$SendLocationInfo['Location_Y']}");
                 break;
-            case Message::EVENT_MENU_MINIPROGRAM:
+            case Message::EVENT_VIEW_MINIPROGRAM:
                 $menuId = $mrec->getMenuID();
                 $mrep->text("你点击的菜单是：$menuId");
                 break;
-            case Message::EVENT_SEND_TEMPLATE:
+            case Message::EVENT_TEMPLATESENDJOBFINISH:
                 // 本处发送消息没有意义
                 $status = $mrec->getStatus();
                 if ($status == 'success') {
@@ -105,7 +105,7 @@ switch ($mrec->getMsgType()) {
                 }
                 syslog(LOG_INFO, "消息ID{$mrec->getTplMsgID()}，发送结果：" . $status);
                 break;
-            case Message::EVENT_SEND_MASS:
+            case Message::EVENT_MASSSENDJOBFINISH:
                 $massResult = $mrec->getMassResult();
                 syslog(LOG_INFO, "消息ID{$massResult['MsgID']}，成功：" . $massResult['SentCount']. "，失败：" . $massResult['ErrorCount']);
                 break;

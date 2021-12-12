@@ -31,7 +31,22 @@ class TestMenu extends TestCase
                         "type" => Menu::BUTTON_TYPE_VIEW,
                         "name" => "网页跳转",
                         "url"  => "http://www.soso.com/"
-                    ]
+                    ],
+                    [
+                        'type' => Menu::BUTTON_TYPE_LOCATION_SELECT,
+                        'name' => '发送位置',
+                        'key'  => 'rselfmenu_3_1'
+                    ],
+                    [
+                        'type'     => Menu::BUTTON_TYPE_MEDIA_ID,
+                        'name'     => '发送指定素材',
+                        'media_id' => 'MEDIA_ID1',
+                    ],
+                    [
+                        'type'     => Menu::BUTTON_TYPE_VIEW_LIMITED,
+                        'name'     => '发送永久素材',
+                        'media_id' => 'MEDIA_ID2',
+                    ],
                 ]
             ],
             [
@@ -68,27 +83,22 @@ class TestMenu extends TestCase
                 'name'       => '功能3',
                 'sub_button' => [
                     [
-                        'type' => Menu::BUTTON_TYPE_LOCATION_SELECT,
-                        'name' => '发送位置',
-                        'key'  => 'rselfmenu_3_1'
+                        'type'     => Menu::BUTTON_TYPE_ARTICLE_ID,
+                        'name'     => '发送图文信息',
+                        'media_id' => 'ARTICLE_ID1',
                     ],
-//                    [
-//                        'type'     => Menu::BUTTON_TYPE_MEDIA_ID,
-//                        'name'     => '发送指定素材',
-//                        'media_id' => 'MEDIA_ID1',
-//                    ],
-//                    [
-//                        'type'     => Menu::BUTTON_TYPE_VIEW_LIMITED,
-//                        'name'     => '发送永久素材',
-//                        'media_id' => 'MEDIA_ID2',
-//                    ],
-//                    [
-//                        'type'     => Menu::BUTTON_TYPE_MINIPROGRAM,
-//                        'name'     => '小程序',
-//                        'appid'    => '123456',
-//                        'url'      => 'http://www.soso.com/',
-//                        'pagepath' => 'test'
-//                    ]
+                    [
+                        'type'     => Menu::BUTTON_TYPE_ARTICLE_VIEW_LIMITED,
+                        'name'     => '发送永久图文信息',
+                        'media_id' => 'ARTICLE_ID2',
+                    ],
+                    [
+                        'type'     => Menu::BUTTON_TYPE_MINIPROGRAM,
+                        'name'     => '小程序',
+                        'appid'    => '123456',
+                        'url'      => 'http://www.soso.com/',
+                        'pagepath' => 'test'
+                    ]
                 ]
             ]
         ];
@@ -107,7 +117,7 @@ class TestMenu extends TestCase
             'debug' => true,
         ];
 
-        $wx_menu = new Menu($appid, $appsecret, $cache, $options);
+        $wx_menu = new Menu($appid, $appsecret, $options, $cache);
         $wx_menu->delete();
         self::assertIsObject($wx_menu);
     }
@@ -121,7 +131,7 @@ class TestMenu extends TestCase
             'debug' => true,
         ];
 
-        $wx_menu = new Menu($appid, $appsecret, $cache, $options);
+        $wx_menu = new Menu($appid, $appsecret, $options, $cache);
         $menus = $wx_menu->get();
         var_dump($menus);
         self::assertIsArray($menus);

@@ -61,7 +61,7 @@ abstract class Message
     /**
      * 消息类型：消息转发到客服
      */
-    const MSGTYPE_TRANSFER = 'transfer_customer_service';
+    const MSGTYPE_TRANSFER_CUSTOMER_SERVICE = 'transfer_customer_service';
 
     /**
      * 事件类型：订阅
@@ -84,69 +84,69 @@ abstract class Message
     const EVENT_LOCATION = 'LOCATION';
 
     /**
-     * 事件类型：菜单 - 点击菜单拉取消息
+     * 事件类型：点击菜单拉取消息
      */
-    const EVENT_MENU_CLICK = 'CLICK';
+    const EVENT_CLICK = 'CLICK';
 
     /**
-     * 事件类型：菜单 - 点击菜单跳转链接
+     * 事件类型：点击菜单跳转链接
      */
-    const EVENT_MENU_VIEW = 'VIEW';
+    const EVENT_VIEW = 'VIEW';
 
     /**
-     * 事件类型：菜单 - 扫码推事件(客户端跳URL)
+     * 事件类型：扫码推事件(客户端跳URL)
      */
-    const EVENT_MENU_SCAN_PUSH = 'scancode_push';
+    const EVENT_SCANCODE_PUSH = 'scancode_push';
 
     /**
-     * 事件类型：菜单 - 扫码推事件(客户端不跳URL)
+     * 事件类型：扫码推事件(客户端不跳URL)
      */
-    const EVENT_MENU_SCAN_WAITMSG = 'scancode_waitmsg';
+    const EVENT_SCANCODE_WAITMSG = 'scancode_waitmsg';
 
     /**
-     * 事件类型：菜单 - 弹出系统拍照发图
+     * 事件类型：弹出系统拍照发图
      */
-    const EVENT_MENU_PIC_SYS = 'pic_sysphoto';
+    const EVENT_PIC_SYSPHOTO = 'pic_sysphoto';
 
     /**
-     * 事件类型：菜单 - 弹出拍照或者相册发图
+     * 事件类型：弹出拍照或者相册发图
      */
-    const EVENT_MENU_PIC_PHOTO = 'pic_photo_or_album';
+    const EVENT_PIC_PHOTO_OR_ALBUM = 'pic_photo_or_album';
 
     /**
-     * 事件类型：菜单 - 弹出微信相册发图器
+     * 事件类型：弹出微信相册发图器
      */
-    const EVENT_MENU_PIC_WEIXIN = 'pic_weixin';
+    const EVENT_PIC_WEIXIN = 'pic_weixin';
 
     /**
-     * 事件类型：菜单 - 弹出地理位置选择器
+     * 事件类型：弹出地理位置选择器
      */
-    const EVENT_MENU_LOCATION = 'location_select';
+    const EVENT_LOCATION_SELECT = 'location_select';
 
     /**
-     * 事件类型：菜单 - 跳转小程序
+     * 事件类型：跳转小程序
      */
-    const EVENT_MENU_MINIPROGRAM = 'view_miniprogram';
+    const EVENT_VIEW_MINIPROGRAM = 'view_miniprogram';
 
     /**
-     * 事件类型：发送结果 - 模板消息发送结果
+     * 事件类型：模板消息发送结果
      */
-    const EVENT_SEND_TEMPLATE = 'TEMPLATESENDJOBFINISH';
+    const EVENT_TEMPLATESENDJOBFINISH = 'TEMPLATESENDJOBFINISH';
 
     /**
-     * 事件类型：发送结果 - 事件推送群发结果
+     * 事件类型：事件推送群发结果
      */
-    const EVENT_SEND_MASS = 'MASSSENDJOBFINISH';
+    const EVENT_MASSSENDJOBFINISH = 'MASSSENDJOBFINISH';
 
     /**
      * 事件类型：卡券 - 审核通过
      */
-    const EVENT_CARD_PASS = 'card_pass_check';
+    const EVENT_CARD_PASS_CHECK = 'card_pass_check';
 
     /**
      * 事件类型：卡券 - 审核未通过
      */
-    const EVENT_CARD_NOTPASS = 'card_not_pass_check';
+    const EVENT_CARD_NOT_PASS_CHECK = 'card_not_pass_check';
 
     /**
      * 事件类型：用户 - 领取卡券
@@ -203,7 +203,10 @@ abstract class Message
      */
     const EVENT_SUBMIT_MEMBERCARD_USER_INFO = 'submit_membercard_user_info';
 
-    const EVENT_MERCHANT_ORDER = 'merchant_order';        //订单 - 付款成功
+    /**
+     * 事件类型：订单 - 付款成功
+     */
+    const EVENT_MERCHANT_ORDER = 'merchant_order';
 
     /**
      * @var string APPID
