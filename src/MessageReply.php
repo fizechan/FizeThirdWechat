@@ -3,7 +3,6 @@
 namespace Fize\Third\Wechat;
 
 use Fize\Crypt\XML;
-use Fize\Third\Wechat\Prpcrypt;
 use OutOfBoundsException;
 
 /**
@@ -252,7 +251,6 @@ class MessageReply extends Message
             $array = $pc->encrypt($xmldata, $this->appId);
             $ret = $array[0];
             if ($ret != 0) {
-                //Log::write('encrypt err!');
                 return false;
             }
             $timestamp = time();

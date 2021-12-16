@@ -22,7 +22,7 @@ class MessageCustom extends Custom
                 'content' => $content
             ]
         ];
-        $this->send($touser, self::MSGTYPE_TEXT, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_TEXT, $extend, $kf_account);
     }
 
     /**
@@ -38,7 +38,7 @@ class MessageCustom extends Custom
                 'media_id' => $media_id
             ]
         ];
-        $this->send($touser, self::MSGTYPE_IMAGE, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_IMAGE, $extend, $kf_account);
     }
 
     /**
@@ -54,7 +54,7 @@ class MessageCustom extends Custom
                 'media_id' => $media_id
             ]
         ];
-        $this->send($touser, self::MSGTYPE_VOICE, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_VOICE, $extend, $kf_account);
     }
 
     /**
@@ -76,7 +76,7 @@ class MessageCustom extends Custom
                 'description'    => $description,
             ]
         ];
-        $this->send($touser, self::MSGTYPE_VIDEO, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_VIDEO, $extend, $kf_account);
     }
 
     /**
@@ -100,7 +100,7 @@ class MessageCustom extends Custom
                 'thumb_media_id' => $thumb_media_id,
             ]
         ];
-        $this->send($touser, self::MSGTYPE_MUSIC, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_MUSIC, $extend, $kf_account);
     }
 
     /**
@@ -116,7 +116,7 @@ class MessageCustom extends Custom
                 'articles' => $articles,
             ]
         ];
-        $this->send($touser, self::MSGTYPE_NEWS, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_NEWS, $extend, $kf_account);
     }
 
     /**
@@ -132,7 +132,7 @@ class MessageCustom extends Custom
                 'media_id' => $media_id,
             ]
         ];
-        $this->send($touser, self::MSGTYPE_MPNEWS, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_MPNEWS, $extend, $kf_account);
     }
 
     /**
@@ -152,7 +152,7 @@ class MessageCustom extends Custom
                 'tail_content' => $tail_content
             ]
         ];
-        $this->send($touser, self::MSGTYPE_MSGMENU, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_MSGMENU, $extend, $kf_account);
     }
 
     /**
@@ -168,7 +168,7 @@ class MessageCustom extends Custom
                 'card_id' => $card_id,
             ]
         ];
-        $this->send($touser, self::MSGTYPE_WXCARD, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_WXCARD, $extend, $kf_account);
     }
 
     /**
@@ -190,6 +190,6 @@ class MessageCustom extends Custom
                 'thumb_media_id' => $thumb_media_id
             ]
         ];
-        $this->send($touser, self::MSGTYPE_MINIPROGRAMPAGE, $extend, $kf_account);
+        $this->send($touser, Message::MSGTYPE_MINIPROGRAMPAGE, $extend, $kf_account);
     }
 }

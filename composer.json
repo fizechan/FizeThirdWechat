@@ -23,7 +23,9 @@
     "fize/http": "*"
   },
   "suggest": {
+    "ext-dom": "*",
     "ext-libxml": "*",
+    "ext-openssl": "*",
     "ext-simplexml": "*"
   },
   "autoload-dev": {

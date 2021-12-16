@@ -49,7 +49,7 @@ switch ($mrec->getMsgType()) {
         $event = $mrec->getEvent();
         switch ($event) {
             case Message::EVENT_SUBSCRIBE:
-                if ($mrec->messageHasKey('EventKey')) {
+                if ($mrec->hasKey('EventKey')) {
                     $qrscene = $mrec->getQrscene();
                     $mrep->text("事件KEY值：$qrscene");
                 } else {

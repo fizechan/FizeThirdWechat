@@ -2,7 +2,6 @@
 
 namespace Fize\Third\Wechat;
 
-use Fize\Third\Wechat\Prpcrypt;
 use OutOfBoundsException;
 
 /**
@@ -33,13 +32,13 @@ class MessageReceive extends Message
         $encryptStr = "";
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $postStr = file_get_contents("php://input");
-            $array = (array)Simplexml::loadString($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $array = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
             $this->encrypt_type = $_GET["encrypt_type"] ?? '';
             if ($this->encrypt_type == 'aes') { //aes加密
                 //Log::write($postStr);
                 $encryptStr = $array['Encrypt'];
                 $pc = new Prpcrypt($this->encodingAesKey);
-                $array = $pc->decrypt($encryptStr, $this->appid);
+                $array = $pc->decrypt($encryptStr, $this->appId);
                 if (!isset($array[0]) || ($array[0] != 0)) {
                     if (!$return) {
                         die('decrypt error!');
@@ -48,9 +47,9 @@ class MessageReceive extends Message
                     }
                 }
                 $this->postXml = $array[1];
-                if (!$this->appid) {
-                    //为了没有appid的订阅号。
-                    $this->appid = $array[2];
+                if (!$this->appId) {
+                    // 为了没有appid的订阅号。
+                    $this->appId = $array[2];
                 }
             } else {
                 $this->postXml = $postStr;
@@ -102,7 +101,7 @@ class MessageReceive extends Message
      * @param string $key 字段名
      * @return bool
      */
-    public function messageHasKey(string $key): bool
+    public function hasKey(string $key): bool
     {
         $message = $this->get();
         return isset($message[$key]);
@@ -114,7 +113,7 @@ class MessageReceive extends Message
      */
     public function getToUserName(): string
     {
-        return $this->getMessageKeyValue('ToUserName');
+        return $this->getKeyValue('ToUserName');
     }
 
     /**
@@ -123,7 +122,7 @@ class MessageReceive extends Message
      */
     public function getFromUserName(): string
     {
-        return $this->getMessageKeyValue('FromUserName');
+        return $this->getKeyValue('FromUserName');
     }
 
     /**
@@ -132,7 +131,7 @@ class MessageReceive extends Message
      */
     public function getCreateTime(): int
     {
-        return (int)$this->getMessageKeyValue('CreateTime');
+        return (int)$this->getKeyValue('CreateTime');
     }
 
     /**
@@ -141,7 +140,7 @@ class MessageReceive extends Message
      */
     public function getMsgType(): string
     {
-        return $this->getMessageKeyValue('MsgType');
+        return $this->getKeyValue('MsgType');
     }
 
     /**
@@ -150,7 +149,7 @@ class MessageReceive extends Message
      */
     public function getMsgId(): string
     {
-        return $this->getMessageKeyValue('MsgId');
+        return $this->getKeyValue('MsgId');
     }
 
     /**
@@ -159,7 +158,7 @@ class MessageReceive extends Message
      */
     public function getContent(): string
     {
-        return $this->getMessageKeyValue('Content');
+        return $this->getKeyValue('Content');
     }
 
     /**
@@ -169,8 +168,8 @@ class MessageReceive extends Message
     public function getImage(): array
     {
         return [
-            'PicUrl'  => $this->getMessageKeyValue('PicUrl'),
-            'MediaId' => $this->getMessageKeyValue('MediaId')
+            'PicUrl'  => $this->getKeyValue('PicUrl'),
+            'MediaId' => $this->getKeyValue('MediaId')
         ];
     }
 
@@ -181,8 +180,8 @@ class MessageReceive extends Message
     public function getVoice(): array
     {
         return [
-            'MediaId' => $this->getMessageKeyValue('MediaId'),
-            'Format'  => $this->getMessageKeyValue('Format')
+            'MediaId' => $this->getKeyValue('MediaId'),
+            'Format'  => $this->getKeyValue('Format')
         ];
     }
 
@@ -193,8 +192,8 @@ class MessageReceive extends Message
     public function getVideo(): array
     {
         return [
-            'MediaId'      => $this->getMessageKeyValue('MediaId'),
-            'ThumbMediaId' => $this->getMessageKeyValue('ThumbMediaId')
+            'MediaId'      => $this->getKeyValue('MediaId'),
+            'ThumbMediaId' => $this->getKeyValue('ThumbMediaId')
         ];
     }
 
@@ -205,8 +204,8 @@ class MessageReceive extends Message
     public function getShortvideo(): array
     {
         return [
-            'MediaId'      => $this->getMessageKeyValue('MediaId'),
-            'ThumbMediaId' => $this->getMessageKeyValue('ThumbMediaId')
+            'MediaId'      => $this->getKeyValue('MediaId'),
+            'ThumbMediaId' => $this->getKeyValue('ThumbMediaId')
         ];
     }
 
@@ -217,10 +216,10 @@ class MessageReceive extends Message
     public function getLocation(): array
     {
         return [
-            'Location_X' => $this->getMessageKeyValue('Location_X'),
-            'Location_Y' => $this->getMessageKeyValue('Location_Y'),
-            'Scale'      => $this->getMessageKeyValue('Scale'),
-            'Label'      => $this->getMessageKeyValue('Label')
+            'Location_X' => $this->getKeyValue('Location_X'),
+            'Location_Y' => $this->getKeyValue('Location_Y'),
+            'Scale'      => $this->getKeyValue('Scale'),
+            'Label'      => $this->getKeyValue('Label')
         ];
     }
 
@@ -231,9 +230,9 @@ class MessageReceive extends Message
     public function getLink(): array
     {
         return [
-            'Title'       => $this->getMessageKeyValue('Title'),
-            'Description' => $this->getMessageKeyValue('Description'),
-            'Url'         => $this->getMessageKeyValue('Url')
+            'Title'       => $this->getKeyValue('Title'),
+            'Description' => $this->getKeyValue('Description'),
+            'Url'         => $this->getKeyValue('Url')
         ];
     }
 
@@ -243,7 +242,7 @@ class MessageReceive extends Message
      */
     public function getEvent(): string
     {
-        return $this->getMessageKeyValue('Event');
+        return $this->getKeyValue('Event');
     }
 
     /**
@@ -252,7 +251,7 @@ class MessageReceive extends Message
      */
     public function getEventKey(): string
     {
-        return $this->getMessageKeyValue('EventKey');
+        return $this->getKeyValue('EventKey');
     }
 
     /**
@@ -270,7 +269,7 @@ class MessageReceive extends Message
      */
     public function getTicket(): string
     {
-        return $this->getMessageKeyValue('Ticket');
+        return $this->getKeyValue('Ticket');
     }
 
 
@@ -281,9 +280,9 @@ class MessageReceive extends Message
     public function getEventLocation(): array
     {
         return [
-            'Latitude'  => $this->getMessageKeyValue('Latitude'),
-            'Longitude' => $this->getMessageKeyValue('Longitude'),
-            'Precision' => $this->getMessageKeyValue('Precision')
+            'Latitude'  => $this->getKeyValue('Latitude'),
+            'Longitude' => $this->getKeyValue('Longitude'),
+            'Precision' => $this->getKeyValue('Precision')
         ];
     }
 
@@ -296,7 +295,7 @@ class MessageReceive extends Message
      */
     public function getTplMsgID(): string
     {
-        return $this->getMessageKeyValue('MsgID');
+        return $this->getKeyValue('MsgID');
     }
 
     /**
@@ -305,7 +304,7 @@ class MessageReceive extends Message
      */
     public function getStatus(): string
     {
-        return $this->getMessageKeyValue('Status');
+        return $this->getKeyValue('Status');
     }
 
     /**
@@ -315,13 +314,13 @@ class MessageReceive extends Message
     public function getMassResult(): array
     {
         return [
-            'MsgID'                => $this->getMessageKeyValue('MsgID'),
-            'Status'               => $this->getMessageKeyValue('Status'),
-            'TotalCount'           => $this->getMessageKeyValue('TotalCount'),
-            'FilterCount'          => $this->getMessageKeyValue('FilterCount'),
-            'SentCount'            => $this->getMessageKeyValue('SentCount'),
-            'ErrorCount'           => $this->getMessageKeyValue('ErrorCount'),
-            'CopyrightCheckResult' => $this->getMessageKeyValue('CopyrightCheckResult'),
+            'MsgID'                => $this->getKeyValue('MsgID'),
+            'Status'               => $this->getKeyValue('Status'),
+            'TotalCount'           => $this->getKeyValue('TotalCount'),
+            'FilterCount'          => $this->getKeyValue('FilterCount'),
+            'SentCount'            => $this->getKeyValue('SentCount'),
+            'ErrorCount'           => $this->getKeyValue('ErrorCount'),
+            'CopyrightCheckResult' => $this->getKeyValue('CopyrightCheckResult'),
         ];
     }
 
@@ -331,7 +330,7 @@ class MessageReceive extends Message
      */
     public function getScanCodeInfo(): array
     {
-        return $this->getMessageKeyValue('ScanCodeInfo');
+        return $this->getKeyValue('ScanCodeInfo');
     }
 
     /**
@@ -345,7 +344,7 @@ class MessageReceive extends Message
      */
     public function getSendPicsInfo(): array
     {
-        return $this->getMessageKeyValue('SendPicsInfo');
+        return $this->getKeyValue('SendPicsInfo');
     }
 
     /**
@@ -357,7 +356,7 @@ class MessageReceive extends Message
      */
     public function getSendLocationInfo(): array
     {
-        return $this->getMessageKeyValue('SendLocationInfo');
+        return $this->getKeyValue('SendLocationInfo');
     }
 
     /**
@@ -366,7 +365,7 @@ class MessageReceive extends Message
      */
     public function getMenuID(): string
     {
-        return $this->getMessageKeyValue('MenuID');
+        return $this->getKeyValue('MenuID');
     }
 
     /**
@@ -376,7 +375,7 @@ class MessageReceive extends Message
      */
     public function getCardId(): string
     {
-        return $this->getMessageKeyValue('CardId');
+        return $this->getKeyValue('CardId');
     }
 
     /**
@@ -386,7 +385,7 @@ class MessageReceive extends Message
      */
     public function getRefuseReason(): string
     {
-        return $this->getMessageKeyValue('RefuseReason');
+        return $this->getKeyValue('RefuseReason');
     }
 
     /**
@@ -397,16 +396,16 @@ class MessageReceive extends Message
     public function getUserGetCard(): array
     {
         return [
-            'CardId'              => $this->getMessageKeyValue('CardId'),
-            'IsGiveByFriend'      => $this->getMessageKeyValue('IsGiveByFriend'),
-            'UserCardCode'        => $this->getMessageKeyValue('UserCardCode'),
-            'FriendUserName'      => $this->getMessageKeyValue('FriendUserName'),
-            'OuterId'             => $this->getMessageKeyValue('OuterId'),
-            'OldUserCardCode'     => $this->getMessageKeyValue('OldUserCardCode'),
-            'OuterStr'            => $this->getMessageKeyValue('OuterStr'),
-            'IsRestoreMemberCard' => $this->getMessageKeyValue('IsRestoreMemberCard'),
-            'IsRecommendByFriend' => $this->getMessageKeyValue('IsRecommendByFriend'),
-            'UnionId'             => $this->getMessageKeyValue('UnionId')
+            'CardId'              => $this->getKeyValue('CardId'),
+            'IsGiveByFriend'      => $this->getKeyValue('IsGiveByFriend'),
+            'UserCardCode'        => $this->getKeyValue('UserCardCode'),
+            'FriendUserName'      => $this->getKeyValue('FriendUserName'),
+            'OuterId'             => $this->getKeyValue('OuterId'),
+            'OldUserCardCode'     => $this->getKeyValue('OldUserCardCode'),
+            'OuterStr'            => $this->getKeyValue('OuterStr'),
+            'IsRestoreMemberCard' => $this->getKeyValue('IsRestoreMemberCard'),
+            'IsRecommendByFriend' => $this->getKeyValue('IsRecommendByFriend'),
+            'UnionId'             => $this->getKeyValue('UnionId')
         ];
     }
 
@@ -418,11 +417,11 @@ class MessageReceive extends Message
     public function getUserGiftingCard(): array
     {
         return [
-            'CardId'         => $this->getMessageKeyValue('CardId'),
-            'UserCardCode'   => $this->getMessageKeyValue('UserCardCode'),
-            'IsReturnBack'   => $this->getMessageKeyValue('IsReturnBack'),
-            'FriendUserName' => $this->getMessageKeyValue('FriendUserName'),
-            'IsChatRoom'     => $this->getMessageKeyValue('IsChatRoom')
+            'CardId'         => $this->getKeyValue('CardId'),
+            'UserCardCode'   => $this->getKeyValue('UserCardCode'),
+            'IsReturnBack'   => $this->getKeyValue('IsReturnBack'),
+            'FriendUserName' => $this->getKeyValue('FriendUserName'),
+            'IsChatRoom'     => $this->getKeyValue('IsChatRoom')
         ];
     }
 
@@ -434,8 +433,8 @@ class MessageReceive extends Message
     public function getUserDelCard(): array
     {
         return [
-            'CardId'       => $this->getMessageKeyValue('CardId'),
-            'UserCardCode' => $this->getMessageKeyValue('UserCardCode')
+            'CardId'       => $this->getKeyValue('CardId'),
+            'UserCardCode' => $this->getKeyValue('UserCardCode')
         ];
     }
 
@@ -447,14 +446,14 @@ class MessageReceive extends Message
     public function getUserConsumeCard(): array
     {
         return [
-            'CardId'        => $this->getMessageKeyValue('CardId'),
-            'UserCardCode'  => $this->getMessageKeyValue('UserCardCode'),
-            'ConsumeSource' => $this->getMessageKeyValue('ConsumeSource'),
-            'LocationName'  => $this->getMessageKeyValue('LocationName'),
-            'StaffOpenId'   => $this->getMessageKeyValue('StaffOpenId'),
-            'VerifyCode'    => $this->getMessageKeyValue('VerifyCode'),
-            'RemarkAmount'  => $this->getMessageKeyValue('RemarkAmount'),
-            'OuterStr'      => $this->getMessageKeyValue('OuterStr')
+            'CardId'        => $this->getKeyValue('CardId'),
+            'UserCardCode'  => $this->getKeyValue('UserCardCode'),
+            'ConsumeSource' => $this->getKeyValue('ConsumeSource'),
+            'LocationName'  => $this->getKeyValue('LocationName'),
+            'StaffOpenId'   => $this->getKeyValue('StaffOpenId'),
+            'VerifyCode'    => $this->getKeyValue('VerifyCode'),
+            'RemarkAmount'  => $this->getKeyValue('RemarkAmount'),
+            'OuterStr'      => $this->getKeyValue('OuterStr')
         ];
     }
 
@@ -466,12 +465,12 @@ class MessageReceive extends Message
     public function getUserPayFromPayCell(): array
     {
         return [
-            'CardId'       => $this->getMessageKeyValue('CardId'),
-            'UserCardCode' => $this->getMessageKeyValue('UserCardCode'),
-            'TransId'      => $this->getMessageKeyValue('TransId'),
-            'LocationId'   => $this->getMessageKeyValue('LocationId'),
-            'Fee'          => $this->getMessageKeyValue('Fee'),
-            'OriginalFee'  => $this->getMessageKeyValue('OriginalFee')
+            'CardId'       => $this->getKeyValue('CardId'),
+            'UserCardCode' => $this->getKeyValue('UserCardCode'),
+            'TransId'      => $this->getKeyValue('TransId'),
+            'LocationId'   => $this->getKeyValue('LocationId'),
+            'Fee'          => $this->getKeyValue('Fee'),
+            'OriginalFee'  => $this->getKeyValue('OriginalFee')
         ];
     }
 
@@ -483,9 +482,9 @@ class MessageReceive extends Message
     public function getUserViewCard(): array
     {
         return [
-            'CardId'       => $this->getMessageKeyValue('CardId'),
-            'UserCardCode' => $this->getMessageKeyValue('UserCardCode'),
-            'OuterStr'     => $this->getMessageKeyValue('OuterStr')
+            'CardId'       => $this->getKeyValue('CardId'),
+            'UserCardCode' => $this->getKeyValue('UserCardCode'),
+            'OuterStr'     => $this->getKeyValue('OuterStr')
         ];
     }
 
@@ -497,8 +496,8 @@ class MessageReceive extends Message
     public function getUserEnterSessionFromCard(): array
     {
         return [
-            'CardId'       => $this->getMessageKeyValue('CardId'),
-            'UserCardCode' => $this->getMessageKeyValue('UserCardCode')
+            'CardId'       => $this->getKeyValue('CardId'),
+            'UserCardCode' => $this->getKeyValue('UserCardCode')
         ];
     }
 
@@ -510,10 +509,10 @@ class MessageReceive extends Message
     public function getUpdateMemberCard(): array
     {
         return [
-            'CardId'        => $this->getMessageKeyValue('CardId'),
-            'UserCardCode'  => $this->getMessageKeyValue('UserCardCode'),
-            'ModifyBonus'   => $this->getMessageKeyValue('ModifyBonus'),
-            'ModifyBalance' => $this->getMessageKeyValue('ModifyBalance')
+            'CardId'        => $this->getKeyValue('CardId'),
+            'UserCardCode'  => $this->getKeyValue('UserCardCode'),
+            'ModifyBonus'   => $this->getKeyValue('ModifyBonus'),
+            'ModifyBalance' => $this->getKeyValue('ModifyBalance')
         ];
     }
 
@@ -525,8 +524,8 @@ class MessageReceive extends Message
     public function getCardSkuRemind(): array
     {
         return [
-            'CardId' => $this->getMessageKeyValue('CardId'),
-            'Detail' => $this->getMessageKeyValue('Detail')
+            'CardId' => $this->getKeyValue('CardId'),
+            'Detail' => $this->getKeyValue('Detail')
         ];
     }
 
@@ -538,18 +537,18 @@ class MessageReceive extends Message
     public function getCardPayOrder(): array
     {
         return [
-            'OrderId'             => $this->getMessageKeyValue('OrderId'),
-            'Status'              => $this->getMessageKeyValue('Status'),
-            'CreateOrderTime'     => $this->getMessageKeyValue('CreateOrderTime'),
-            'PayFinishTime'       => $this->getMessageKeyValue('PayFinishTime'),
-            'Desc'                => $this->getMessageKeyValue('Desc'),
-            'FreeCoinCount'       => $this->getMessageKeyValue('FreeCoinCount'),
-            'PayCoinCount'        => $this->getMessageKeyValue('PayCoinCount'),
-            'RefundFreeCoinCount' => $this->getMessageKeyValue('RefundFreeCoinCount'),
-            'RefundPayCoinCount'  => $this->getMessageKeyValue('RefundPayCoinCount'),
-            'OrderType'           => $this->getMessageKeyValue('OrderType'),
-            'Memo'                => $this->getMessageKeyValue('Memo'),
-            'ReceiptInfo'         => $this->getMessageKeyValue('ReceiptInfo')
+            'OrderId'             => $this->getKeyValue('OrderId'),
+            'Status'              => $this->getKeyValue('Status'),
+            'CreateOrderTime'     => $this->getKeyValue('CreateOrderTime'),
+            'PayFinishTime'       => $this->getKeyValue('PayFinishTime'),
+            'Desc'                => $this->getKeyValue('Desc'),
+            'FreeCoinCount'       => $this->getKeyValue('FreeCoinCount'),
+            'PayCoinCount'        => $this->getKeyValue('PayCoinCount'),
+            'RefundFreeCoinCount' => $this->getKeyValue('RefundFreeCoinCount'),
+            'RefundPayCoinCount'  => $this->getKeyValue('RefundPayCoinCount'),
+            'OrderType'           => $this->getKeyValue('OrderType'),
+            'Memo'                => $this->getKeyValue('Memo'),
+            'ReceiptInfo'         => $this->getKeyValue('ReceiptInfo')
         ];
     }
 
@@ -561,8 +560,8 @@ class MessageReceive extends Message
     public function getSubmitMembercardUserInfo(): array
     {
         return [
-            'CardId'       => $this->getMessageKeyValue('CardId'),
-            'UserCardCode' => $this->getMessageKeyValue('UserCardCode')
+            'CardId'       => $this->getKeyValue('CardId'),
+            'UserCardCode' => $this->getKeyValue('UserCardCode')
         ];
     }
 
@@ -571,7 +570,7 @@ class MessageReceive extends Message
      * @param string $key 标签名
      * @return array|string
      */
-    protected function getMessageKeyValue(string $key)
+    protected function getKeyValue(string $key)
     {
         $message = $this->get();
         if (!isset($message[$key])) {
