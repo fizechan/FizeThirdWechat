@@ -11,8 +11,8 @@ $encodingaeskey = null;
 $mrec = new MessageReceive($appId, $token, $encodingaeskey);
 $mrec->valid();
 $mrep = new MessageReply($appId, $token, $encodingaeskey);
-$mrep->setFromUserName($mrec->getToUserName());
-$mrep->setToUserName($mrec->getFromUserName());
+$mrep->fromUserName($mrec->getToUserName());
+$mrep->toUserName($mrec->getFromUserName());
 switch ($mrec->getMsgType()) {
     case Message::MSGTYPE_TEXT:
         $mrep->text($mrec->getContent());

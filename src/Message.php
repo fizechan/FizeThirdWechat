@@ -242,4 +242,21 @@ abstract class Message
         $this->token = $token;
         $this->encodingAesKey = $encodingaeskey;
     }
+
+    /**
+     * 用SHA1算法生成安全签名
+     * @param string $token       票据
+     * @param string $timestamp   时间戳
+     * @param string $nonce       随机字符串
+     * @param string $encrypt_msg 密文消息
+     * @return string
+     */
+    protected function getSHA1(string $token, string $timestamp, string $nonce, string $encrypt_msg): string
+    {
+        // 排序
+        $array = [$encrypt_msg, $token, $timestamp, $nonce];
+        sort($array, SORT_STRING);
+        $str = implode($array);
+        return sha1($str);
+    }
 }

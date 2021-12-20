@@ -2,7 +2,9 @@
 
 namespace Fize\Third\Wechat;
 
+use DOMDocument;
 use OutOfBoundsException;
+use RuntimeException;
 
 /**
  * 微信信息接收类
@@ -23,11 +25,16 @@ class MessageReceive extends Message
     private $message;
 
     /**
+     * @var string 接收用户
+     */
+    protected $toUserName;
+
+    /**
      * 微信验证，包括post来的xml解密
      * @param bool $return
      * @return boolean
      */
-    public function valid($return = false)
+    public function valid(bool $return = false): bool
     {
         $encryptStr = "";
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -35,21 +42,16 @@ class MessageReceive extends Message
             $array = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
             $this->encrypt_type = $_GET["encrypt_type"] ?? '';
             if ($this->encrypt_type == 'aes') { //aes加密
-                //Log::write($postStr);
-                $encryptStr = $array['Encrypt'];
-                $pc = new Prpcrypt($this->encodingAesKey);
-                $array = $pc->decrypt($encryptStr, $this->appId);
-                if (!isset($array[0]) || ($array[0] != 0)) {
+                $MsgSignature = $array['MsgSignature'];
+                $TimeStamp = $array['TimeStamp'];
+                $Nonce = $array['Nonce'];
+                $this->postXml = $this->decryptMsg($MsgSignature, $TimeStamp, $Nonce, $postStr);
+                if (empty($this->postXml)) {
                     if (!$return) {
                         die('decrypt error!');
                     } else {
                         return false;
                     }
-                }
-                $this->postXml = $array[1];
-                if (!$this->appId) {
-                    // 为了没有appid的订阅号。
-                    $this->appId = $array[2];
                 }
             } else {
                 $this->postXml = $postStr;
@@ -113,6 +115,9 @@ class MessageReceive extends Message
      */
     public function getToUserName(): string
     {
+        if ($this->toUserName) {
+            return $this->toUserName;
+        }
         return $this->getKeyValue('ToUserName');
     }
 
@@ -614,4 +619,93 @@ class MessageReceive extends Message
             return false;
         }
     }
+
+    /**
+     * 检验消息的真实性，并且获取解密后的明文
+     * @param string      $msgSignature 签名串，对应URL参数的msg_signature
+     * @param string|null $timestamp    时间戳 对应URL参数的timestamp
+     * @param string|null $nonce        随机串，对应URL参数的nonce
+     * @param string      $postData     密文，对应POST请求的数据
+     * @return string 解密后的原文
+     */
+    protected function decryptMsg(string $msgSignature, ?string $timestamp, ?string $nonce, string $postData): string
+    {
+        if (strlen($this->encodingAesKey) != 43) {
+            throw new OutOfBoundsException('encodingAesKey error!');
+        }
+
+        // 提取密文
+        [$encrypt, $touser_name] = $this->extract($postData);
+        $this->toUserName = $touser_name;
+
+        if ($timestamp == null) {
+            $timestamp = time();
+        }
+
+        // 验证安全签名
+        $signature = $this->getSHA1($this->token, $timestamp, $nonce, $encrypt);
+        if ($signature != $msgSignature) {
+            throw new RuntimeException('签名错误！');
+        }
+
+        return $this->decrypt($encrypt);
+    }
+
+    /**
+     * 对密文进行解密
+     * @param string $encrypted 需要解密的密文
+     * @return string 解密得到的明文
+     */
+    protected function decrypt(string $encrypted): string
+    {
+        $key = base64_decode($this->encodingAesKey . "=");
+        $iv = substr($key, 0, 16);
+        $decrypted = openssl_decrypt($encrypted, 'AES-256-CBC', $key, OPENSSL_ZERO_PADDING, $iv);
+        // 去除补位字符
+        $result = $this->decode($decrypted);
+        // 去除16位随机字符串,网络字节序和AppId
+        if (strlen($result) < 16) {
+            return "";
+        }
+        $content = substr($result, 16, strlen($result));
+        $len_list = unpack("N", substr($content, 0, 4));
+        $xml_len = $len_list[1];
+        $xml_content = substr($content, 4, $xml_len);
+        $from_appid = substr($content, $xml_len + 4);
+        if ($from_appid != $this->appId) {
+            throw new RuntimeException('APPID错误！');
+        }
+        return $xml_content;
+    }
+
+    /**
+     * 对解密后的明文进行补位删除
+     * @param string $text 解密后的明文
+     * @return string 删除填充补位后的明文
+     */
+    protected function decode(string $text): string
+    {
+        $pad = ord(substr($text, -1));
+        if ($pad < 1 || $pad > 32) {
+            $pad = 0;
+        }
+        return substr($text, 0, (strlen($text) - $pad));
+    }
+
+    /**
+     * 提取出xml数据包中的加密消息
+     * @param string $xmltext 待提取的xml字符串
+     * @return array ['消息体', '用户名']
+     */
+    protected function extract(string $xmltext): array
+    {
+        $xml = new DOMDocument();
+        $xml->loadXML($xmltext);
+        $array_e = $xml->getElementsByTagName('Encrypt');
+        $array_a = $xml->getElementsByTagName('ToUserName');
+        $encrypt = $array_e->item(0)->nodeValue;
+        $tousername = $array_a->item(0)->nodeValue;
+        return [$encrypt, $tousername];
+    }
+
 }
