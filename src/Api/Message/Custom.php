@@ -16,12 +16,12 @@ class Custom extends Api
 
     /**
      * 发消息
-     * @param string $touser 接收用户OPENID
-     * @param string $msgtype 消息类型
-     * @param array $extend 扩展字段
-     * @param string $kf_account 指定客服帐号
+     * @param string      $touser     接收用户OPENID
+     * @param string      $msgtype    消息类型
+     * @param array       $extend     扩展字段
+     * @param string|null $kf_account 指定客服帐号
      */
-    public function send($touser, $msgtype, array $extend, $kf_account = null)
+    public function send(string $touser, string $msgtype, array $extend, string $kf_account = null)
     {
         $params = [
             'touser'  => $touser,
@@ -33,15 +33,15 @@ class Custom extends Api
                 'kf_account' => $kf_account
             ];
         }
-        $this->httpPost("/message/custom/send?access_token={$this->accessToken}", $params);
+        $this->httpPost("/message/custom/send?access_token=$this->accessToken", $params);
     }
 
     /**
      * 客服输入状态
-     * @param string $touser 接收用户OPENID
+     * @param string $touser  接收用户OPENID
      * @param string $command 输入状态
      */
-    public function typing($touser, $command)
+    public function typing(string $touser, string $command)
     {
         $params = [
             'touser'  => $touser,
