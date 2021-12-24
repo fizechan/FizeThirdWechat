@@ -93,7 +93,7 @@ class Api extends ApiAbstract
     /**
      * 获取公众号的自动回复规则
      * @return array
-     * @see https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Getting_Rules_for_Auto_Replies.html
+     * @link https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Getting_Rules_for_Auto_Replies.html
      */
     public function getCurrentAutoreplyInfo(): array
     {
