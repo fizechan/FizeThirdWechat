@@ -84,7 +84,7 @@ class QyapiAbstract
             'cachekeyPre' => '_QY_WECHAT_',
             'debug'       => false,
             'cache'       => [
-                'handler' => 'file',
+                'handler' => 'File',
                 'config'  => []
             ]
         ];
@@ -102,7 +102,7 @@ class QyapiAbstract
             $cache = CacheFactory::create($cache_handler, $cache_config);
         }
         $this->cache = $cache;
-        $this->accessTokenCacheKey = $this->cacheKeyPre . '_ACCESS_TOKEN_' . $this->corpid;
+        $this->accessTokenCacheKey = $this->cacheKeyPre . '_ACCESS_TOKEN_' . $this->corpid . '_' . $this->corpsecret;
 
         if ($this->checkAccessToken) {  // 检测TOKEN以便于URI中的token字段马上有效
             $this->getAccessToken();
@@ -145,6 +145,34 @@ class QyapiAbstract
         }
         $uri = $this->getUri($path, $pathPrefix, $scheme);
         $response = ClientSimple::get($uri);
+        return $this->handleResponse($response, $contentJsonDecode);
+    }
+
+    /**
+     * 核心POST函数
+     * @param string       $path              请求路径
+     * @param array|string $params            提交的参数，可以是数组或者字符串，如果需要上传文件必须使用数组
+     * @param bool         $paramsJsonEncode  是否对参数进行JSON编码
+     * @param bool         $contentJsonDecode 是否对结果进行JSON解码
+     * @param bool         $checkAccessToken  是否检查当前的TOKEN
+     * @param string|null  $pathPrefix        路径前缀
+     * @param string|null  $scheme            协议
+     * @return array|string
+     */
+    protected function httpPost(string $path, $params, bool $paramsJsonEncode = true, bool $contentJsonDecode = true, bool $checkAccessToken = true, string $pathPrefix = null, string $scheme = null)
+    {
+        if ($checkAccessToken) {
+            if (!$this->accessToken) {
+                $this->getAccessToken();
+            }
+        }
+
+        if ($paramsJsonEncode) {
+            $params = Json::encode($params, JSON_UNESCAPED_UNICODE);
+        }
+
+        $uri = $this->getUri($path, $pathPrefix, $scheme);
+        $response = ClientSimple::post($uri, $params);
         return $this->handleResponse($response, $contentJsonDecode);
     }
 
