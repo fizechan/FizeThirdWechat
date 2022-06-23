@@ -17,10 +17,10 @@
     "php": ">=7.1.0",
     "ext-curl": "*",
     "ext-json": "*",
-    "fize/cache": "*",
-    "fize/crypt": "*",
-    "fize/exception": "*",
-    "fize/http": "*"
+    "fize/cache": "^4.0.0",
+    "fize/crypt": "^4.0.0",
+    "fize/exception": "^2.0.0",
+    "fize/http": "^3.0.1"
   },
   "suggest": {
     "ext-dom": "*",
