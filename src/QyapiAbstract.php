@@ -11,6 +11,7 @@ use Psr\SimpleCache\CacheInterface;
 
 /**
  * 企业微信接口基类
+ * @todo 企业微信准备单独发包。
  */
 class QyapiAbstract
 {
