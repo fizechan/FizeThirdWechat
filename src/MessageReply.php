@@ -2,7 +2,7 @@
 
 namespace Fize\Third\Wechat;
 
-use Fize\Crypt\XML;
+use Fize\Codec\XML;
 use OutOfBoundsException;
 
 /**

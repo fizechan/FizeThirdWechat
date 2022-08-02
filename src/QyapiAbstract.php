@@ -3,7 +3,7 @@
 namespace Fize\Third\Wechat;
 
 use Fize\Cache\CacheFactory;
-use Fize\Crypt\Json;
+use Fize\Codec\Json;
 use Fize\Exception\ThirdException;
 use Fize\Http\ClientSimple;
 use Psr\Http\Message\ResponseInterface;

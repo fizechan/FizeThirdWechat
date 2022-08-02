@@ -3,7 +3,7 @@
 namespace Fize\Third\Wechat\Api;
 
 use CURLFile;
-use Fize\Crypt\Json;
+use Fize\Codec\Json;
 use Fize\Exception\ThirdException;
 use Fize\Http\ClientSimple;
 use Fize\Third\Wechat\ApiAbstract;

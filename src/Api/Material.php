@@ -3,9 +3,8 @@
 namespace Fize\Third\Wechat\Api;
 
 use CURLFile;
-use Fize\Crypt\Json;
+use Fize\Codec\Json;
 use Fize\Exception\ThirdException;
-use fize\net\Http;
 use Fize\Third\Wechat\ApiAbstract;
 
 
@@ -91,7 +90,7 @@ class Material extends ApiAbstract
             'media_id' => $media_id
         ];
         $result = $this->httpPost("/material/get_material?access_token={$this->accessToken}", $params);
-        $ContentType = Http::getLastResponse()->getHeaderLine('Content-Type');
+        $ContentType = $this->lastResponse->getHeaderLine('Content-Type');
         if ($ContentType == 'text/plain') {
             $json = Json::decode($result);
             if (isset($json['errcode']) && $json['errcode']) {

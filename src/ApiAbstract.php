@@ -3,7 +3,7 @@
 namespace Fize\Third\Wechat;
 
 use Fize\Cache\CacheFactory;
-use Fize\Crypt\Json;
+use Fize\Codec\Json;
 use Fize\Exception\ThirdException;
 use Fize\Http\ClientSimple;
 use Psr\Http\Message\ResponseInterface;
@@ -90,6 +90,11 @@ abstract class ApiAbstract
     protected $scheme = 'https';
 
     /**
+     * @var ResponseInterface 最后一个HTTP响应
+     */
+    protected $lastResponse;
+
+    /**
      * 构造
      * @param string              $appid     APPID
      * @param string              $appsecret APP密钥
@@ -145,8 +150,8 @@ abstract class ApiAbstract
             }
         }
         $uri = $this->getUri($path, $pathPrefix, $scheme);
-        $response = ClientSimple::get($uri);
-        return $this->handleResponse($response, $contentJsonDecode);
+        $this->lastResponse = ClientSimple::get($uri);
+        return $this->handleResponse($this->lastResponse, $contentJsonDecode);
     }
 
     /**
@@ -173,8 +178,8 @@ abstract class ApiAbstract
         }
 
         $uri = $this->getUri($path, $pathPrefix, $scheme);
-        $response = ClientSimple::post($uri, $params);
-        return $this->handleResponse($response, $contentJsonDecode);
+        $this->lastResponse = ClientSimple::post($uri, $params);
+        return $this->handleResponse($this->lastResponse, $contentJsonDecode);
     }
 
     /**

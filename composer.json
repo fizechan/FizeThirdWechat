@@ -18,9 +18,9 @@
     "ext-curl": "*",
     "ext-json": "*",
     "fize/cache": "^4.0.0",
-    "fize/crypt": "^4.0.0",
-    "fize/exception": "^2.0.0",
-    "fize/http": "^3.0.1"
+    "fize/codec": "^5.0.0",
+    "fize/exception": "^2.1.0",
+    "fize/http": "^3.0.2"
   },
   "suggest": {
     "ext-dom": "*",
