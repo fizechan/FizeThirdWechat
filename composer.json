@@ -19,8 +19,8 @@
     "ext-json": "*",
     "fize/cache": "^4.0.0",
     "fize/codec": "^5.0.0",
-    "fize/exception": "^2.1.0",
-    "fize/http": "^3.0.2"
+    "fize/exception": "^3.0.0",
+    "fize/http": "^4.0.1"
   },
   "suggest": {
     "ext-dom": "*",
