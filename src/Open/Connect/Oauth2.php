@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Fize\Third\Wechat\open\Connect;
+namespace Fize\Third\Wechat\Open\Connect;
 
 
 use Fize\Third\Wechat\Open;
@@ -24,17 +24,22 @@ class Oauth2 extends Open
 
     /**
      * 获取授权
-     * @param string      $redirect_uri 同意授权后跳转URI
-     * @param string      $scope        授权作用域
-     * @param string|null $state        自定义参数
-     * @return string 返回授权URI
+     * @param string      $redirect_uri  同意授权后跳转URI
+     * @param string      $scope         授权作用域
+     * @param string|null $state         自定义参数
+     * @param string|null $agentid       应用agentid
+     * @param string      $response_type 返回类型
+     * @return string 返回授权URL
      */
-    public function authorize(string $redirect_uri, string $scope, string $state = null): string
+    public function authorize(string $redirect_uri, string $scope, string $state = null, string $agentid = null, string $response_type = 'code'): string
     {
         $redirect_uri = urlencode($redirect_uri);
-        $uri = "https://" . self::HOST . "/connect/oauth2/authorize?appid=$this->appid&redirect_uri=$redirect_uri&response_type=code&scope=$scope";
+        $uri = "https://" . self::HOST . "/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type={$response_type}&scope={$scope}";
         if (!is_null($state)) {
-            $uri .= "&state=$state";
+            $uri .= "&state={$state}";
+        }
+        if (!is_null($agentid)) {
+            $uri .= "&agentid={$agentid}";
         }
         $uri .= "#wechat_redirect";
         return $uri;

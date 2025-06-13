@@ -92,9 +92,4 @@ class Oauth2
         $sns = new Sns($this->appid, $this->appsecret);
         return $sns->userinfo($result['access_token'], $result['openid'], $lang);
     }
-
-    public function qyapiUserinfo()
-    {
-
-    }
 }
