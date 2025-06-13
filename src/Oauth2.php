@@ -61,7 +61,7 @@ class Oauth2
         if (!isset($_GET['code']) || empty($_GET['code'])) {
             // 跳转到授权页面
             header("Location: " . $this->openOauth2->authorize($redirect_uri, OpenOauth2::SCOPE_SNSAPI_BASE, $state));
-            exit();
+            exit();  // @todo 破坏性跳转，需要优化
         }
 
         return $this->apiOauth2->accessToken($_GET['code']);
@@ -84,7 +84,7 @@ class Oauth2
         if (!isset($_GET['code']) || empty($_GET['code'])) {
             // 跳转到授权页面
             header("Location: " . $this->openOauth2->authorize($redirect_uri, OpenOauth2::SCOPE_SNSAPI_USERINFO, $state));
-            exit();
+            exit();  // @todo 破坏性跳转，需要优化
         }
 
         $result = $this->apiOauth2->accessToken($_GET['code']);
