@@ -34,14 +34,14 @@ class Oauth2 extends Open
     public function authorize(string $redirect_uri, string $scope, string $state = null, string $agentid = null, string $response_type = 'code'): string
     {
         $redirect_uri = urlencode($redirect_uri);
-        $uri = "https://" . self::HOST . "/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type={$response_type}&scope={$scope}";
+        $url = "https://" . self::HOST . "/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type={$response_type}&scope={$scope}";
         if (!is_null($state)) {
-            $uri .= "&state={$state}";
+            $url .= "&state={$state}";
         }
         if (!is_null($agentid)) {
-            $uri .= "&agentid={$agentid}";
+            $url .= "&agentid={$agentid}";
         }
-        $uri .= "#wechat_redirect";
-        return $uri;
+        $url .= "#wechat_redirect";
+        return $url;
     }
 }
