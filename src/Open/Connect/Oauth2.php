@@ -18,9 +18,14 @@ class Oauth2 extends Open
     const SCOPE_SNSAPI_BASE = 'snsapi_base';
 
     /**
-     * 授权作用域：完整信息
+     * 授权作用域：用户信息
      */
     const SCOPE_SNSAPI_USERINFO = 'snsapi_userinfo';
+
+    /**
+     * 授权作用域：成员信息
+     */
+    const SCOPE_SNSAPI_PRIVATEINFO = 'snsapi_privateinfo';
 
     /**
      * 获取授权
