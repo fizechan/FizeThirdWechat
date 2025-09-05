@@ -5,7 +5,7 @@ namespace Fize\Third\Wechat;
 use Fize\Cache\CacheFactory;
 use Fize\Codec\Json;
 use Fize\Exception\ThirdException;
-use Fize\Http\ClientSimple;
+use Fize\Http\ClientOnce;
 use Psr\Http\Message\ResponseInterface;
 use Psr\SimpleCache\CacheInterface;
 
@@ -149,8 +149,8 @@ abstract class ApiAbstract
                 $this->getAccessToken();
             }
         }
-        $uri = $this->getUri($path, $pathPrefix, $scheme);
-        $this->lastResponse = ClientSimple::get($uri);
+        $url = $this->getUri($path, $pathPrefix, $scheme);
+        $this->lastResponse = ClientOnce::get($url);
         return $this->handleResponse($this->lastResponse, $contentJsonDecode);
     }
 
@@ -177,8 +177,8 @@ abstract class ApiAbstract
             $params = Json::encode($params, JSON_UNESCAPED_UNICODE);
         }
 
-        $uri = $this->getUri($path, $pathPrefix, $scheme);
-        $this->lastResponse = ClientSimple::post($uri, $params);
+        $url = $this->getUri($path, $pathPrefix, $scheme);
+        $this->lastResponse = ClientOnce::post($url, $params);
         return $this->handleResponse($this->lastResponse, $contentJsonDecode);
     }
 
@@ -194,6 +194,31 @@ abstract class ApiAbstract
             return $this->accessToken;
         }
         $json = $this->httpGet("/token?grant_type=client_credential&appid=$this->appid&secret=$this->appsecret", true, false);
+        $this->accessToken = $json['access_token'];
+        $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;
+        $this->cache->set($this->accessTokenCacheKey, $json['access_token'], $expire);
+        return $this->accessToken;
+    }
+
+    /**
+     * 获取稳定版接口调用凭据
+     * @param bool $force_refresh 强制刷新模式
+     * @return string
+     */
+    protected function getStableAccessToken(bool $force_refresh = false): string
+    {
+        $accessTokenCache = $this->cache->get($this->accessTokenCacheKey);
+        if ($accessTokenCache) {
+            $this->accessToken = $accessTokenCache;
+            return $this->accessToken;
+        }
+        $params = [
+            'grant_type'    => 'client_credential',
+            'appid'         => $this->appid,
+            'secret'        => $this->appsecret,
+            'force_refresh' => $force_refresh
+        ];
+        $json = $this->httpPost("/stable_token", $params, true, true, false);
         $this->accessToken = $json['access_token'];
         $expire = $json['expires_in'] ? intval($json['expires_in']) - 100 : 3600;
         $this->cache->set($this->accessTokenCacheKey, $json['access_token'], $expire);
