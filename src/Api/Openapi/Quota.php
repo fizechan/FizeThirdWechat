@@ -11,7 +11,7 @@ class Quota extends ApiAbstract
 {
 
     /**
-     * 查询openAPI调用quota
+     * 查询API调用额度
      *
      * 参数 `$cgi_path`:
      *   例如"/cgi-bin/message/custom/send";不要前缀“https://api.weixin.qq.com” ，也不要漏了"/",否则都会76003的报错

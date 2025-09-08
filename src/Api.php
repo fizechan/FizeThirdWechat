@@ -53,7 +53,7 @@ class Api extends ApiAbstract
      * @param string $long_url 需要转换的长链接
      * @return string
      * @deprecated 2021年03月15日后将停止该接口生成短链能力
-     * @see https://developers.weixin.qq.com/doc/offiaccount/Account_Management/URL_Shortener.html
+     * @see        https://developers.weixin.qq.com/doc/offiaccount/Account_Management/URL_Shortener.html
      */
     public function shorturl(string $long_url): string
     {
@@ -78,7 +78,7 @@ class Api extends ApiAbstract
     }
 
     /**
-     * 清空api的调用quota
+     * 重置API调用次数
      * @see https://developers.weixin.qq.com/doc/offiaccount/openApi/clear_quota.html
      */
     public function clearQuota()
@@ -99,5 +99,20 @@ class Api extends ApiAbstract
     {
         $this->getAccessToken();
         return $this->httpGet("/get_current_autoreply_info?access_token=$this->accessToken");
+    }
+
+    /**
+     * 使用AppSecret重置 API 调用次数
+     * @return array
+     * @link https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/openApi-mgnt/clearQuotaByAppSecret.html
+     */
+    public function clearQuotaV2(): array
+    {
+        $this->getAccessToken();
+        $params = [
+            'appid'     => $this->appid,
+            'appsecret' => $this->appsecret
+        ];
+        return $this->httpPost("/clear_quota/v2", $params, true, true, false);
     }
 }

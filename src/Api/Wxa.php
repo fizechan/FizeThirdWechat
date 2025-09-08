@@ -174,4 +174,28 @@ class Wxa extends ApiAbstract
         ];
         return $this->httpPost("/wxa/del_store?access_token={$this->accessToken}", $params);
     }
+
+    /**
+     * @param string $openid     用户唯一标识符
+     * @param string $signature  用户登录态签名，用session_key对空字符串签名得到的结果。
+     * @param string $sig_method 用户登录态签名的哈希方法，目前只支持 hmac_sha256。
+     * @return array
+     */
+    public function checksession(string $openid, string $signature, string $sig_method = 'hmac_sha256'): array
+    {
+        return $this->httpGet("/wxa/checksession?access_token={$this->accessToken}&signature={$signature}&openid={$openid}&sig_method={$sig_method}");
+    }
+
+    /**
+     * 获取插件用户openpid
+     * @param string $code 插件用户标志凭证code
+     * @return array
+     */
+    public function getPluginOpenPId(string $code): array
+    {
+        $params = [
+            'code' => $code
+        ];
+        return $this->httpPost("/wxa/getpluginopenpid?access_token={$this->accessToken}", $params, true, true, true, '');
+    }
 }

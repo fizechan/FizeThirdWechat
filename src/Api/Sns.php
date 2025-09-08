@@ -44,4 +44,16 @@ class Sns extends ApiAbstract
             return false;
         }
     }
+
+    /**
+     * 小程序登录
+     * @param string $js_code    登录时获取的 code，可通过wx.login获取
+     * @param string $grant_type 授权类型，此处只需填写 authorization_code
+     * @return array
+     */
+    public function jscode2session(string $js_code, string $grant_type = 'authorization_code'): array
+    {
+        $uri = "/sns/jscode2session?appid={$this->appid}&secret={$this->appsecret}&js_code={$js_code}&grant_type={$grant_type}";
+        return $this->httpGet($uri, true, false, '');
+    }
 }
